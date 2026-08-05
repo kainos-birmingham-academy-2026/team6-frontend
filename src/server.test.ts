@@ -21,6 +21,25 @@ describe("server endpoints", () => {
   it("renders home page on /", async () => {
     const response = await request(app).get("/");
 
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles");
+  });
+
+  it("renders open job roles on /job-roles", async () => {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
+      {
+        jobRoleId: 1,
+        roleName: "Backend Developer",
+        location: "London",
+        capabilityName: "Backend Engineering",
+        bandName: "Junior",
+        closingDate: "2026-09-15T23:59:59.000Z",
+        status: "Open"
+      }
+    ]);
+
+    const response = await request(app).get("/job-roles");
+
     expect(response.status).toBe(200);
     expect(response.type).toContain("html");
     expect(response.text).toContain("Kainos Careers Home");
