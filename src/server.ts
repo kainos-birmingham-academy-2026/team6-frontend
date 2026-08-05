@@ -2,7 +2,7 @@ import express from "express";
 import nunjucks from "nunjucks";
 import path from "path";
 
-const app = express();
+export const app = express();
 const port = Number(process.env.PORT) || 3000;
 const viewsPath = path.join(__dirname, "views");
 
@@ -22,6 +22,8 @@ app.get("/health", (_req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+  });
+}

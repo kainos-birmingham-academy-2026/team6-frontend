@@ -27,6 +27,12 @@ Start from built output:
 npm run start
 ```
 
+Run tests:
+
+```bash
+npm test
+```
+
 ## Endpoints
 
 - `GET /`
