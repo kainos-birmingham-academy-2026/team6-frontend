@@ -1,9 +1,10 @@
 import express from "express";
 import nunjucks from "nunjucks";
 import path from "path";
+import { jobRoleController } from "./controllers/jobRoleController";
 
 export const app = express();
-const port = Number(process.env.PORT) || 3000;
+const port = Number(process.env.PORT) || 3001;
 const viewsPath = path.join(__dirname, "views");
 
 nunjucks.configure(viewsPath, {
@@ -12,8 +13,10 @@ nunjucks.configure(viewsPath, {
 });
 
 app.get("/", (_req, res) => {
-  res.render("index.njk");
+  res.redirect("/job-roles");
 });
+
+app.get("/job-roles", jobRoleController.list);
 
 app.get("/health", (_req, res) => {
   res.json({

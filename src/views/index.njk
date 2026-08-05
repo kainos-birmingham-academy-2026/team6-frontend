@@ -3,9 +3,48 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hello</title>
+    <title>Kainos Careers</title>
   </head>
   <body>
-    <h1>Hello World</h1>
+    <main>
+      <h1>Open Job Roles at Kainos</h1>
+
+      {% if hasLoadError %}
+      <p>Unable to load job roles right now. Please try again later.</p>
+      {% endif %}
+
+      {% if jobRoles and jobRoles.length > 0 %}
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Role Name</th>
+              <th>Location</th>
+              <th>Capability</th>
+              <th>Band</th>
+              <th>Closing Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for role in jobRoles %}
+            <tr>
+              <td>{{ role.jobRoleId }}</td>
+              <td>{{ role.roleName }}</td>
+              <td>{{ role.location }}</td>
+              <td>{{ role.capabilityName or role.capabilityId }}</td>
+              <td>{{ role.bandName or role.bandId }}</td>
+              <td>{{ role.closingDate }}</td>
+              <td class="status-open">{{ role.status }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p>No open job roles available at the moment.</p>
+      {% endif %}
+    </main>
   </body>
 </html>

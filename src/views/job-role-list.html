@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kainos Job Roles</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f6f8fc;
+        color: #142235;
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 36px auto;
+        padding: 0 16px;
+      }
+
+      h1 {
+        margin: 0 0 16px;
+      }
+
+      .card {
+        border: 1px solid #d4deec;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 8px 22px rgba(28, 62, 120, 0.08);
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid #d4deec;
+      }
+
+      th {
+        background: #eef4fb;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #fafcff;
+      }
+
+      .status-open {
+        color: #0f6d31;
+        font-weight: 700;
+      }
+
+      .message {
+        border: 1px solid #d4deec;
+        border-radius: 10px;
+        background: #fff;
+        padding: 14px;
+      }
+
+      @media (max-width: 920px) {
+        .card {
+          overflow-x: auto;
+        }
+
+        table {
+          min-width: 880px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Open Job Roles at Kainos</h1>
+
+      {% if hasLoadError %}
+      <p class="message">Unable to load job roles right now. Please try again later.</p>
+      {% endif %}
+
+      {% if jobRoles and jobRoles.length > 0 %}
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Role Name</th>
+              <th>Location</th>
+              <th>Capability</th>
+              <th>Band</th>
+              <th>Closing Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for role in jobRoles %}
+            <tr>
+              <td>{{ role.roleName }}</td>
+              <td>{{ role.location }}</td>
+              <td>{{ role.capabilityName or role.capabilityId }}</td>
+              <td>{{ role.bandName or role.bandId }}</td>
+              <td>{{ role.closingDate }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="message">No open job roles available at the moment.</p>
+      {% endif %}
+    </main>
+  </body>
+</html>
