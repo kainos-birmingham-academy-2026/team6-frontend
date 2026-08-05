@@ -4,6 +4,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
+    "prepare": "npm run setup-hooks",
+    "setup-hooks": "git config core.hooksPath .githooks",
     "build": "tsc -p tsconfig.json && copyfiles -u 2 \"src/views/**/*\" dist/views",
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
