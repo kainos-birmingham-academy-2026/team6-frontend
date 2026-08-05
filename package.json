@@ -9,7 +9,9 @@
     "start": "node dist/server.js",
     "lint": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "express": "^5.2.1",
@@ -20,6 +22,8 @@
     "@types/node": "^26.1.2",
     "@types/nunjucks": "^3.2.6",
     "@types/supertest": "^6.0.3",
+    "@vitest/coverage-v8": "^2.1.8",
+    "@vitest/ui": "^2.1.8",
     "copyfiles": "^2.4.1",
     "supertest": "^7.1.1",
     "tsx": "^4.23.7",
