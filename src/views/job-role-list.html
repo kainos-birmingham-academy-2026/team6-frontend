@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kainos Job Roles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Kainos Careers Home">
+          <img src="/images/kainos-logo.svg" alt="Kainos" class="brand-logo" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/job-roles" class="nav-link nav-link-active">Job Roles</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content">
+      <h1>Open Job Roles at Kainos</h1>
+
+      {% if hasLoadError %}
+      <p class="message">Unable to load job roles right now. Please try again later.</p>
+      {% endif %}
+
+      {% if jobRoles and jobRoles.length > 0 %}
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Role Name</th>
+              <th>Location</th>
+              <th>Capability</th>
+              <th>Band</th>
+              <th>Closing Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for role in jobRoles %}
+            <tr>
+              <td>{{ role.roleName }}</td>
+              <td>{{ role.location }}</td>
+              <td>{{ role.capabilityName or role.capabilityId }}</td>
+              <td>{{ role.bandName or role.bandId }}</td>
+              <td>{{ role.closingDate }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="message">No open job roles available at the moment.</p>
+      {% endif %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <div>
+          <p class="footer-title">Kainos Careers</p>
+          <p>True partners change the world together.</p>
+        </div>
+        <div>
+          <p class="footer-title">Contact</p>
+          <p>Email: careers@kainos.com</p>
+          <p>Phone: +44 (0) 28 9032 2600</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

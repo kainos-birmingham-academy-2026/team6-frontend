@@ -1,0 +1,15 @@
+<svg width="190" height="44" viewBox="0 0 190 44" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Kainos</title>
+  <desc id="desc">Kainos wordmark in blue with a green dot.</desc>
+  <rect x="0" y="0" width="190" height="44" fill="white" fill-opacity="0"/>
+  <text x="0" y="31" font-size="38" font-family="Poppins, Arial, sans-serif" font-weight="600" fill="#2D3F92" letter-spacing="0.6">kainos</text>
+
+  <!--
+    Easy manual edit:
+    Change the two numbers in translate(X Y) to move the green dot.
+    Example: translate(100 21)
+  -->
+  <g id="green-dot-position" transform="translate(101 21)">
+    <circle cx="0" cy="0" r="6.2" fill="#70BE44"/>
+  </g>
+</svg>

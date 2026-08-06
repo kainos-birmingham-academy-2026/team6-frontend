@@ -33,6 +33,14 @@ Run tests:
 npm test
 ```
 
+Git pre-push checks (lint + test):
+
+```bash
+npm run setup-hooks
+```
+
+After this is set once, every `git push` will run lint and tests locally before push.
+
 ## Endpoints
 
 - `GET /`
