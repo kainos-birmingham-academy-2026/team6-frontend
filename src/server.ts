@@ -4,7 +4,7 @@ import path from "path";
 import { jobRoleController } from "./controllers/jobRoleController";
 
 export const app = express();
-const port = Number(process.env.PORT) || 3001;
+const port = Number(process.env.PORT) || 3000;
 const viewsPath = path.join(__dirname, "views");
 
 nunjucks.configure(viewsPath, {
@@ -13,7 +13,7 @@ nunjucks.configure(viewsPath, {
 });
 
 app.get("/", (_req, res) => {
-  res.redirect("/job-roles");
+  res.render("index.njk");
 });
 
 app.get("/job-roles", jobRoleController.list);

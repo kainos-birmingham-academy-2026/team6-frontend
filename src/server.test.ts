@@ -17,11 +17,12 @@ describe("server endpoints", () => {
     vi.clearAllMocks();
   });
 
-  it("redirects / to /job-roles", async () => {
+  it("returns hello world page on /", async () => {
     const response = await request(app).get("/");
 
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toBe("/job-roles");
+    expect(response.status).toBe(200);
+    expect(response.type).toContain("html");
+    expect(response.text).toContain("Hello World");
   });
 
   it("renders open job roles on /job-roles", async () => {
