@@ -21,8 +21,10 @@ describe("server endpoints", () => {
   it("renders home page on /", async () => {
     const response = await request(app).get("/");
 
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toBe("/job-roles");
+    expect(response.status).toBe(200);
+    expect(response.type).toContain("html");
+    expect(response.text).toContain("Kainos Careers Home");
+    expect(response.text).toContain("/job-roles");
   });
 
   it("renders open job roles on /job-roles", async () => {
