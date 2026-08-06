@@ -26,7 +26,8 @@ export class JobRoleService {
     try {
       const response = await this.client.get<BackendJobRole[]>("/job-roles");
 
-      return response.data.filter((role) => (role.status ?? "").toLowerCase() === "open");
+      // Render backend data as-is so roles without a status field are still shown.
+      return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(`Failed to fetch job roles: ${error.response?.status ?? "unknown"}`);
