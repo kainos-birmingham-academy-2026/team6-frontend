@@ -4,77 +4,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Kainos Job Roles</title>
-    <style>
-      body {
-        margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #f6f8fc;
-        color: #142235;
-      }
-
-      main {
-        max-width: 1100px;
-        margin: 36px auto;
-        padding: 0 16px;
-      }
-
-      h1 {
-        margin: 0 0 16px;
-      }
-
-      .card {
-        border: 1px solid #d4deec;
-        border-radius: 10px;
-        background: #fff;
-        box-shadow: 0 8px 22px rgba(28, 62, 120, 0.08);
-        overflow: hidden;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      th,
-      td {
-        text-align: left;
-        padding: 12px;
-        border-bottom: 1px solid #d4deec;
-      }
-
-      th {
-        background: #eef4fb;
-      }
-
-      tbody tr:nth-child(even) {
-        background: #fafcff;
-      }
-
-      .status-open {
-        color: #0f6d31;
-        font-weight: 700;
-      }
-
-      .message {
-        border: 1px solid #d4deec;
-        border-radius: 10px;
-        background: #fff;
-        padding: 14px;
-      }
-
-      @media (max-width: 920px) {
-        .card {
-          overflow-x: auto;
-        }
-
-        table {
-          min-width: 880px;
-        }
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Kainos Careers Home">
+          <img src="/images/kainos-logo.svg" alt="Kainos" class="brand-logo" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/job-roles" class="nav-link nav-link-active">Job Roles</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content">
       <h1>Open Job Roles at Kainos</h1>
 
       {% if hasLoadError %}
@@ -110,5 +62,19 @@
       <p class="message">No open job roles available at the moment.</p>
       {% endif %}
     </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <div>
+          <p class="footer-title">Kainos Careers</p>
+          <p>True partners change the world together.</p>
+        </div>
+        <div>
+          <p class="footer-title">Contact</p>
+          <p>Email: careers@kainos.com</p>
+          <p>Phone: +44 (0) 28 9032 2600</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

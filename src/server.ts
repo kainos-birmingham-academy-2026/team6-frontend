@@ -6,14 +6,17 @@ import { jobRoleController } from "./controllers/jobRoleController";
 export const app = express();
 const port = Number(process.env.PORT) || 3001;
 const viewsPath = path.join(__dirname, "views");
+const publicPath = path.join(__dirname, "public");
 
 nunjucks.configure(viewsPath, {
   autoescape: true,
   express: app
 });
 
+app.use(express.static(publicPath));
+
 app.get("/", (_req, res) => {
-  res.redirect("/job-roles");
+  res.render("home.html");
 });
 
 app.get("/job-roles", jobRoleController.list);

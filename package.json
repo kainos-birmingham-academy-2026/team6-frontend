@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "npm run setup-hooks",
     "setup-hooks": "git config core.hooksPath .githooks",
-    "build": "tsc -p tsconfig.json && copyfiles -u 2 \"src/views/**/*\" dist/views",
+    "build": "tsc -p tsconfig.json && copyfiles -u 2 \"src/views/**/*\" dist/views && copyfiles -u 2 \"src/public/**/*\" dist/public",
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "lint": "tsc --noEmit",
