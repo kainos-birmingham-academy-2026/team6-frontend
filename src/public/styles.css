@@ -437,6 +437,7 @@ tbody tr:nth-child(even) {
     grid-template-columns: 1fr;
   }
 
+<<<<<<< HEAD
   .info-hero,
   .info-grid {
     grid-template-columns: 1fr;
@@ -446,6 +447,8 @@ tbody tr:nth-child(even) {
     grid-column: auto;
   }
 
+=======
+>>>>>>> 2cffd23 (edited the branding)
   .brand-bar {
     font-size: 0.7rem;
   }
