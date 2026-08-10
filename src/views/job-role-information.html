@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Job Role Information | Kainos Careers</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="brand-bar">Kainos Careers</p>
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Kainos Careers Home">
+          <img src="/images/kainos-logo-primary-transparent.png" alt="Kainos" class="brand-logo" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/job-roles" class="nav-link nav-link-active">Job Roles</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content">
+      <h1>Job Role Information</h1>
+
+      {% if hasLoadError %}
+      <p class="message">Unable to load this role right now. Please try again shortly.</p>
+      {% elif hasNotFoundError %}
+      <p class="message">This role could not be found. It may have closed or moved.</p>
+      {% elif jobRole %}
+      <section class="info-hero card">
+        <div class="info-hero-content">
+          <p class="eyebrow">Open Position</p>
+          <h2>{{ jobRole.roleName }}</h2>
+          <p>
+            {{ jobRole.description or "Explore this opportunity at Kainos and review all key details before applying." }}
+          </p>
+        </div>
+        <div class="info-hero-meta">
+          <p class="info-chip">Status: {{ jobRole.statusDisplay }}</p>
+          <p class="info-chip">Open Positions: {{ jobRole.openPositionsDisplay }}</p>
+        </div>
+      </section>
+
+      <section class="info-grid">
+        <article class="card info-panel">
+          <h3>Role Profile</h3>
+          <dl class="info-list">
+            <div>
+              <dt>Role Name</dt>
+              <dd>{{ jobRole.roleName or "N/A" }}</dd>
+            </div>
+            <div>
+              <dt>Location</dt>
+              <dd>{{ jobRole.location or "N/A" }}</dd>
+            </div>
+            <div>
+              <dt>Closing Date</dt>
+              <dd>{{ jobRole.closingDateDisplay }}</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>{{ jobRole.statusDisplay }}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="card info-panel">
+          <h3>Capability and Band</h3>
+          <dl class="info-list">
+            <div>
+              <dt>Capability</dt>
+              <dd>{{ jobRole.capabilityDisplay }}</dd>
+            </div>
+            <div>
+              <dt>Band</dt>
+              <dd>{{ jobRole.bandDisplay }}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="card info-panel info-panel-wide">
+          <h3>Responsibilities</h3>
+          <p class="info-copy">{{ jobRole.responsibilitiesDisplay }}</p>
+        </article>
+
+        <article class="card info-panel info-panel-wide">
+          <h3>Role Resource</h3>
+          {% if jobRole.sharepointUrlDisplay %}
+          <p class="info-copy">
+            <a href="{{ jobRole.sharepointUrlDisplay }}" class="external-link" target="_blank" rel="noopener noreferrer">
+              Open SharePoint Role Information
+            </a>
+          </p>
+          {% else %}
+          <p class="info-copy">No SharePoint resource is available for this role yet.</p>
+          {% endif %}
+        </article>
+      </section>
+
+      <section class="info-actions">
+        <a href="/job-roles" class="primary-link">Back to Job Roles</a>
+      </section>
+      {% endif %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <div>
+          <p class="footer-title">Kainos Careers</p>
+          <p>Partner with the best people in tech to shape what comes next.</p>
+        </div>
+        <div>
+          <p class="footer-title">Contact</p>
+          <p><a href="mailto:careers@kainos.com">careers@kainos.com</a></p>
+          <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
+          <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
