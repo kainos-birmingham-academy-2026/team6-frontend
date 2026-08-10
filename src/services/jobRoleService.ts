@@ -3,6 +3,9 @@ import axios, { AxiosError, type AxiosInstance } from "axios";
 export type BackendJobRole = {
   jobRoleId?: number | string;
   roleName?: string;
+  description?: string;
+  responsibilities?: string;
+  sharepointUrl?: string;
   location?: string;
   capabilityName?: string;
   capabilityId?: number | string;
@@ -10,6 +13,8 @@ export type BackendJobRole = {
   bandId?: number | string;
   closingDate?: string;
   status?: string;
+  statusName?: string;
+  numberOfOpenPositions?: number;
 };
 
 export class JobRoleService {
@@ -31,6 +36,19 @@ export class JobRoleService {
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(`Failed to fetch job roles: ${error.response?.status ?? "unknown"}`);
+      }
+
+      throw error;
+    }
+  }
+
+  async getJobRoleById(jobRoleId: string | number): Promise<BackendJobRole> {
+    try {
+      const response = await this.client.get<BackendJobRole>(`/job-roles/${jobRoleId}`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(`Failed to fetch job role: ${error.response?.status ?? "unknown"}`);
       }
 
       throw error;

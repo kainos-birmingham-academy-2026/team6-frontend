@@ -45,14 +45,22 @@
             {% for role in jobRoles %}
             <tr>
               <td>
-                <a href="/job-role-information.html?roleName={{ role.roleName | urlencode }}" class="role-name-link">{{ role.roleName }}</a>
+                {% if role.detailsId %}
+                <a href="/job-roles/{{ role.detailsId }}" class="role-name-link">{{ role.roleName }}</a>
+                {% else %}
+                {{ role.roleName }}
+                {% endif %}
               </td>
               <td>{{ role.location }}</td>
               <td>{{ role.capabilityDisplay }}</td>
               <td>{{ role.bandDisplay }}</td>
               <td>{{ role.closingDateDisplay }}</td>
               <td>
-                <a href="/job-role-information.html?roleName={{ role.roleName | urlencode }}" class="table-action-btn">View More Info</a>
+                {% if role.detailsId %}
+                <a href="/job-roles/{{ role.detailsId }}" class="table-action-btn">View More Info</a>
+                {% else %}
+                <span>Unavailable</span>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}
