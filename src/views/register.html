@@ -40,6 +40,9 @@
 
         <section class="login-form-panel card" aria-labelledby="register-form-title">
           <h2 id="register-form-title">Create Account</h2>
+          {% if registerErrorMessage %}
+          <p class="auth-message auth-message-error" role="alert">{{ registerErrorMessage }}</p>
+          {% endif %}
           <form action="/register" method="post" class="login-form" novalidate>
             <div class="form-field">
               <label for="register-email">Email Address</label>
@@ -48,6 +51,7 @@
                 name="email"
                 type="email"
                 autocomplete="email"
+                value="{{ registerEmail or '' }}"
                 placeholder="name@kainos.com"
                 required
               />

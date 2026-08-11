@@ -40,6 +40,9 @@
 
         <section class="login-form-panel card" aria-labelledby="login-form-title">
           <h2 id="login-form-title">Sign In</h2>
+          {% if loginErrorMessage %}
+          <p class="auth-message auth-message-error" role="alert">{{ loginErrorMessage }}</p>
+          {% endif %}
           <form action="/login" method="post" class="login-form" novalidate>
             <div class="form-field">
               <label for="email">Email Address</label>
@@ -48,6 +51,7 @@
                 name="email"
                 type="email"
                 autocomplete="email"
+                value="{{ loginEmail or '' }}"
                 placeholder="name@kainos.com"
                 required
               />

@@ -8,10 +8,19 @@ vi.mock("./services/jobRoleService", () => ({
   }
 }));
 
+vi.mock("./services/authService", () => ({
+  authService: {
+    login: vi.fn(),
+    register: vi.fn()
+  }
+}));
+
 import { app } from "./server";
+import { authService } from "./services/authService";
 import { jobRoleService } from "./services/jobRoleService";
 
 const mockedJobRoleService = vi.mocked(jobRoleService);
+const mockedAuthService = vi.mocked(authService);
 
 describe("server endpoints", () => {
   afterEach(() => {
@@ -46,6 +55,66 @@ describe("server endpoints", () => {
     expect(response.text).toContain("Email Address");
     expect(response.text).toContain("Password");
     expect(response.text).toContain("Create Account");
+  });
+
+  it("redirects to job roles when login succeeds", async () => {
+    mockedAuthService.login.mockResolvedValue();
+
+    const response = await request(app).post("/login").type("form").send({
+      email: "user@kainos.com",
+      password: "Password123!"
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles");
+    expect(mockedAuthService.login).toHaveBeenCalledWith({
+      email: "user@kainos.com",
+      password: "Password123!"
+    });
+  });
+
+  it("renders backend validation message when login fails", async () => {
+    mockedAuthService.login.mockRejectedValue(new Error("Email or password is invalid."));
+
+    const response = await request(app).post("/login").type("form").send({
+      email: "bad-email",
+      password: "123"
+    });
+
+    expect(response.status).toBe(401);
+    expect(response.type).toContain("html");
+    expect(response.text).toContain("Email or password is invalid.");
+    expect(response.text).toContain('value="bad-email"');
+  });
+
+  it("redirects to login when register succeeds", async () => {
+    mockedAuthService.register.mockResolvedValue();
+
+    const response = await request(app).post("/register").type("form").send({
+      email: "new.user@kainos.com",
+      password: "Password123!"
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
+    expect(mockedAuthService.register).toHaveBeenCalledWith({
+      email: "new.user@kainos.com",
+      password: "Password123!"
+    });
+  });
+
+  it("renders backend validation message when register fails", async () => {
+    mockedAuthService.register.mockRejectedValue(new Error("Password must contain at least 8 characters."));
+
+    const response = await request(app).post("/register").type("form").send({
+      email: "new.user@kainos.com",
+      password: "short"
+    });
+
+    expect(response.status).toBe(401);
+    expect(response.type).toContain("html");
+    expect(response.text).toContain("Password must contain at least 8 characters.");
+    expect(response.text).toContain('value="new.user@kainos.com"');
   });
 
   it("renders open job roles on /job-roles", async () => {

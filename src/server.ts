@@ -1,6 +1,7 @@
 import express from "express";
 import nunjucks from "nunjucks";
 import path from "path";
+import { authController } from "./controllers/authController";
 import { jobRoleController } from "./controllers/jobRoleController";
 
 export const app = express();
@@ -14,18 +15,16 @@ nunjucks.configure(viewsPath, {
 });
 
 app.use(express.static(publicPath));
+app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (_req, res) => {
   res.render("home.html");
 });
 
-app.get("/login", (_req, res) => {
-  res.render("login.html");
-});
-
-app.get("/register", (_req, res) => {
-  res.render("register.html");
-});
+app.get("/login", authController.showLogin.bind(authController));
+app.post("/login", authController.login.bind(authController));
+app.get("/register", authController.showRegister.bind(authController));
+app.post("/register", authController.register.bind(authController));
 
 app.get("/job-roles", jobRoleController.list);
 app.get("/job-roles/:id", jobRoleController.getById);
