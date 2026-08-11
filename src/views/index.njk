@@ -4,9 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Kainos Careers</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main>
+    <header class="site-header">
+      <p class="brand-bar">Kainos Careers</p>
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Kainos Careers Home">
+          <img src="/images/kainos-logo-primary-transparent.png" alt="Kainos" class="brand-logo" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/job-roles" class="nav-link nav-link-active">Job Roles</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content">
       <h1>Open Job Roles at Kainos</h1>
 
       {% if hasLoadError %}
@@ -14,7 +29,7 @@
       {% endif %}
 
       {% if jobRoles and jobRoles.length > 0 %}
-      <div class="table-card">
+      <div class="card">
         <table>
           <thead>
             <tr>
@@ -43,8 +58,23 @@
         </table>
       </div>
       {% else %}
-      <p>No open job roles available at the moment.</p>
+      <p class="message">No open job roles available at the moment.</p>
       {% endif %}
     </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <div>
+          <p class="footer-title">Kainos Careers</p>
+          <p>Partner with the best people in tech to shape what comes next.</p>
+        </div>
+        <div>
+          <p class="footer-title">Contact</p>
+          <p><a href="mailto:careers@kainos.com">careers@kainos.com</a></p>
+          <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
+          <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

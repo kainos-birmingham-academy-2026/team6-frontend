@@ -20,6 +20,7 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/job-roles", jobRoleController.list);
+app.get("/job-roles/:id", jobRoleController.getById);
 
 app.get("/health", (_req, res) => {
   res.json({
