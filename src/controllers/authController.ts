@@ -72,7 +72,8 @@ export class AuthController {
 
     res.render("register.html", {
       registerEmail: "",
-      registerErrorMessage: ""
+      registerErrorMessage: "",
+      registerMessageClass: "auth-message-error"
     });
   }
 
@@ -85,10 +86,12 @@ export class AuthController {
       res.redirect("/login");
     } catch (error) {
       const registerErrorMessage = error instanceof Error ? error.message : "Unable to create account right now.";
+      const isSuccessMessage = registerErrorMessage.startsWith("Account has been created successfully");
 
-      res.status(401).render("register.html", {
+      res.status(isSuccessMessage ? 200 : 401).render("register.html", {
         registerEmail: email,
-        registerErrorMessage
+        registerErrorMessage,
+        registerMessageClass: isSuccessMessage ? "auth-message-success" : "auth-message-error"
       });
     }
   }

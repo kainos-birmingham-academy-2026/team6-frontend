@@ -104,7 +104,7 @@ export class AuthService {
     const token = payload.token || payload.accessToken || payload.jwt;
 
     if (!token) {
-      throw new Error("Login succeeded but no token was returned by the backend.");
+      throw new Error("Account has been created successfully, sign in ");
     }
 
     return {
