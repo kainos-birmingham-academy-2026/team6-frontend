@@ -27,6 +27,27 @@ describe("server endpoints", () => {
     expect(response.text).toContain("/job-roles");
   });
 
+  it("renders login page on /login", async () => {
+    const response = await request(app).get("/login");
+
+    expect(response.status).toBe(200);
+    expect(response.type).toContain("html");
+    expect(response.text).toContain("Welcome Back");
+    expect(response.text).toContain("Email Address");
+    expect(response.text).toContain("Password");
+  });
+
+  it("renders register page on /register", async () => {
+    const response = await request(app).get("/register");
+
+    expect(response.status).toBe(200);
+    expect(response.type).toContain("html");
+    expect(response.text).toContain("Create Your Account");
+    expect(response.text).toContain("Email Address");
+    expect(response.text).toContain("Password");
+    expect(response.text).toContain("Create Account");
+  });
+
   it("renders open job roles on /job-roles", async () => {
     mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
       {

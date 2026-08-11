@@ -19,6 +19,14 @@ app.get("/", (_req, res) => {
   res.render("home.html");
 });
 
+app.get("/login", (_req, res) => {
+  res.render("login.html");
+});
+
+app.get("/register", (_req, res) => {
+  res.render("register.html");
+});
+
 app.get("/job-roles", jobRoleController.list);
 app.get("/job-roles/:id", jobRoleController.getById);
 

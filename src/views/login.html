@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login | Kainos Careers</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="brand-bar">Kainos Careers</p>
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Kainos Careers Home">
+          <img src="/images/kainos-logo-primary-transparent.png" alt="Kainos" class="brand-logo" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/job-roles" class="nav-link">Job Roles</a>
+          <a href="/login" class="nav-link nav-link-active">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container login-page-content">
+      <section class="login-grid">
+        <article class="login-copy-panel card">
+          <p class="eyebrow">Kainos Careers</p>
+          <h1>Welcome Back</h1>
+          <p>
+            Sign in to continue your application journey, track opportunities, and stay connected
+            with the latest Kainos career updates.
+          </p>
+          <ul class="login-points" aria-label="Benefits of signing in">
+            <li>Save and continue applications at any time</li>
+            <li>Get updates on role changes and deadlines</li>
+            <li>Manage your profile and notification preferences</li>
+          </ul>
+        </article>
+
+        <section class="login-form-panel card" aria-labelledby="login-form-title">
+          <h2 id="login-form-title">Sign In</h2>
+          <form action="/login" method="post" class="login-form" novalidate>
+            <div class="form-field">
+              <label for="email">Email Address</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="name@kainos.com"
+                required
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button type="submit" class="login-submit-btn">Sign In</button>
+            <div class="login-help-row">
+              <p class="login-help-text">
+                Need help? Email <a href="mailto:careers@kainos.com">careers@kainos.com</a>
+              </p>
+              <p class="login-help-text">
+                New here? <a href="/register">Create an account</a>
+              </p>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <div>
+          <p class="footer-title">Kainos Careers</p>
+          <p>Partner with the best people in tech to shape what comes next.</p>
+        </div>
+        <div>
+          <p class="footer-title">Contact</p>
+          <p><a href="mailto:careers@kainos.com">careers@kainos.com</a></p>
+          <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
+          <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
