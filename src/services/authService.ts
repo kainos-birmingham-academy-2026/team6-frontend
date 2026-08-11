@@ -10,6 +10,27 @@ export type RegisterPayload = {
   password: string;
 };
 
+export type AuthSuccessResponse = {
+  token: string;
+  user: {
+    userid: number;
+    email: string;
+    role: string;
+  };
+};
+
+type BackendAuthResponse = {
+  token?: string;
+  accessToken?: string;
+  jwt?: string;
+  user?: {
+    userid?: number;
+    id?: number;
+    email?: string;
+    role?: string;
+  };
+};
+
 type ErrorPayload = {
   message?: string;
   error?: string;
@@ -22,13 +43,15 @@ export class AuthService {
   constructor(private readonly apiBaseUrl: string = process.env.API_BASE_URL || "http://localhost:3000") {
     this.client = axios.create({
       baseURL: this.apiBaseUrl,
-      timeout: 5000
+      headers: {"Content-Type": "application/json",},
+      timeout: 5000,
     });
   }
 
-  async login(payload: LoginPayload): Promise<void> {
+  async login(payload: LoginPayload): Promise<AuthSuccessResponse> {
     try {
-      await this.client.post("/auth/login", payload);
+      const response = await this.client.post("auth/login", payload);
+      return this.normalizeAuthResponse(response.data, payload.email);
     } catch (error) {
       if (error instanceof AxiosError) {
         const backendMessage = this.extractBackendMessage(error.response?.data);
@@ -39,9 +62,10 @@ export class AuthService {
     }
   }
 
-  async register(payload: RegisterPayload): Promise<void> {
+  async register(payload: RegisterPayload): Promise<AuthSuccessResponse> {
     try {
-      await this.client.post("/auth/register", payload);
+      const response = await this.client.post("/auth/register", payload);
+      return this.normalizeAuthResponse(response.data, payload.email);
     } catch (error) {
       if (error instanceof AxiosError) {
         const backendMessage = this.extractBackendMessage(error.response?.data);
@@ -73,6 +97,24 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  private normalizeAuthResponse(data: unknown, fallbackEmail: string): AuthSuccessResponse {
+    const payload = (data ?? {}) as BackendAuthResponse;
+    const token = payload.token || payload.accessToken || payload.jwt;
+
+    if (!token) {
+      throw new Error("Login succeeded but no token was returned by the backend.");
+    }
+
+    return {
+      token,
+      user: {
+        userid: payload.user?.userid ?? payload.user?.id ?? 0,
+        email: payload.user?.email || fallbackEmail,
+        role: payload.user?.role || "candidate"
+      }
+    };
   }
 }
 

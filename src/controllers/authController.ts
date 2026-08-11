@@ -1,8 +1,24 @@
 import type { Request, Response } from "express";
 import { authService } from "../services/authService";
 
+declare module "express-session" {
+  interface SessionData {
+    user?: {
+      userid: number;
+      email: string;
+      role: string;
+    };
+    token?: string;
+  }
+}
+
 export class AuthController {
-  showLogin(_req: Request, res: Response): void {
+  showLogin(req: Request, res: Response): void {
+    if (req.session.token) {
+      res.redirect("/job-roles");
+      return;
+    }
+
     res.render("login.html", {
       loginEmail: "",
       loginErrorMessage: ""
@@ -14,7 +30,29 @@ export class AuthController {
     const password = typeof req.body.password === "string" ? req.body.password : "";
 
     try {
-      await authService.login({ email, password });
+      const result = await authService.login({
+        email,
+        password
+      });
+
+      req.session.user = {
+        userid: result.user.userid,
+        email: result.user.email,
+        role: result.user.role
+      };
+
+      req.session.token = result.token;
+      await new Promise<void>((resolve, reject) => {
+        req.session.save((sessionError) => {
+          if (sessionError) {
+            reject(sessionError);
+            return;
+          }
+
+          resolve();
+        });
+      });
+
       res.redirect("/job-roles");
     } catch (error) {
       const loginErrorMessage = error instanceof Error ? error.message : "Unable to sign in right now.";
@@ -26,7 +64,12 @@ export class AuthController {
     }
   }
 
-  showRegister(_req: Request, res: Response): void {
+  showRegister(req: Request, res: Response): void {
+    if (req.session.token) {
+      res.redirect("/job-roles");
+      return;
+    }
+
     res.render("register.html", {
       registerEmail: "",
       registerErrorMessage: ""
@@ -48,6 +91,13 @@ export class AuthController {
         registerErrorMessage
       });
     }
+  }
+
+  logout(req: Request, res: Response): void {
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      res.redirect("/login");
+    });
   }
 }
 

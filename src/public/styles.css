@@ -71,6 +71,10 @@ body {
   gap: 0.4rem;
 }
 
+.nav-inline-form {
+  margin: 0;
+}
+
 .nav-link {
   color: var(--kainos-blue);
   text-decoration: none;
@@ -80,6 +84,13 @@ body {
   border-radius: 8px;
   padding: 0.6rem 0.9rem;
   transition: background-color 180ms ease, color 180ms ease;
+}
+
+.nav-link-button {
+  border: none;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
 }
 
 .nav-link:hover,

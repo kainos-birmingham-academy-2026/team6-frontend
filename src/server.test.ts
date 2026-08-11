@@ -58,7 +58,14 @@ describe("server endpoints", () => {
   });
 
   it("redirects to job roles when login succeeds", async () => {
-    mockedAuthService.login.mockResolvedValue();
+    mockedAuthService.login.mockResolvedValue({
+      token: "jwt-token",
+      user: {
+        userid: 1,
+        email: "user@kainos.com",
+        role: "candidate"
+      }
+    });
 
     const response = await request(app).post("/login").type("form").send({
       email: "user@kainos.com",
@@ -87,8 +94,94 @@ describe("server endpoints", () => {
     expect(response.text).toContain('value="bad-email"');
   });
 
+  it("keeps user signed in and redirects /login after successful auth", async () => {
+    mockedAuthService.login.mockResolvedValue({
+      token: "jwt-token",
+      user: {
+        userid: 1,
+        email: "user@kainos.com",
+        role: "candidate"
+      }
+    });
+
+    const agent = request.agent(app);
+
+    const loginResponse = await agent.post("/login").type("form").send({
+      email: "user@kainos.com",
+      password: "Password123!"
+    });
+
+    expect(loginResponse.status).toBe(302);
+    expect(loginResponse.headers.location).toBe("/job-roles");
+
+    const revisitLoginResponse = await agent.get("/login");
+
+    expect(revisitLoginResponse.status).toBe(302);
+    expect(revisitLoginResponse.headers.location).toBe("/job-roles");
+  });
+
+  it("shows sign out button in nav after login", async () => {
+    mockedAuthService.login.mockResolvedValue({
+      token: "jwt-token",
+      user: {
+        userid: 1,
+        email: "user@kainos.com",
+        role: "candidate"
+      }
+    });
+
+    const agent = request.agent(app);
+
+    await agent.post("/login").type("form").send({
+      email: "user@kainos.com",
+      password: "Password123!"
+    });
+
+    const response = await agent.get("/");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Sign Out");
+    expect(response.text).not.toContain('href="/login" class="nav-link">Login</a>');
+  });
+
+  it("logs user out and returns login link in nav", async () => {
+    mockedAuthService.login.mockResolvedValue({
+      token: "jwt-token",
+      user: {
+        userid: 1,
+        email: "user@kainos.com",
+        role: "candidate"
+      }
+    });
+
+    const agent = request.agent(app);
+
+    await agent.post("/login").type("form").send({
+      email: "user@kainos.com",
+      password: "Password123!"
+    });
+
+    const logoutResponse = await agent.post("/logout");
+
+    expect(logoutResponse.status).toBe(302);
+    expect(logoutResponse.headers.location).toBe("/login");
+
+    const response = await agent.get("/");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('href="/login" class="nav-link">Login</a>');
+    expect(response.text).not.toContain("Sign Out");
+  });
+
   it("redirects to login when register succeeds", async () => {
-    mockedAuthService.register.mockResolvedValue();
+    mockedAuthService.register.mockResolvedValue({
+      token: "jwt-token",
+      user: {
+        userid: 2,
+        email: "new.user@kainos.com",
+        role: "candidate"
+      }
+    });
 
     const response = await request(app).post("/register").type("form").send({
       email: "new.user@kainos.com",

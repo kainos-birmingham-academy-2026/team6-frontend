@@ -17,7 +17,13 @@
         <nav class="site-nav" aria-label="Main navigation">
           <a href="/" class="nav-link">Home</a>
           <a href="/job-roles" class="nav-link">Job Roles</a>
+          {% if isAuthenticated %}
+          <form action="/logout" method="post" class="nav-inline-form">
+            <button type="submit" class="nav-link nav-link-button">Sign Out</button>
+          </form>
+          {% else %}
           <a href="/login" class="nav-link nav-link-active">Login</a>
+          {% endif %}
         </nav>
       </div>
     </header>
