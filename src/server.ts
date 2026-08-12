@@ -35,8 +35,17 @@ app.use(
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = Boolean(req.session.token);
+  res.locals.isAdmin = req.session.user?.role === "admin";
   next();
 });
+
+const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (req.session.user?.role !== "admin") {
+    res.redirect("/login");
+    return;
+  }
+  next();
+};
 
 app.get("/", (_req, res) => {
   res.render("home.html");
@@ -49,11 +58,11 @@ app.post("/register", authController.register.bind(authController));
 app.post("/logout", authController.logout.bind(authController));
 
 app.get("/job-roles", jobRoleController.list);
-app.get("/job-roles/add", jobRoleController.showAddForm.bind(jobRoleController));
-app.post("/job-roles/add", jobRoleController.createRole.bind(jobRoleController));
-app.get("/job-roles/:id/edit", jobRoleController.showEditForm.bind(jobRoleController));
-app.post("/job-roles/:id/edit", jobRoleController.updateRole.bind(jobRoleController));
-app.post("/job-roles/:id/delete", jobRoleController.deleteRole.bind(jobRoleController));
+app.get("/job-roles/add", requireAdmin, jobRoleController.showAddForm.bind(jobRoleController));
+app.post("/job-roles/add", requireAdmin, jobRoleController.createRole.bind(jobRoleController));
+app.get("/job-roles/:id/edit", requireAdmin, jobRoleController.showEditForm.bind(jobRoleController));
+app.post("/job-roles/:id/edit", requireAdmin, jobRoleController.updateRole.bind(jobRoleController));
+app.post("/job-roles/:id/delete", requireAdmin, jobRoleController.deleteRole.bind(jobRoleController));
 app.get("/job-roles/:id", jobRoleController.getById);
 
 app.get("/health", (_req, res) => {

@@ -31,7 +31,9 @@
     <main class="container page-content">
       <div class="page-header-row">
         <h1>Open Job Roles at Kainos</h1>
+        {% if isAdmin %}
         <a href="/job-roles/add" class="primary-link">Add New Role</a>
+        {% endif %}
       </div>
 
       {% if hasLoadError %}
@@ -49,7 +51,9 @@
               <th>Band</th>
               <th>Closing Date</th>
               <th>More Info</th>
+              {% if isAdmin %}
               <th>Actions</th>
+              {% endif %}
             </tr>
           </thead>
           <tbody>
@@ -73,6 +77,7 @@
                 <span>Unavailable</span>
                 {% endif %}
               </td>
+              {% if isAdmin %}
               <td>
                 {% if role.detailsId %}
                 <div class="table-actions">
@@ -88,6 +93,7 @@
                 </div>
                 {% endif %}
               </td>
+              {% endif %}
             </tr>
             {% endfor %}
           </tbody>

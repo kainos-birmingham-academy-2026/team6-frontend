@@ -108,6 +108,7 @@
 
       <section class="info-actions">
         <a href="/job-roles" class="primary-link">Back to Job Roles</a>
+        {% if isAdmin %}
         <a href="/job-roles/{{ jobRole.jobRoleId }}/edit" class="primary-link">Edit Role</a>
         <form
           action="/job-roles/{{ jobRole.jobRoleId }}/delete"
@@ -117,6 +118,7 @@
         >
           <button type="submit" class="primary-link btn-danger-link">Delete Role</button>
         </form>
+        {% endif %}
       </section>
       {% endif %}
     </main>

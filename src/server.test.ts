@@ -27,6 +27,21 @@ import { jobRoleService } from "./services/jobRoleService";
 const mockedJobRoleService = vi.mocked(jobRoleService);
 const mockedAuthService = vi.mocked(authService);
 
+const loginAsAdmin = async () => {
+  mockedAuthService.login.mockResolvedValueOnce({
+    token: "jwt-token",
+    user: { userid: 1, email: "admin@kainos.com", role: "admin" }
+  });
+
+  const agent = request.agent(app);
+  await agent.post("/login").type("form").send({
+    email: "admin@kainos.com",
+    password: "Password123!"
+  });
+
+  return agent;
+};
+
 describe("server endpoints", () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -337,11 +352,54 @@ describe("server endpoints", () => {
     expect(Number.isNaN(Date.parse(response.body.time))).toBe(false);
   });
 
-  it("renders the add job role form with capabilities and bands", async () => {
+  it("hides add/edit/delete role actions from anonymous visitors", async () => {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
+      {
+        jobRoleId: 1,
+        roleName: "Backend Developer",
+        location: "London",
+        capabilityName: "Backend Engineering",
+        bandName: "Junior",
+        closingDate: "2026-09-15T23:59:59.000Z"
+      }
+    ]);
+
+    const response = await request(app).get("/job-roles");
+
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain("Add New Role");
+    expect(response.text).not.toContain(">Edit<");
+    expect(response.text).not.toContain(">Delete<");
+  });
+
+  it("redirects anonymous visitors away from the add role form", async () => {
+    const response = await request(app).get("/job-roles/add");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
+    expect(mockedJobRoleService.getCapabilities).not.toHaveBeenCalled();
+  });
+
+  it("redirects non-admin users away from the add role form", async () => {
+    mockedAuthService.login.mockResolvedValueOnce({
+      token: "jwt-token",
+      user: { userid: 2, email: "user@kainos.com", role: "user" }
+    });
+    const agent = request.agent(app);
+    await agent.post("/login").type("form").send({ email: "user@kainos.com", password: "Password123!" });
+
+    const response = await agent.get("/job-roles/add");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
+  });
+
+  it("renders the add job role form with capabilities and bands for an admin", async () => {
     mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
+    const agent = await loginAsAdmin();
 
-    const response = await request(app).get("/job-roles/add");
+    const response = await agent.get("/job-roles/add");
 
     expect(response.status).toBe(200);
     expect(response.text).toContain("Add Job Role");
@@ -353,8 +411,9 @@ describe("server endpoints", () => {
     mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.createJobRole.mockResolvedValue({ jobRoleId: 5 });
+    const agent = await loginAsAdmin();
 
-    const response = await request(app).post("/job-roles/add").type("form").send({
+    const response = await agent.post("/job-roles/add").type("form").send({
       roleName: "Software Engineer",
       location: "Belfast",
       capabilityId: "1",
@@ -377,8 +436,9 @@ describe("server endpoints", () => {
   it("re-renders the add form with an error when required fields are missing", async () => {
     mockedJobRoleService.getCapabilities.mockResolvedValue([]);
     mockedJobRoleService.getBands.mockResolvedValue([]);
+    const agent = await loginAsAdmin();
 
-    const response = await request(app).post("/job-roles/add").type("form").send({
+    const response = await agent.post("/job-roles/add").type("form").send({
       roleName: "",
       location: "Belfast"
     });
@@ -392,8 +452,9 @@ describe("server endpoints", () => {
     mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.createJobRole.mockRejectedValue(new Error("Invalid capability or band"));
+    const agent = await loginAsAdmin();
 
-    const response = await request(app).post("/job-roles/add").type("form").send({
+    const response = await agent.post("/job-roles/add").type("form").send({
       roleName: "Software Engineer",
       location: "Belfast",
       capabilityId: "1",
@@ -416,8 +477,9 @@ describe("server endpoints", () => {
     });
     mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 2, bandName: "Consultant" }]);
+    const agent = await loginAsAdmin();
 
-    const response = await request(app).get("/job-roles/1/edit");
+    const response = await agent.get("/job-roles/1/edit");
 
     expect(response.status).toBe(200);
     expect(response.text).toContain("Edit Job Role");
@@ -429,8 +491,9 @@ describe("server endpoints", () => {
     mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.updateJobRole.mockResolvedValue({ jobRoleId: 1 });
+    const agent = await loginAsAdmin();
 
-    const response = await request(app).post("/job-roles/1/edit").type("form").send({
+    const response = await agent.post("/job-roles/1/edit").type("form").send({
       roleName: "Updated Role",
       location: "London",
       capabilityId: "1",
@@ -446,10 +509,19 @@ describe("server endpoints", () => {
     );
   });
 
+  it("redirects anonymous visitors away from deleting a role", async () => {
+    const response = await request(app).post("/job-roles/1/delete");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
+    expect(mockedJobRoleService.deleteJobRole).not.toHaveBeenCalled();
+  });
+
   it("deletes a job role and redirects to the job roles list", async () => {
     mockedJobRoleService.deleteJobRole.mockResolvedValue(undefined);
+    const agent = await loginAsAdmin();
 
-    const response = await request(app).post("/job-roles/1/delete");
+    const response = await agent.post("/job-roles/1/delete");
 
     expect(response.status).toBe(302);
     expect(response.headers.location).toBe("/job-roles");
