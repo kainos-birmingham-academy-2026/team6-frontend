@@ -29,7 +29,10 @@
     </header>
 
     <main class="container page-content">
-      <h1>Open Job Roles at Kainos</h1>
+      <div class="page-header-row">
+        <h1>Open Job Roles at Kainos</h1>
+        <a href="/job-roles/add" class="primary-link">Add New Role</a>
+      </div>
 
       {% if hasLoadError %}
       <p class="message">Unable to load job roles right now. Please try again later.</p>
@@ -46,6 +49,7 @@
               <th>Band</th>
               <th>Closing Date</th>
               <th>More Info</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -67,6 +71,21 @@
                 <a href="/job-roles/{{ role.detailsId }}" class="table-action-btn">View More Info</a>
                 {% else %}
                 <span>Unavailable</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if role.detailsId %}
+                <div class="table-actions">
+                  <a href="/job-roles/{{ role.detailsId }}/edit" class="table-action-btn">Edit</a>
+                  <form
+                    action="/job-roles/{{ role.detailsId }}/delete"
+                    method="post"
+                    class="nav-inline-form"
+                    onsubmit="return confirm('Are you sure you want to delete this job role? This action cannot be undone.');"
+                  >
+                    <button type="submit" class="table-action-btn btn-danger">Delete</button>
+                  </form>
+                </div>
                 {% endif %}
               </td>
             </tr>

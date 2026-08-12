@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ formTitle }} | Kainos Careers</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="brand-bar">Kainos Careers</p>
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Kainos Careers Home">
+          <img src="/images/kainos-logo-primary-transparent.png" alt="Kainos" class="brand-logo" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/job-roles" class="nav-link nav-link-active">Job Roles</a>
+          {% if isAuthenticated %}
+          <form action="/logout" method="post" class="nav-inline-form">
+            <button type="submit" class="nav-link nav-link-button">Sign Out</button>
+          </form>
+          {% else %}
+          <a href="/login" class="nav-link">Login</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content">
+      <h1>{{ formTitle }}</h1>
+
+      <div class="card job-role-form-panel">
+        {% if errorMessage %}
+        <p class="auth-message auth-message-error" role="alert">{{ errorMessage }}</p>
+        {% endif %}
+
+        <form action="{{ formAction }}" method="post" class="job-role-form" novalidate>
+          <div class="form-field">
+            <label for="roleName">Role Name</label>
+            <input id="roleName" name="roleName" type="text" value="{{ values.roleName }}" required />
+          </div>
+
+          <div class="form-field">
+            <label for="location">Location</label>
+            <input id="location" name="location" type="text" value="{{ values.location }}" required />
+          </div>
+
+          <div class="form-field">
+            <label for="capabilityId">Capability</label>
+            <select id="capabilityId" name="capabilityId" required>
+              <option value="" disabled {% if not values.capabilityId %}selected{% endif %}>Select a capability</option>
+              {% for capability in capabilities %}
+              <option value="{{ capability.capabilityId }}" {% if values.capabilityId == capability.capabilityId|string %}selected{% endif %}>
+                {{ capability.capabilityName }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="bandId">Band</label>
+            <select id="bandId" name="bandId" required>
+              <option value="" disabled {% if not values.bandId %}selected{% endif %}>Select a band</option>
+              {% for band in bands %}
+              <option value="{{ band.bandId }}" {% if values.bandId == band.bandId|string %}selected{% endif %}>
+                {{ band.bandName }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="closingDate">Closing Date</label>
+            <input id="closingDate" name="closingDate" type="date" value="{{ values.closingDate }}" required />
+          </div>
+
+          <div class="form-field">
+            <label for="numberOfOpenPositions">Number of Open Positions</label>
+            <input
+              id="numberOfOpenPositions"
+              name="numberOfOpenPositions"
+              type="number"
+              min="1"
+              value="{{ values.numberOfOpenPositions }}"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4">{{ values.description }}</textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="responsibilities">Responsibilities</label>
+            <textarea id="responsibilities" name="responsibilities" rows="4">{{ values.responsibilities }}</textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="sharepointUrl">SharePoint URL</label>
+            <input id="sharepointUrl" name="sharepointUrl" type="url" value="{{ values.sharepointUrl }}" />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="login-submit-btn">{% if formMode == "edit" %}Save Changes{% else %}Create Role{% endif %}</button>
+            <a href="/job-roles" class="btn-secondary-link">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <div>
+          <p class="footer-title">Kainos Careers</p>
+          <p>Partner with the best people in tech to shape what comes next.</p>
+        </div>
+        <div>
+          <p class="footer-title">Contact</p>
+          <p><a href="mailto:careers@kainos.com">careers@kainos.com</a></p>
+          <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
+          <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

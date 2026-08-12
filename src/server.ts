@@ -49,6 +49,11 @@ app.post("/register", authController.register.bind(authController));
 app.post("/logout", authController.logout.bind(authController));
 
 app.get("/job-roles", jobRoleController.list);
+app.get("/job-roles/add", jobRoleController.showAddForm.bind(jobRoleController));
+app.post("/job-roles/add", jobRoleController.createRole.bind(jobRoleController));
+app.get("/job-roles/:id/edit", jobRoleController.showEditForm.bind(jobRoleController));
+app.post("/job-roles/:id/edit", jobRoleController.updateRole.bind(jobRoleController));
+app.post("/job-roles/:id/delete", jobRoleController.deleteRole.bind(jobRoleController));
 app.get("/job-roles/:id", jobRoleController.getById);
 
 app.get("/health", (_req, res) => {

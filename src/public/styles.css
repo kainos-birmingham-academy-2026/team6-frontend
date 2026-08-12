@@ -439,6 +439,25 @@ tbody tr:nth-child(even) {
   transform: translateY(-1px);
 }
 
+.table-action-btn.btn-danger,
+.table-actions form button.btn-danger {
+  background: #d55757;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.table-action-btn.btn-danger:hover,
+.table-action-btn.btn-danger:focus-visible {
+  background: #b83f3f;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .status-open {
   color: var(--kainos-dark-green);
   font-weight: 700;
@@ -556,6 +575,77 @@ tbody tr:nth-child(even) {
 
 .info-actions {
   margin-top: 1.2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-danger-link {
+  background: #d55757;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn-danger-link:hover,
+.btn-danger-link:focus-visible {
+  background: #b83f3f;
+}
+
+.btn-secondary-link {
+  display: inline-block;
+  color: var(--kainos-blue);
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.78rem 1.08rem;
+}
+
+.btn-secondary-link:hover,
+.btn-secondary-link:focus-visible {
+  text-decoration: underline;
+}
+
+.page-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-header-row h1 {
+  margin: 0;
+}
+
+.job-role-form-panel {
+  padding: clamp(1.2rem, 3.2vw, 1.8rem);
+}
+
+.job-role-form select,
+.job-role-form textarea {
+  width: 100%;
+  border: 1px solid var(--kainos-line);
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--kainos-ink);
+  font: inherit;
+  padding: 0.72rem 0.8rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.job-role-form select:focus-visible,
+.job-role-form textarea:focus-visible {
+  border-color: var(--kainos-blue);
+  box-shadow: 0 0 0 3px rgba(40, 53, 131, 0.16);
+  outline: none;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
 .site-footer {

@@ -4,7 +4,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("./services/jobRoleService", () => ({
   jobRoleService: {
     getOpenJobRoles: vi.fn(),
-    getJobRoleById: vi.fn()
+    getJobRoleById: vi.fn(),
+    getCapabilities: vi.fn(),
+    getBands: vi.fn(),
+    createJobRole: vi.fn(),
+    updateJobRole: vi.fn(),
+    deleteJobRole: vi.fn()
   }
 }));
 
@@ -330,5 +335,124 @@ describe("server endpoints", () => {
     expect(response.body.status).toBe("UP");
     expect(typeof response.body.time).toBe("string");
     expect(Number.isNaN(Date.parse(response.body.time))).toBe(false);
+  });
+
+  it("renders the add job role form with capabilities and bands", async () => {
+    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
+
+    const response = await request(app).get("/job-roles/add");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Add Job Role");
+    expect(response.text).toContain("Engineering");
+    expect(response.text).toContain("Associate");
+  });
+
+  it("creates a job role and redirects to the job roles list", async () => {
+    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
+    mockedJobRoleService.createJobRole.mockResolvedValue({ jobRoleId: 5 });
+
+    const response = await request(app).post("/job-roles/add").type("form").send({
+      roleName: "Software Engineer",
+      location: "Belfast",
+      capabilityId: "1",
+      bandId: "1",
+      closingDate: "2026-12-31"
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles");
+    expect(mockedJobRoleService.createJobRole).toHaveBeenCalledWith(
+      expect.objectContaining({
+        roleName: "Software Engineer",
+        location: "Belfast",
+        capabilityId: 1,
+        bandId: 1
+      })
+    );
+  });
+
+  it("re-renders the add form with an error when required fields are missing", async () => {
+    mockedJobRoleService.getCapabilities.mockResolvedValue([]);
+    mockedJobRoleService.getBands.mockResolvedValue([]);
+
+    const response = await request(app).post("/job-roles/add").type("form").send({
+      roleName: "",
+      location: "Belfast"
+    });
+
+    expect(response.status).toBe(400);
+    expect(mockedJobRoleService.createJobRole).not.toHaveBeenCalled();
+    expect(response.text).toContain("Role name is required.");
+  });
+
+  it("re-renders the add form when the backend rejects the job role", async () => {
+    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
+    mockedJobRoleService.createJobRole.mockRejectedValue(new Error("Invalid capability or band"));
+
+    const response = await request(app).post("/job-roles/add").type("form").send({
+      roleName: "Software Engineer",
+      location: "Belfast",
+      capabilityId: "1",
+      bandId: "1",
+      closingDate: "2026-12-31"
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.text).toContain("Invalid capability or band");
+  });
+
+  it("renders the edit job role form pre-populated with existing values", async () => {
+    mockedJobRoleService.getJobRoleById.mockResolvedValue({
+      jobRoleId: 1,
+      roleName: "Software Engineer",
+      location: "Belfast",
+      capabilityId: 1,
+      bandId: 2,
+      closingDate: "2026-12-31T00:00:00.000Z"
+    });
+    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 2, bandName: "Consultant" }]);
+
+    const response = await request(app).get("/job-roles/1/edit");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Edit Job Role");
+    expect(response.text).toContain('value="Software Engineer"');
+    expect(response.text).toContain('value="Belfast"');
+  });
+
+  it("updates a job role and redirects to the role details page", async () => {
+    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
+    mockedJobRoleService.updateJobRole.mockResolvedValue({ jobRoleId: 1 });
+
+    const response = await request(app).post("/job-roles/1/edit").type("form").send({
+      roleName: "Updated Role",
+      location: "London",
+      capabilityId: "1",
+      bandId: "1",
+      closingDate: "2026-12-31"
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles/1");
+    expect(mockedJobRoleService.updateJobRole).toHaveBeenCalledWith(
+      "1",
+      expect.objectContaining({ roleName: "Updated Role" })
+    );
+  });
+
+  it("deletes a job role and redirects to the job roles list", async () => {
+    mockedJobRoleService.deleteJobRole.mockResolvedValue(undefined);
+
+    const response = await request(app).post("/job-roles/1/delete");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles");
+    expect(mockedJobRoleService.deleteJobRole).toHaveBeenCalledWith("1");
   });
 });
