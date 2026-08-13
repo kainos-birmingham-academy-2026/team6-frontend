@@ -30,7 +30,7 @@
 
     <main class="container login-page-content">
       <section class="login-grid">
-        <article class="login-copy-panel card">
+        <article class="login-copy-panel card reveal">
           <p class="eyebrow">Kainos Careers</p>
           <h1>Welcome Back</h1>
           <p>
@@ -42,9 +42,12 @@
             <li>Get updates on role changes and deadlines</li>
             <li>Manage your profile and notification preferences</li>
           </ul>
+          <p class="login-panel-footnote">
+            Not ready to sign in? <a href="/job-roles">Browse open roles</a> first.
+          </p>
         </article>
 
-        <section class="login-form-panel card" aria-labelledby="login-form-title">
+        <section class="login-form-panel card reveal" aria-labelledby="login-form-title">
           <h2 id="login-form-title">Sign In</h2>
           {% if loginErrorMessage %}
           <p class="auth-message auth-message-error" role="alert">{{ loginErrorMessage }}</p>
@@ -65,14 +68,26 @@
 
             <div class="form-field">
               <label for="password">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                placeholder="Enter your password"
-                required
-              />
+              <div class="password-field">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autocomplete="current-password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-password-toggle="password"
+                  aria-label="Show password"
+                  aria-pressed="false"
+                  hidden
+                >
+                  Show
+                </button>
+              </div>
             </div>
 
             <button type="submit" class="login-submit-btn">Sign In</button>
@@ -101,7 +116,18 @@
           <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
           <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
         </div>
+        <div>
+          <p class="footer-title">Follow Us</p>
+          <p class="footer-socials">
+            <a href="https://www.linkedin.com/company/kainos/" rel="noreferrer noopener" target="_blank">LinkedIn</a>
+            <a href="https://twitter.com/KainosSoftware" rel="noreferrer noopener" target="_blank">Twitter</a>
+            <a href="https://www.facebook.com/KainosSoftware/" rel="noreferrer noopener" target="_blank">Facebook</a>
+          </p>
+        </div>
       </div>
     </footer>
+
+    <script src="/site.js" defer></script>
+    <script src="/auth.js" defer></script>
   </body>
 </html>
