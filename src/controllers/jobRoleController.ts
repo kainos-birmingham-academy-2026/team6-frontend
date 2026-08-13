@@ -37,6 +37,72 @@ const formatDateToDayMonthYear = (value?: string): string => {
   return `${day}/${month}/${year}`;
 };
 
+const CAPABILITY_ICONS: Record<string, string> = {
+  engineering: "</>",
+  "software engineering": "</>",
+  "backend engineering": "</>",
+  "cloud and engineering": "</>",
+  data: "◧",
+  "data & ai": "◧",
+  "data and ai": "◧",
+  design: "✎",
+  "experience design": "✎",
+  "user-centred design": "✎",
+  workday: "⬡",
+  product: "◆",
+  delivery: "◆",
+  "delivery & product": "◆"
+};
+
+const capabilityIcon = (name: string): string =>
+  CAPABILITY_ICONS[name.trim().toLowerCase()] ?? "✦";
+
+// Stable per-capability accent so a capability always keeps the same card colour.
+const capabilityAccent = (name: string): number => {
+  let hash = 0;
+  for (const character of name) {
+    hash = (hash * 31 + character.charCodeAt(0)) % 5;
+  }
+  return hash + 1;
+};
+
+const daysUntil = (value?: string): number | null => {
+  if (!value) {
+    return null;
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return Math.ceil((parsed.getTime() - today.getTime()) / 86_400_000);
+};
+
+const closingUrgency = (days: number | null): { label: string; className: string } => {
+  if (days === null) {
+    return { label: "", className: "" };
+  }
+  if (days < 0) {
+    return { label: "Closed", className: "closing-closed" };
+  }
+  if (days === 0) {
+    return { label: "Closes today", className: "closing-urgent" };
+  }
+  if (days === 1) {
+    return { label: "1 day left", className: "closing-urgent" };
+  }
+  if (days <= 7) {
+    return { label: `${days} days left`, className: "closing-urgent" };
+  }
+  if (days <= 14) {
+    return { label: `${days} days left`, className: "closing-soon" };
+  }
+  return { label: "", className: "" };
+};
+
 const formatDateForInput = (value?: string): string => {
   if (!value) {
     return "";
@@ -127,16 +193,34 @@ export class JobRoleController {
   async list(req: Request, res: Response): Promise<void> {
     try {
       const jobRoles = await jobRoleService.getOpenJobRoles(req.session.token);
-      const jobRolesViewModel = jobRoles.map((role, index) => ({
-        ...role,
-        detailsId: role.jobRoleId ?? index + 1,
-        capabilityDisplay: role.capabilityName || role.capabilityId || "N/A",
-        bandDisplay: role.bandName || role.bandId || "N/A",
-        closingDateDisplay: formatDateToDayMonthYear(role.closingDate)
-      }));
+      const jobRolesViewModel = jobRoles.map((role, index) => {
+        const capabilityDisplay = String(role.capabilityName || role.capabilityId || "N/A");
+        const daysRemaining = daysUntil(role.closingDate);
+        const urgency = closingUrgency(daysRemaining);
+
+        return {
+          ...role,
+          detailsId: role.jobRoleId ?? index + 1,
+          capabilityDisplay,
+          bandDisplay: role.bandName || role.bandId || "N/A",
+          closingDateDisplay: formatDateToDayMonthYear(role.closingDate),
+          capabilityIcon: capabilityIcon(capabilityDisplay),
+          accentClass: `cap-accent-${capabilityAccent(capabilityDisplay)}`,
+          closingSort: daysRemaining ?? Number.MAX_SAFE_INTEGER,
+          urgencyLabel: urgency.label,
+          urgencyClass: urgency.className
+        };
+      });
+
+      const featuredRole = jobRolesViewModel.reduce(
+        (soonest, role) => (role.closingSort < soonest.closingSort ? role : soonest),
+        jobRolesViewModel[0]
+      );
 
       res.render("job-role-list.html", {
         jobRoles: jobRolesViewModel,
+        featuredRole,
+        otherRoles: jobRolesViewModel.filter((role) => role !== featuredRole),
         hasLoadError: false
       });
     } catch (error) {
