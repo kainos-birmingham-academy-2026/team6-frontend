@@ -5,6 +5,7 @@ import { authController } from "./controllers/authController";
 import { jobRoleController } from "./controllers/jobRoleController";
 import "dotenv/config";
 import session from "express-session";
+import { requireAuth } from "./middleware/requireAuth";
 
 export const app = express();
 const port = Number(process.env.PORT) || 3001;
@@ -48,8 +49,8 @@ app.get("/register", authController.showRegister.bind(authController));
 app.post("/register", authController.register.bind(authController));
 app.post("/logout", authController.logout.bind(authController));
 
-app.get("/job-roles", jobRoleController.list);
-app.get("/job-roles/:id", jobRoleController.getById);
+app.get("/job-roles", requireAuth, jobRoleController.list);
+app.get("/job-roles/:id", requireAuth, jobRoleController.getById);
 
 app.get("/health", (_req, res) => {
   res.json({

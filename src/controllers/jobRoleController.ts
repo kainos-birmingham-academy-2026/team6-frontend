@@ -1,5 +1,15 @@
 import type { Request, Response } from "express";
-import { jobRoleService } from "../services/jobRoleService";
+import { BackendRequestError, jobRoleService } from "../services/jobRoleService";
+
+async function redirectToLoginOnAuthFailure(error: unknown, req: Request, res: Response): Promise<boolean> {
+  if (error instanceof BackendRequestError && (error.status === 401 || error.status === 403)) {
+    await new Promise<void>((resolve) => req.session.destroy(() => resolve()));
+    res.redirect("/login");
+    return true;
+  }
+
+  return false;
+}
 
 const formatDateToDayMonthYear = (value?: string): string => {
   if (!value) {
@@ -19,9 +29,9 @@ const formatDateToDayMonthYear = (value?: string): string => {
 };
 
 export class JobRoleController {
-  async list(_req: Request, res: Response): Promise<void> {
+  async list(req: Request, res: Response): Promise<void> {
     try {
-      const jobRoles = await jobRoleService.getOpenJobRoles();
+      const jobRoles = await jobRoleService.getOpenJobRoles(req.session.token);
       const jobRolesViewModel = jobRoles.map((role, index) => ({
         ...role,
         detailsId: role.jobRoleId ?? index + 1,
@@ -34,7 +44,11 @@ export class JobRoleController {
         jobRoles: jobRolesViewModel,
         hasLoadError: false
       });
-    } catch {
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+
       res.status(502).render("job-role-list.html", {
         jobRoles: [],
         hasLoadError: true
@@ -60,7 +74,7 @@ export class JobRoleController {
         return;
       }
 
-      const role = await jobRoleService.getJobRoleById(id);
+      const role = await jobRoleService.getJobRoleById(id, req.session.token);
       const jobRoleViewModel = {
         ...role,
         capabilityDisplay: role.capabilityName || role.capabilityId || "N/A",
@@ -78,7 +92,11 @@ export class JobRoleController {
         hasLoadError: false,
         hasNotFoundError: false
       });
-    } catch {
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+
       res.status(502).render("job-role-information.html", {
         jobRole: null,
         hasLoadError: true,
