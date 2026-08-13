@@ -1,5 +1,24 @@
 import type { Request, Response } from "express";
-import { jobRoleService, type JobRolePayload } from "../services/jobRoleService";
+import {
+  BackendRequestError,
+  jobRoleService,
+  type JobRolePayload
+} from "../services/jobRoleService";
+
+const redirectToLoginOnAuthFailure = async (
+  error: unknown,
+  req: Request,
+  res: Response
+): Promise<boolean> => {
+  if (error instanceof BackendRequestError && error.statusCode === 401) {
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      res.redirect("/login");
+    });
+    return true;
+  }
+  return false;
+};
 
 const formatDateToDayMonthYear = (value?: string): string => {
   if (!value) {

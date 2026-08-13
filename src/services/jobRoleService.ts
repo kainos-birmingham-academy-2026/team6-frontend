@@ -1,5 +1,15 @@
 import axios, { AxiosError, type AxiosInstance } from "axios";
 
+export class BackendRequestError extends Error {
+  constructor(
+    message: string,
+    public readonly statusCode?: number
+  ) {
+    super(message);
+    this.name = "BackendRequestError";
+  }
+}
+
 export type BackendJobRole = {
   jobRoleId?: number | string;
   roleName?: string;
@@ -54,6 +64,18 @@ export class JobRoleService {
       baseURL: this.apiBaseUrl,
       timeout: 5000
     });
+  }
+
+  private buildAuthHeaders(token?: string): Record<string, string> {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json"
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    return headers;
   }
 
   async getOpenJobRoles(token?: string): Promise<BackendJobRole[]> {

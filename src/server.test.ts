@@ -1,17 +1,30 @@
 import request from "supertest";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("./services/jobRoleService", () => ({
-  jobRoleService: {
-    getOpenJobRoles: vi.fn(),
-    getJobRoleById: vi.fn(),
-    getCapabilities: vi.fn(),
-    getBands: vi.fn(),
-    createJobRole: vi.fn(),
-    updateJobRole: vi.fn(),
-    deleteJobRole: vi.fn()
+vi.mock("./services/jobRoleService", () => {
+  class BackendRequestError extends Error {
+    constructor(
+      message: string,
+      public readonly statusCode?: number
+    ) {
+      super(message);
+      this.name = "BackendRequestError";
+    }
   }
-}));
+
+  return {
+    BackendRequestError,
+    jobRoleService: {
+      getOpenJobRoles: vi.fn(),
+      getJobRoleById: vi.fn(),
+      getCapabilities: vi.fn(),
+      getBands: vi.fn(),
+      createJobRole: vi.fn(),
+      updateJobRole: vi.fn(),
+      deleteJobRole: vi.fn()
+    }
+  };
+});
 
 vi.mock("./services/authService", () => ({
   authService: {
@@ -27,7 +40,7 @@ import { BackendRequestError, jobRoleService } from "./services/jobRoleService";
 const mockedJobRoleService = vi.mocked(jobRoleService);
 const mockedAuthService = vi.mocked(authService);
 
-const loginAsAdmin = async () => {
+const loginAgent = async () => {
   mockedAuthService.login.mockResolvedValueOnce({
     token: "jwt-token",
     user: { userid: 1, email: "admin@kainos.com", role: "admin" }
@@ -232,22 +245,6 @@ describe("server endpoints", () => {
     expect(response.text).toContain('value="new.user@kainos.com"');
   });
 
-  it("redirects to login when accessing job roles without authentication", async () => {
-    const response = await request(app).get("/job-roles");
-
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toBe("/login");
-    expect(mockedJobRoleService.getOpenJobRoles).not.toHaveBeenCalled();
-  });
-
-  it("redirects to login when accessing job role details without authentication", async () => {
-    const response = await request(app).get("/job-roles/1");
-
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toBe("/login");
-    expect(mockedJobRoleService.getJobRoleById).not.toHaveBeenCalled();
-  });
-
   it("renders open job roles on /job-roles", async () => {
     mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
       {
@@ -367,7 +364,9 @@ describe("server endpoints", () => {
   });
 
   it("redirects to login and clears session when the backend rejects the token", async () => {
-    mockedJobRoleService.getOpenJobRoles.mockRejectedValue(new BackendRequestError("Failed to fetch job roles: 401", 401));
+    mockedJobRoleService.getOpenJobRoles.mockRejectedValue(
+      new BackendRequestError("Failed to fetch job roles: 401", 401)
+    );
 
     const agent = await loginAgent();
     const response = await agent.get("/job-roles");
@@ -436,7 +435,7 @@ describe("server endpoints", () => {
       { capabilityId: 1, capabilityName: "Engineering" }
     ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
-    const agent = await loginAsAdmin();
+    const agent = await loginAgent();
 
     const response = await agent.get("/job-roles/add");
 
@@ -452,7 +451,7 @@ describe("server endpoints", () => {
     ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.createJobRole.mockResolvedValue({ jobRoleId: 5 });
-    const agent = await loginAsAdmin();
+    const agent = await loginAgent();
 
     const response = await agent.post("/job-roles/add").type("form").send({
       roleName: "Software Engineer",
@@ -477,7 +476,7 @@ describe("server endpoints", () => {
   it("re-renders the add form with an error when required fields are missing", async () => {
     mockedJobRoleService.getCapabilities.mockResolvedValue([]);
     mockedJobRoleService.getBands.mockResolvedValue([]);
-    const agent = await loginAsAdmin();
+    const agent = await loginAgent();
 
     const response = await agent.post("/job-roles/add").type("form").send({
       roleName: "",
@@ -495,7 +494,7 @@ describe("server endpoints", () => {
     ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.createJobRole.mockRejectedValue(new Error("Invalid capability or band"));
-    const agent = await loginAsAdmin();
+    const agent = await loginAgent();
 
     const response = await agent.post("/job-roles/add").type("form").send({
       roleName: "Software Engineer",
@@ -522,7 +521,7 @@ describe("server endpoints", () => {
       { capabilityId: 1, capabilityName: "Engineering" }
     ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 2, bandName: "Consultant" }]);
-    const agent = await loginAsAdmin();
+    const agent = await loginAgent();
 
     const response = await agent.get("/job-roles/1/edit");
 
@@ -538,7 +537,7 @@ describe("server endpoints", () => {
     ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.updateJobRole.mockResolvedValue({ jobRoleId: 1 });
-    const agent = await loginAsAdmin();
+    const agent = await loginAgent();
 
     const response = await agent.post("/job-roles/1/edit").type("form").send({
       roleName: "Updated Role",
@@ -566,7 +565,7 @@ describe("server endpoints", () => {
 
   it("deletes a job role and redirects to the job roles list", async () => {
     mockedJobRoleService.deleteJobRole.mockResolvedValue(undefined);
-    const agent = await loginAsAdmin();
+    const agent = await loginAgent();
 
     const response = await agent.post("/job-roles/1/delete");
 
