@@ -108,6 +108,17 @@
 
       <section class="info-actions">
         <a href="/job-roles" class="primary-link">Back to Job Roles</a>
+        {% if isAdmin %}
+        <a href="/job-roles/{{ jobRole.jobRoleId }}/edit" class="primary-link">Edit Role</a>
+        <form
+          action="/job-roles/{{ jobRole.jobRoleId }}/delete"
+          method="post"
+          class="nav-inline-form"
+          onsubmit="return confirm('Are you sure you want to delete this job role? This action cannot be undone.');"
+        >
+          <button type="submit" class="primary-link btn-danger-link">Delete Role</button>
+        </form>
+        {% endif %}
       </section>
       {% endif %}
     </main>

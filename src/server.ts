@@ -24,20 +24,29 @@ app.use(express.json());
 app.use(
   session({
     secret: process.env.SESSION_SECRET as string,
-    resave:false,
+    resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
       secure: false,
-      maxAge: 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000
     }
   })
-)
+);
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = Boolean(req.session.token);
+  res.locals.isAdmin = req.session.user?.role === "admin";
   next();
 });
+
+const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (req.session.user?.role !== "admin") {
+    res.redirect("/login");
+    return;
+  }
+  next();
+};
 
 app.get("/", (_req, res) => {
   res.render("home.html");
@@ -49,8 +58,21 @@ app.get("/register", authController.showRegister.bind(authController));
 app.post("/register", authController.register.bind(authController));
 app.post("/logout", authController.logout.bind(authController));
 
-app.get("/job-roles", requireAuth, jobRoleController.list);
-app.get("/job-roles/:id", requireAuth, jobRoleController.getById);
+app.get("/job-roles", jobRoleController.list);
+app.get("/job-roles/add", requireAdmin, jobRoleController.showAddForm.bind(jobRoleController));
+app.post("/job-roles/add", requireAdmin, jobRoleController.createRole.bind(jobRoleController));
+app.get(
+  "/job-roles/:id/edit",
+  requireAdmin,
+  jobRoleController.showEditForm.bind(jobRoleController)
+);
+app.post("/job-roles/:id/edit", requireAdmin, jobRoleController.updateRole.bind(jobRoleController));
+app.post(
+  "/job-roles/:id/delete",
+  requireAdmin,
+  jobRoleController.deleteRole.bind(jobRoleController)
+);
+app.get("/job-roles/:id", jobRoleController.getById);
 
 app.get("/health", (_req, res) => {
   res.json({

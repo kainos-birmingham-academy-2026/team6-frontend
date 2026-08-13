@@ -55,7 +55,8 @@ export class AuthController {
 
       res.redirect("/job-roles");
     } catch (error) {
-      const loginErrorMessage = error instanceof Error ? error.message : "Unable to sign in right now.";
+      const loginErrorMessage =
+        error instanceof Error ? error.message : "Unable to sign in right now.";
 
       res.status(401).render("login.html", {
         loginEmail: email,
@@ -85,8 +86,11 @@ export class AuthController {
       await authService.register({ email, password });
       res.redirect("/login");
     } catch (error) {
-      const registerErrorMessage = error instanceof Error ? error.message : "Unable to create account right now.";
-      const isSuccessMessage = registerErrorMessage.startsWith("Account has been created successfully");
+      const registerErrorMessage =
+        error instanceof Error ? error.message : "Unable to create account right now.";
+      const isSuccessMessage = registerErrorMessage.startsWith(
+        "Account has been created successfully"
+      );
 
       res.status(isSuccessMessage ? 200 : 401).render("register.html", {
         registerEmail: email,
