@@ -40,11 +40,13 @@ type ErrorPayload = {
 export class AuthService {
   private readonly client: AxiosInstance;
 
-  constructor(private readonly apiBaseUrl: string = process.env.API_BASE_URL || "http://localhost:3000") {
+  constructor(
+    private readonly apiBaseUrl: string = process.env.API_BASE_URL || "http://localhost:3000"
+  ) {
     this.client = axios.create({
       baseURL: this.apiBaseUrl,
-      headers: {"Content-Type": "application/json",},
-      timeout: 5000,
+      headers: { "Content-Type": "application/json" },
+      timeout: 5000
     });
   }
 
@@ -55,7 +57,9 @@ export class AuthService {
     } catch (error) {
       if (error instanceof AxiosError) {
         const backendMessage = this.extractBackendMessage(error.response?.data);
-        throw new Error(backendMessage || "Unable to sign in. Please check your email and password.");
+        throw new Error(
+          backendMessage || "Unable to sign in. Please check your email and password."
+        );
       }
 
       throw error;
@@ -69,7 +73,9 @@ export class AuthService {
     } catch (error) {
       if (error instanceof AxiosError) {
         const backendMessage = this.extractBackendMessage(error.response?.data);
-        throw new Error(backendMessage || "Unable to create account. Please check your details and try again.");
+        throw new Error(
+          backendMessage || "Unable to create account. Please check your details and try again."
+        );
       }
 
       throw error;
@@ -92,7 +98,9 @@ export class AuthService {
     }
 
     if (Array.isArray(payload.errors)) {
-      const firstError = payload.errors.find((entry) => typeof entry === "string" && entry.trim().length > 0);
+      const firstError = payload.errors.find(
+        (entry) => typeof entry === "string" && entry.trim().length > 0
+      );
       return firstError || null;
     }
 

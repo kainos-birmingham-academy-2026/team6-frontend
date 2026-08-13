@@ -47,7 +47,9 @@ type ErrorPayload = {
 export class JobRoleService {
   private readonly client: AxiosInstance;
 
-  constructor(private readonly apiBaseUrl: string = process.env.API_BASE_URL || "http://localhost:3000") {
+  constructor(
+    private readonly apiBaseUrl: string = process.env.API_BASE_URL || "http://localhost:3000"
+  ) {
     this.client = axios.create({
       baseURL: this.apiBaseUrl,
       timeout: 5000
@@ -114,20 +116,27 @@ export class JobRoleService {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new Error(this.extractBackendMessage(error.response?.data) || "Unable to create job role.");
+        throw new Error(
+          this.extractBackendMessage(error.response?.data) || "Unable to create job role."
+        );
       }
 
       throw error;
     }
   }
 
-  async updateJobRole(jobRoleId: string | number, payload: JobRolePayload): Promise<BackendJobRole> {
+  async updateJobRole(
+    jobRoleId: string | number,
+    payload: JobRolePayload
+  ): Promise<BackendJobRole> {
     try {
       const response = await this.client.put<BackendJobRole>(`/job-roles/${jobRoleId}`, payload);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new Error(this.extractBackendMessage(error.response?.data) || "Unable to update job role.");
+        throw new Error(
+          this.extractBackendMessage(error.response?.data) || "Unable to update job role."
+        );
       }
 
       throw error;
@@ -139,7 +148,9 @@ export class JobRoleService {
       await this.client.delete(`/job-roles/${jobRoleId}`);
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new Error(this.extractBackendMessage(error.response?.data) || "Unable to delete job role.");
+        throw new Error(
+          this.extractBackendMessage(error.response?.data) || "Unable to delete job role."
+        );
       }
 
       throw error;

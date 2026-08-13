@@ -23,15 +23,15 @@ app.use(express.json());
 app.use(
   session({
     secret: process.env.SESSION_SECRET as string,
-    resave:false,
+    resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
       secure: false,
-      maxAge: 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000
     }
   })
-)
+);
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = Boolean(req.session.token);
@@ -60,9 +60,17 @@ app.post("/logout", authController.logout.bind(authController));
 app.get("/job-roles", jobRoleController.list);
 app.get("/job-roles/add", requireAdmin, jobRoleController.showAddForm.bind(jobRoleController));
 app.post("/job-roles/add", requireAdmin, jobRoleController.createRole.bind(jobRoleController));
-app.get("/job-roles/:id/edit", requireAdmin, jobRoleController.showEditForm.bind(jobRoleController));
+app.get(
+  "/job-roles/:id/edit",
+  requireAdmin,
+  jobRoleController.showEditForm.bind(jobRoleController)
+);
 app.post("/job-roles/:id/edit", requireAdmin, jobRoleController.updateRole.bind(jobRoleController));
-app.post("/job-roles/:id/delete", requireAdmin, jobRoleController.deleteRole.bind(jobRoleController));
+app.post(
+  "/job-roles/:id/delete",
+  requireAdmin,
+  jobRoleController.deleteRole.bind(jobRoleController)
+);
 app.get("/job-roles/:id", jobRoleController.getById);
 
 app.get("/health", (_req, res) => {

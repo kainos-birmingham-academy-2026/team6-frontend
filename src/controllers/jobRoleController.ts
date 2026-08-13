@@ -64,7 +64,8 @@ const toFormValues = (body: Record<string, unknown>): JobRoleFormValues => ({
   description: typeof body.description === "string" ? body.description : "",
   responsibilities: typeof body.responsibilities === "string" ? body.responsibilities : "",
   sharepointUrl: typeof body.sharepointUrl === "string" ? body.sharepointUrl : "",
-  numberOfOpenPositions: typeof body.numberOfOpenPositions === "string" ? body.numberOfOpenPositions : ""
+  numberOfOpenPositions:
+    typeof body.numberOfOpenPositions === "string" ? body.numberOfOpenPositions : ""
 });
 
 const validateFormValues = (values: JobRoleFormValues): string | null => {
@@ -98,7 +99,9 @@ const toPayload = (values: JobRoleFormValues): JobRolePayload => ({
   description: values.description.trim() || undefined,
   responsibilities: values.responsibilities.trim() || undefined,
   sharepointUrl: values.sharepointUrl.trim() || undefined,
-  numberOfOpenPositions: values.numberOfOpenPositions ? Number(values.numberOfOpenPositions) : undefined
+  numberOfOpenPositions: values.numberOfOpenPositions
+    ? Number(values.numberOfOpenPositions)
+    : undefined
 });
 
 export class JobRoleController {
@@ -151,7 +154,9 @@ export class JobRoleController {
         closingDateDisplay: formatDateToDayMonthYear(role.closingDate),
         statusDisplay: role.statusName || role.status || "N/A",
         openPositionsDisplay:
-          typeof role.numberOfOpenPositions === "number" ? String(role.numberOfOpenPositions) : "N/A",
+          typeof role.numberOfOpenPositions === "number"
+            ? String(role.numberOfOpenPositions)
+            : "N/A",
         responsibilitiesDisplay: role.responsibilities || "No responsibilities provided.",
         sharepointUrlDisplay: role.sharepointUrl || ""
       };
@@ -172,7 +177,10 @@ export class JobRoleController {
 
   async showAddForm(_req: Request, res: Response): Promise<void> {
     try {
-      const [capabilities, bands] = await Promise.all([jobRoleService.getCapabilities(), jobRoleService.getBands()]);
+      const [capabilities, bands] = await Promise.all([
+        jobRoleService.getCapabilities(),
+        jobRoleService.getBands()
+      ]);
 
       res.render("job-role-form.html", {
         formMode: "add",
@@ -199,7 +207,10 @@ export class JobRoleController {
   async createRole(req: Request, res: Response): Promise<void> {
     const values = toFormValues(req.body ?? {});
     const validationError = validateFormValues(values);
-    const [capabilities, bands] = await Promise.all([jobRoleService.getCapabilities(), jobRoleService.getBands()]);
+    const [capabilities, bands] = await Promise.all([
+      jobRoleService.getCapabilities(),
+      jobRoleService.getBands()
+    ]);
 
     if (validationError) {
       res.status(400).render("job-role-form.html", {
@@ -218,7 +229,8 @@ export class JobRoleController {
       await jobRoleService.createJobRole(toPayload(values));
       res.redirect("/job-roles");
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unable to create job role right now.";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unable to create job role right now.";
       res.status(400).render("job-role-form.html", {
         formMode: "add",
         formAction: "/job-roles/add",
@@ -282,7 +294,10 @@ export class JobRoleController {
     const id = Array.isArray(rawId) ? rawId[0] : rawId;
     const values = toFormValues(req.body ?? {});
     const validationError = validateFormValues(values);
-    const [capabilities, bands] = await Promise.all([jobRoleService.getCapabilities(), jobRoleService.getBands()]);
+    const [capabilities, bands] = await Promise.all([
+      jobRoleService.getCapabilities(),
+      jobRoleService.getBands()
+    ]);
 
     if (validationError) {
       res.status(400).render("job-role-form.html", {
@@ -301,7 +316,8 @@ export class JobRoleController {
       await jobRoleService.updateJobRole(id, toPayload(values));
       res.redirect(`/job-roles/${id}`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unable to update job role right now.";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unable to update job role right now.";
       res.status(400).render("job-role-form.html", {
         formMode: "edit",
         formAction: `/job-roles/${id}/edit`,

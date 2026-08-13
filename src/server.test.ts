@@ -217,7 +217,9 @@ describe("server endpoints", () => {
   });
 
   it("renders backend validation message when register fails", async () => {
-    mockedAuthService.register.mockRejectedValue(new Error("Password must contain at least 8 characters."));
+    mockedAuthService.register.mockRejectedValue(
+      new Error("Password must contain at least 8 characters.")
+    );
 
     const response = await request(app).post("/register").type("form").send({
       email: "new.user@kainos.com",
@@ -386,7 +388,10 @@ describe("server endpoints", () => {
       user: { userid: 2, email: "user@kainos.com", role: "user" }
     });
     const agent = request.agent(app);
-    await agent.post("/login").type("form").send({ email: "user@kainos.com", password: "Password123!" });
+    await agent
+      .post("/login")
+      .type("form")
+      .send({ email: "user@kainos.com", password: "Password123!" });
 
     const response = await agent.get("/job-roles/add");
 
@@ -395,7 +400,9 @@ describe("server endpoints", () => {
   });
 
   it("renders the add job role form with capabilities and bands for an admin", async () => {
-    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getCapabilities.mockResolvedValue([
+      { capabilityId: 1, capabilityName: "Engineering" }
+    ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     const agent = await loginAsAdmin();
 
@@ -408,7 +415,9 @@ describe("server endpoints", () => {
   });
 
   it("creates a job role and redirects to the job roles list", async () => {
-    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getCapabilities.mockResolvedValue([
+      { capabilityId: 1, capabilityName: "Engineering" }
+    ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.createJobRole.mockResolvedValue({ jobRoleId: 5 });
     const agent = await loginAsAdmin();
@@ -449,7 +458,9 @@ describe("server endpoints", () => {
   });
 
   it("re-renders the add form when the backend rejects the job role", async () => {
-    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getCapabilities.mockResolvedValue([
+      { capabilityId: 1, capabilityName: "Engineering" }
+    ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.createJobRole.mockRejectedValue(new Error("Invalid capability or band"));
     const agent = await loginAsAdmin();
@@ -475,7 +486,9 @@ describe("server endpoints", () => {
       bandId: 2,
       closingDate: "2026-12-31T00:00:00.000Z"
     });
-    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getCapabilities.mockResolvedValue([
+      { capabilityId: 1, capabilityName: "Engineering" }
+    ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 2, bandName: "Consultant" }]);
     const agent = await loginAsAdmin();
 
@@ -488,7 +501,9 @@ describe("server endpoints", () => {
   });
 
   it("updates a job role and redirects to the role details page", async () => {
-    mockedJobRoleService.getCapabilities.mockResolvedValue([{ capabilityId: 1, capabilityName: "Engineering" }]);
+    mockedJobRoleService.getCapabilities.mockResolvedValue([
+      { capabilityId: 1, capabilityName: "Engineering" }
+    ]);
     mockedJobRoleService.getBands.mockResolvedValue([{ bandId: 1, bandName: "Associate" }]);
     mockedJobRoleService.updateJobRole.mockResolvedValue({ jobRoleId: 1 });
     const agent = await loginAsAdmin();
