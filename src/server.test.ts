@@ -28,6 +28,13 @@ vi.mock("./services/authService", () => ({
   }
 }));
 
+vi.mock("./services/authService", () => ({
+  authService: {
+    login: vi.fn(),
+    register: vi.fn()
+  }
+}));
+
 import { app } from "./server";
 import { authService } from "./services/authService";
 import { BackendRequestError, jobRoleService } from "./services/jobRoleService";
