@@ -30,6 +30,11 @@
 
     <main>
       <section class="hero">
+        <div class="hero-blobs" aria-hidden="true">
+          <span class="hero-blob hero-blob-green"></span>
+          <span class="hero-blob hero-blob-blue"></span>
+          <span class="hero-blob hero-blob-teal"></span>
+        </div>
         <div class="container hero-grid">
           <div class="hero-card">
             <p class="eyebrow">Go Beyond</p>
@@ -38,32 +43,301 @@
               Partner with teams that use technology to make lives easier and create real
               impact for clients, communities, and each other.
             </p>
-            <a href="/job-roles" class="primary-link">View Open Job Roles</a>
+            <div class="hero-actions">
+              <a href="/job-roles" class="primary-link">View Open Job Roles</a>
+              <a href="#life-at-kainos" class="ghost-link">Life at Kainos</a>
+            </div>
+            <dl class="hero-stats">
+              <div>
+                <dt>Years of impact</dt>
+                <dd><span class="counter" data-count-to="37">0</span>+</dd>
+              </div>
+              <div>
+                <dt>People worldwide</dt>
+                <dd><span class="counter" data-count-to="3000">0</span>+</dd>
+              </div>
+              <div>
+                <dt>Countries</dt>
+                <dd><span class="counter" data-count-to="12">0</span></dd>
+              </div>
+            </dl>
           </div>
           <div class="hero-art">
             <img
-              src="/images/kaino-people-hero.png"
-              onerror="this.onerror=null;this.src='/images/kainos-people-hero.png';"
+              src="/images/kainos-people-hero.png"
               alt="Kainos people sharing their career stories"
               class="hero-image"
             />
+            <p class="hero-badge">Now hiring across every capability</p>
           </div>
         </div>
       </section>
 
-      <section class="container highlights">
-        <article class="highlight-card">
-          <h2>People First</h2>
-          <p>We create inclusive teams where everyone can learn, thrive, and lead.</p>
-        </article>
-        <article class="highlight-card">
-          <h2>Modern Engineering</h2>
-          <p>Deliver cloud-native, data-driven software for global organizations.</p>
-        </article>
-        <article class="highlight-card">
-          <h2>Real Impact</h2>
-          <p>Work with clients solving challenges in health, finance, and public services.</p>
-        </article>
+      <section class="container section reveal" aria-labelledby="opportunities-title">
+        <div class="section-head">
+          <p class="eyebrow eyebrow-dark">Open Opportunities</p>
+          <h2 id="opportunities-title">Find the team where you belong</h2>
+          <p class="section-lede">
+            From engineering and data to design and delivery, explore the capabilities shaping our
+            client work today.
+          </p>
+        </div>
+        <div class="capability-grid">
+          <a href="/job-roles" class="capability-card reveal">
+            <span class="capability-icon" aria-hidden="true">&lt;/&gt;</span>
+            <h3>Engineering</h3>
+            <p>Cloud-native platforms, modern languages, and delivery teams that ship fast.</p>
+            <span class="capability-cta">Browse roles</span>
+          </a>
+          <a href="/job-roles" class="capability-card reveal">
+            <span class="capability-icon" aria-hidden="true">◧</span>
+            <h3>Data &amp; AI</h3>
+            <p>Turn complex data into decisions with pipelines, models, and responsible AI.</p>
+            <span class="capability-cta">Browse roles</span>
+          </a>
+          <a href="/job-roles" class="capability-card reveal">
+            <span class="capability-icon" aria-hidden="true">✎</span>
+            <h3>Experience Design</h3>
+            <p>User-centred research and design for services used by millions of people.</p>
+            <span class="capability-cta">Browse roles</span>
+          </a>
+          <a href="/job-roles" class="capability-card reveal">
+            <span class="capability-icon" aria-hidden="true">⬡</span>
+            <h3>Workday</h3>
+            <p>Deploy, test, and amplify Workday for some of the world's biggest organisations.</p>
+            <span class="capability-cta">Browse roles</span>
+          </a>
+          <a href="/job-roles" class="capability-card reveal">
+            <span class="capability-icon" aria-hidden="true">◆</span>
+            <h3>Delivery &amp; Product</h3>
+            <p>Lead multidisciplinary teams from discovery through to live service.</p>
+            <span class="capability-cta">Browse roles</span>
+          </a>
+          <a href="/job-roles" class="capability-card reveal">
+            <span class="capability-icon" aria-hidden="true">✦</span>
+            <h3>Graduates &amp; Academy</h3>
+            <p>Start your career with structured training, mentoring, and real client work.</p>
+            <span class="capability-cta">Browse roles</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="culture" id="life-at-kainos" aria-labelledby="culture-title">
+        <div class="container culture-grid">
+          <div class="culture-copy reveal">
+            <p class="eyebrow">Life at Kainos</p>
+            <h2 id="culture-title">Our people are at the heart of everything</h2>
+            <p>
+              Once you're here there's no limit to how far you can go. Hear from the people building
+              services that change how the world works.
+            </p>
+            <a
+              href="https://careers.kainos.com/gb/en/life-at-kainos"
+              class="primary-link"
+              rel="noreferrer noopener"
+              target="_blank"
+              >Explore our culture</a
+            >
+          </div>
+
+          <figure class="video-card reveal">
+            <!-- Set data-video-id to a YouTube id to play inline; otherwise this opens the careers site. -->
+            <a
+              class="video-frame"
+              data-video-id=""
+              href="https://careers.kainos.com/gb/en/life-at-kainos"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              <img src="/images/kainos-people-hero.png" alt="" class="video-poster" />
+              <span class="video-play" aria-hidden="true"></span>
+              <span class="visually-hidden">Watch: life at Kainos</span>
+            </a>
+            <figcaption>Watch: a day in the life of our delivery teams</figcaption>
+          </figure>
+
+          <div class="culture-cards">
+            <article class="culture-card reveal">
+              <h3>People First</h3>
+              <p>
+                "The team genuinely invests in you. I had a mentor from week one and still meet them
+                every fortnight."
+              </p>
+              <p class="culture-attrib">Sarah — Senior Software Engineer</p>
+            </article>
+            <article class="culture-card reveal">
+              <h3>Growth &amp; Learning</h3>
+              <p>
+                "Kainos Academy gave me the space to retrain into data engineering without leaving
+                the company."
+              </p>
+              <p class="culture-attrib">Ade — Data Engineer</p>
+            </article>
+            <article class="culture-card reveal">
+              <h3>Real Impact</h3>
+              <p>
+                "I've worked on health and government services used by millions. The work actually
+                matters."
+              </p>
+              <p class="culture-attrib">Niamh — Product Manager</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="container section reveal" aria-labelledby="benefits-title">
+        <div class="section-head">
+          <p class="eyebrow eyebrow-dark">Benefits</p>
+          <h2 id="benefits-title">Rewards that go beyond the salary</h2>
+          <p class="section-lede">
+            We back our teams with the pay, flexibility, and support they need to do their best
+            work.
+          </p>
+        </div>
+        <div class="benefit-grid">
+          <article class="benefit-card reveal">
+            <span class="benefit-icon" aria-hidden="true">£</span>
+            <h3>Competitive Compensation</h3>
+            <p>Benchmarked salaries, performance bonuses, share schemes, and a strong pension.</p>
+          </article>
+          <article class="benefit-card reveal">
+            <span class="benefit-icon" aria-hidden="true">⌂</span>
+            <h3>Work-Life Balance</h3>
+            <p>Hybrid and remote options, flexible hours, and generous leave that grows with you.</p>
+          </article>
+          <article class="benefit-card reveal">
+            <span class="benefit-icon" aria-hidden="true">↗</span>
+            <h3>Career Development</h3>
+            <p>Kainos Academy, certifications, mentoring, and clear progression frameworks.</p>
+          </article>
+          <article class="benefit-card reveal">
+            <span class="benefit-icon" aria-hidden="true">♡</span>
+            <h3>Wellbeing Support</h3>
+            <p>Private healthcare, mental health support, and paid volunteering days each year.</p>
+          </article>
+          <article class="benefit-card reveal">
+            <span class="benefit-icon" aria-hidden="true">◍</span>
+            <h3>Inclusive Workplace</h3>
+            <p>Employee networks, inclusive hiring, and adjustments available at every stage.</p>
+          </article>
+          <article class="benefit-card reveal">
+            <span class="benefit-icon" aria-hidden="true">✈</span>
+            <h3>Global Opportunities</h3>
+            <p>Work with teams across the UK, Ireland, Europe, and North America.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="process" aria-labelledby="process-title">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="eyebrow eyebrow-dark">How To Apply</p>
+            <h2 id="process-title">Five steps from application to offer</h2>
+            <p class="section-lede">
+              We keep hiring transparent, and you'll always know what happens next.
+            </p>
+          </div>
+          <ol class="process-track">
+            <li class="process-step reveal">
+              <span class="process-number">1</span>
+              <h3>Submit Application</h3>
+              <p>Pick a role, upload your CV, and tell us what you want to work on.</p>
+            </li>
+            <li class="process-step reveal">
+              <span class="process-number">2</span>
+              <h3>Initial Review</h3>
+              <p>Our talent team reviews your application and gets back to you quickly.</p>
+            </li>
+            <li class="process-step reveal">
+              <span class="process-number">3</span>
+              <h3>Assessment</h3>
+              <p>A practical exercise or technical conversation matched to the role.</p>
+            </li>
+            <li class="process-step reveal">
+              <span class="process-number">4</span>
+              <h3>Interview</h3>
+              <p>Meet the team, talk through your experience, and ask us anything.</p>
+            </li>
+            <li class="process-step reveal">
+              <span class="process-number">5</span>
+              <h3>Offer</h3>
+              <p>We share the detail, agree a start date, and get onboarding ready.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="container section reveal" aria-labelledby="team-title">
+        <div class="section-head">
+          <p class="eyebrow eyebrow-dark">Meet Our Team</p>
+          <h2 id="team-title">Stories from people who joined us</h2>
+        </div>
+        <div class="testimonials" data-testimonials>
+          <div class="testimonial-viewport">
+            <article class="testimonial is-active">
+              <blockquote>
+                "I joined as a graduate and led my own workstream within two years. The trust here
+                is real."
+              </blockquote>
+              <p class="testimonial-name">Sarah</p>
+              <p class="testimonial-role">Senior Software Engineer · Belfast</p>
+              <p class="testimonial-tags">
+                <span>React</span><span>AWS</span><span>Mentoring</span>
+              </p>
+            </article>
+            <article class="testimonial">
+              <blockquote>
+                "Design has a seat at the table from day one. Research actually shapes what we
+                build."
+              </blockquote>
+              <p class="testimonial-name">Mike</p>
+              <p class="testimonial-role">Experience Designer · London</p>
+              <p class="testimonial-tags">
+                <span>Research</span><span>Accessibility</span><span>Figma</span>
+              </p>
+            </article>
+            <article class="testimonial">
+              <blockquote>
+                "Switching capability was straightforward. I moved into data and the company funded
+                the training."
+              </blockquote>
+              <p class="testimonial-name">Alex</p>
+              <p class="testimonial-role">Data Engineer · Remote</p>
+              <p class="testimonial-tags">
+                <span>Python</span><span>Azure</span><span>Databricks</span>
+              </p>
+            </article>
+          </div>
+          <div class="testimonial-controls">
+            <button
+              type="button"
+              class="testimonial-btn"
+              data-testimonial-prev
+              aria-label="Previous story"
+            >
+              ‹
+            </button>
+            <div class="testimonial-dots" aria-label="Choose a story"></div>
+            <button
+              type="button"
+              class="testimonial-btn"
+              data-testimonial-next
+              aria-label="Next story"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-band reveal">
+        <div class="container cta-inner">
+          <div>
+            <h2>Ready to go beyond?</h2>
+            <p>Browse every open role and find the one that fits where you want to go next.</p>
+          </div>
+          <a href="/job-roles" class="primary-link">See all job roles</a>
+        </div>
       </section>
     </main>
 
@@ -79,7 +353,17 @@
           <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
           <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
         </div>
+        <div>
+          <p class="footer-title">Follow Us</p>
+          <p class="footer-socials">
+            <a href="https://www.linkedin.com/company/kainos/" rel="noreferrer noopener" target="_blank">LinkedIn</a>
+            <a href="https://twitter.com/KainosSoftware" rel="noreferrer noopener" target="_blank">Twitter</a>
+            <a href="https://www.facebook.com/KainosSoftware/" rel="noreferrer noopener" target="_blank">Facebook</a>
+          </p>
+        </div>
       </div>
     </footer>
+
+    <script src="/home.js" defer></script>
   </body>
 </html>
