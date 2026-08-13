@@ -22,7 +22,7 @@ vi.mock("./services/authService", () => ({
 
 import { app } from "./server";
 import { authService } from "./services/authService";
-import { jobRoleService } from "./services/jobRoleService";
+import { BackendRequestError, jobRoleService } from "./services/jobRoleService";
 
 const mockedJobRoleService = vi.mocked(jobRoleService);
 const mockedAuthService = vi.mocked(authService);
@@ -232,6 +232,22 @@ describe("server endpoints", () => {
     expect(response.text).toContain('value="new.user@kainos.com"');
   });
 
+  it("redirects to login when accessing job roles without authentication", async () => {
+    const response = await request(app).get("/job-roles");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
+    expect(mockedJobRoleService.getOpenJobRoles).not.toHaveBeenCalled();
+  });
+
+  it("redirects to login when accessing job role details without authentication", async () => {
+    const response = await request(app).get("/job-roles/1");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
+    expect(mockedJobRoleService.getJobRoleById).not.toHaveBeenCalled();
+  });
+
   it("renders open job roles on /job-roles", async () => {
     mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
       {
@@ -245,7 +261,8 @@ describe("server endpoints", () => {
       }
     ]);
 
-    const response = await request(app).get("/job-roles");
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles");
 
     expect(response.status).toBe(200);
     expect(response.type).toContain("html");
@@ -266,7 +283,8 @@ describe("server endpoints", () => {
       }
     ]);
 
-    const response = await request(app).get("/job-roles");
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles");
 
     expect(response.status).toBe(200);
     expect(response.type).toContain("html");
@@ -290,7 +308,8 @@ describe("server endpoints", () => {
       }
     ]);
 
-    const response = await request(app).get("/job-roles");
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles");
 
     expect(response.status).toBe(200);
     expect(response.text).toContain('href="/job-roles/1"');
@@ -312,7 +331,8 @@ describe("server endpoints", () => {
       numberOfOpenPositions: 2
     });
 
-    const response = await request(app).get("/job-roles/1");
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles/1");
 
     expect(response.status).toBe(200);
     expect(response.type).toContain("html");
@@ -327,7 +347,8 @@ describe("server endpoints", () => {
   it("returns 502 when role details loading fails", async () => {
     mockedJobRoleService.getJobRoleById.mockRejectedValue(new Error("API unavailable"));
 
-    const response = await request(app).get("/job-roles/1");
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles/1");
 
     expect(response.status).toBe(502);
     expect(response.type).toContain("html");
@@ -337,11 +358,22 @@ describe("server endpoints", () => {
   it("returns 502 when job role loading fails", async () => {
     mockedJobRoleService.getOpenJobRoles.mockRejectedValue(new Error("API unavailable"));
 
-    const response = await request(app).get("/job-roles");
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles");
 
     expect(response.status).toBe(502);
     expect(response.type).toContain("html");
     expect(response.text).toContain("Unable to load job roles right now");
+  });
+
+  it("redirects to login and clears session when the backend rejects the token", async () => {
+    mockedJobRoleService.getOpenJobRoles.mockRejectedValue(new BackendRequestError("Failed to fetch job roles: 401", 401));
+
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
   });
 
   it("returns health payload on /health", async () => {

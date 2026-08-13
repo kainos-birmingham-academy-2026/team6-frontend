@@ -105,9 +105,9 @@ const toPayload = (values: JobRoleFormValues): JobRolePayload => ({
 });
 
 export class JobRoleController {
-  async list(_req: Request, res: Response): Promise<void> {
+  async list(req: Request, res: Response): Promise<void> {
     try {
-      const jobRoles = await jobRoleService.getOpenJobRoles();
+      const jobRoles = await jobRoleService.getOpenJobRoles(req.session.token);
       const jobRolesViewModel = jobRoles.map((role, index) => ({
         ...role,
         detailsId: role.jobRoleId ?? index + 1,
@@ -120,7 +120,11 @@ export class JobRoleController {
         jobRoles: jobRolesViewModel,
         hasLoadError: false
       });
-    } catch {
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+
       res.status(502).render("job-role-list.html", {
         jobRoles: [],
         hasLoadError: true
@@ -146,7 +150,7 @@ export class JobRoleController {
         return;
       }
 
-      const role = await jobRoleService.getJobRoleById(id);
+      const role = await jobRoleService.getJobRoleById(id, req.session.token);
       const jobRoleViewModel = {
         ...role,
         capabilityDisplay: role.capabilityName || role.capabilityId || "N/A",
@@ -166,7 +170,11 @@ export class JobRoleController {
         hasLoadError: false,
         hasNotFoundError: false
       });
-    } catch {
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+
       res.status(502).render("job-role-information.html", {
         jobRole: null,
         hasLoadError: true,

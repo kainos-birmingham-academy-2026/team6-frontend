@@ -56,28 +56,38 @@ export class JobRoleService {
     });
   }
 
-  async getOpenJobRoles(): Promise<BackendJobRole[]> {
+  async getOpenJobRoles(token?: string): Promise<BackendJobRole[]> {
     try {
-      const response = await this.client.get<BackendJobRole[]>("/job-roles");
+      const response = await this.client.get<BackendJobRole[]>("/job-roles", {
+        headers: this.buildAuthHeaders(token)
+      });
 
       // Render backend data as-is so roles without a status field are still shown.
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new Error(`Failed to fetch job roles: ${error.response?.status ?? "unknown"}`);
+        throw new BackendRequestError(
+          `Failed to fetch job roles: ${error.response?.status ?? "unknown"}`,
+          error.response?.status
+        );
       }
 
       throw error;
     }
   }
 
-  async getJobRoleById(jobRoleId: string | number): Promise<BackendJobRole> {
+  async getJobRoleById(jobRoleId: string | number, token?: string): Promise<BackendJobRole> {
     try {
-      const response = await this.client.get<BackendJobRole>(`/job-roles/${jobRoleId}`);
+      const response = await this.client.get<BackendJobRole>(`/job-roles/${jobRoleId}`, {
+        headers: this.buildAuthHeaders(token)
+      });
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new Error(`Failed to fetch job role: ${error.response?.status ?? "unknown"}`);
+        throw new BackendRequestError(
+          `Failed to fetch job role: ${error.response?.status ?? "unknown"}`,
+          error.response?.status
+        );
       }
 
       throw error;

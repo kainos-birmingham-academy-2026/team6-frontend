@@ -5,6 +5,7 @@ import { authController } from "./controllers/authController";
 import { jobRoleController } from "./controllers/jobRoleController";
 import "dotenv/config";
 import session from "express-session";
+import { requireAuth } from "./middleware/requireAuth";
 
 export const app = express();
 const port = Number(process.env.PORT) || 3001;
