@@ -1,8 +1,10 @@
 import express from "express";
 import nunjucks from "nunjucks";
 import path from "path";
+import multer from "multer";
 import { authController } from "./controllers/authController";
 import { jobRoleController } from "./controllers/jobRoleController";
+import { applicationController } from "./controllers/applicationController";
 import "dotenv/config";
 import session from "express-session";
 import { requireAuth } from "./middleware/requireAuth";
@@ -11,6 +13,10 @@ export const app = express();
 const port = Number(process.env.PORT) || 3001;
 const viewsPath = path.join(__dirname, "views");
 const publicPath = path.join(__dirname, "public");
+const cvUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }
+});
 
 nunjucks.configure(viewsPath, {
   autoescape: true,
@@ -71,6 +77,22 @@ app.post(
   "/job-roles/:id/delete",
   requireAdmin,
   jobRoleController.deleteRole.bind(jobRoleController)
+);
+app.get(
+  "/job-roles/:id/apply",
+  requireAuth,
+  applicationController.showApplyForm.bind(applicationController)
+);
+app.post(
+  "/job-roles/:id/apply",
+  requireAuth,
+  cvUpload.single("cv"),
+  applicationController.submitApplication.bind(applicationController)
+);
+app.get(
+  "/job-roles/:id/apply/confirmation",
+  requireAuth,
+  applicationController.showConfirmation.bind(applicationController)
 );
 app.get("/job-roles/:id", jobRoleController.getById);
 
