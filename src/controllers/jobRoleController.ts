@@ -253,7 +253,7 @@ export class JobRoleController {
     }
 
     try {
-      await jobRoleService.createJobRole(toPayload(values));
+      await jobRoleService.createJobRole(toPayload(values), req.session.token);
       res.redirect("/job-roles");
     } catch (error) {
       const errorMessage =
@@ -276,7 +276,7 @@ export class JobRoleController {
 
     try {
       const [role, capabilities, bands] = await Promise.all([
-        jobRoleService.getJobRoleById(id),
+        jobRoleService.getJobRoleById(id, req.session.token),
         jobRoleService.getCapabilities(),
         jobRoleService.getBands()
       ]);
@@ -340,7 +340,7 @@ export class JobRoleController {
     }
 
     try {
-      await jobRoleService.updateJobRole(id, toPayload(values));
+      await jobRoleService.updateJobRole(id, toPayload(values), req.session.token);
       res.redirect(`/job-roles/${id}`);
     } catch (error) {
       const errorMessage =
@@ -362,7 +362,7 @@ export class JobRoleController {
     const id = Array.isArray(rawId) ? rawId[0] : rawId;
 
     try {
-      await jobRoleService.deleteJobRole(id);
+      await jobRoleService.deleteJobRole(id, req.session.token);
     } catch {
       // Fall through to redirect back to the job roles list even if the delete failed,
       // where the role will still be visible if it was not actually removed.
