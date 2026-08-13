@@ -469,7 +469,8 @@ describe("server endpoints", () => {
         location: "Belfast",
         capabilityId: 1,
         bandId: 1
-      })
+      }),
+      "jwt-token"
     );
   });
 
@@ -551,7 +552,8 @@ describe("server endpoints", () => {
     expect(response.headers.location).toBe("/job-roles/1");
     expect(mockedJobRoleService.updateJobRole).toHaveBeenCalledWith(
       "1",
-      expect.objectContaining({ roleName: "Updated Role" })
+      expect.objectContaining({ roleName: "Updated Role" }),
+      "jwt-token"
     );
   });
 
@@ -571,6 +573,6 @@ describe("server endpoints", () => {
 
     expect(response.status).toBe(302);
     expect(response.headers.location).toBe("/job-roles");
-    expect(mockedJobRoleService.deleteJobRole).toHaveBeenCalledWith("1");
+    expect(mockedJobRoleService.deleteJobRole).toHaveBeenCalledWith("1", "jwt-token");
   });
 });

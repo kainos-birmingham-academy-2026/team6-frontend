@@ -142,9 +142,11 @@ export class JobRoleService {
     }
   }
 
-  async createJobRole(payload: JobRolePayload): Promise<BackendJobRole> {
+  async createJobRole(payload: JobRolePayload, token?: string): Promise<BackendJobRole> {
     try {
-      const response = await this.client.post<BackendJobRole>("/job-roles", payload);
+      const response = await this.client.post<BackendJobRole>("/job-roles", payload, {
+        headers: this.buildAuthHeaders(token)
+      });
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -159,10 +161,13 @@ export class JobRoleService {
 
   async updateJobRole(
     jobRoleId: string | number,
-    payload: JobRolePayload
+    payload: JobRolePayload,
+    token?: string
   ): Promise<BackendJobRole> {
     try {
-      const response = await this.client.put<BackendJobRole>(`/job-roles/${jobRoleId}`, payload);
+      const response = await this.client.put<BackendJobRole>(`/job-roles/${jobRoleId}`, payload, {
+        headers: this.buildAuthHeaders(token)
+      });
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -175,9 +180,11 @@ export class JobRoleService {
     }
   }
 
-  async deleteJobRole(jobRoleId: string | number): Promise<void> {
+  async deleteJobRole(jobRoleId: string | number, token?: string): Promise<void> {
     try {
-      await this.client.delete(`/job-roles/${jobRoleId}`);
+      await this.client.delete(`/job-roles/${jobRoleId}`, {
+        headers: this.buildAuthHeaders(token)
+      });
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(
