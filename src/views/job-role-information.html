@@ -108,6 +108,9 @@
 
       <section class="info-actions">
         <a href="/job-roles" class="primary-link">Back to Job Roles</a>
+        {% if isAuthenticated and not isAdmin and jobRole.canApply %}
+        <a href="/job-roles/{{ jobRole.jobRoleId }}/apply" class="primary-link">Apply Now</a>
+        {% endif %}
         {% if isAdmin %}
         <a href="/job-roles/{{ jobRole.jobRoleId }}/edit" class="primary-link">Edit Role</a>
         <form

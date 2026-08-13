@@ -170,6 +170,7 @@ export class JobRoleController {
       }
 
       const role = await jobRoleService.getJobRoleById(id, req.session.token);
+      const roleStatus = (role.statusName || role.status || "").toLowerCase();
       const jobRoleViewModel = {
         ...role,
         capabilityDisplay: role.capabilityName || role.capabilityId || "N/A",
@@ -181,7 +182,8 @@ export class JobRoleController {
             ? String(role.numberOfOpenPositions)
             : "N/A",
         responsibilitiesDisplay: role.responsibilities || "No responsibilities provided.",
-        sharepointUrlDisplay: role.sharepointUrl || ""
+        sharepointUrlDisplay: role.sharepointUrl || "",
+        canApply: roleStatus === "open" && (role.numberOfOpenPositions ?? 0) > 0
       };
 
       res.render("job-role-information.html", {

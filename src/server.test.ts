@@ -33,12 +33,20 @@ vi.mock("./services/authService", () => ({
   }
 }));
 
+vi.mock("./services/applicationService", () => ({
+  applicationService: {
+    submitApplication: vi.fn()
+  }
+}));
+
 import { app } from "./server";
 import { authService } from "./services/authService";
 import { BackendRequestError, jobRoleService } from "./services/jobRoleService";
+import { applicationService } from "./services/applicationService";
 
 const mockedJobRoleService = vi.mocked(jobRoleService);
 const mockedAuthService = vi.mocked(authService);
+const mockedApplicationService = vi.mocked(applicationService);
 
 const loginAgent = async () => {
   mockedAuthService.login.mockResolvedValueOnce({
@@ -49,6 +57,21 @@ const loginAgent = async () => {
   const agent = request.agent(app);
   await agent.post("/login").type("form").send({
     email: "admin@kainos.com",
+    password: "Password123!"
+  });
+
+  return agent;
+};
+
+const loginAsCandidateAgent = async () => {
+  mockedAuthService.login.mockResolvedValueOnce({
+    token: "candidate-jwt-token",
+    user: { userid: 2, email: "candidate@kainos.com", role: "candidate" }
+  });
+
+  const agent = request.agent(app);
+  await agent.post("/login").type("form").send({
+    email: "candidate@kainos.com",
     password: "Password123!"
   });
 
@@ -574,5 +597,110 @@ describe("server endpoints", () => {
     expect(response.status).toBe(302);
     expect(response.headers.location).toBe("/job-roles");
     expect(mockedJobRoleService.deleteJobRole).toHaveBeenCalledWith("1", "jwt-token");
+  });
+
+  it("shows the apply button on job role details when open with positions available", async () => {
+    mockedJobRoleService.getJobRoleById.mockResolvedValue({
+      jobRoleId: 1,
+      roleName: "Backend Developer",
+      status: "open",
+      numberOfOpenPositions: 2
+    });
+    const agent = await loginAsCandidateAgent();
+
+    const response = await agent.get("/job-roles/1");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('href="/job-roles/1/apply"');
+    expect(response.text).toContain("Apply Now");
+  });
+
+  it("hides the apply button when there are no open positions", async () => {
+    mockedJobRoleService.getJobRoleById.mockResolvedValue({
+      jobRoleId: 1,
+      roleName: "Backend Developer",
+      status: "open",
+      numberOfOpenPositions: 0
+    });
+    const agent = await loginAsCandidateAgent();
+
+    const response = await agent.get("/job-roles/1");
+
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain("Apply Now");
+  });
+
+  it("redirects anonymous visitors away from the apply form", async () => {
+    const response = await request(app).get("/job-roles/1/apply");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
+  });
+
+  it("renders the apply form for an authenticated candidate when the role is open", async () => {
+    mockedJobRoleService.getJobRoleById.mockResolvedValue({
+      jobRoleId: 1,
+      roleName: "Backend Developer",
+      status: "open",
+      numberOfOpenPositions: 2
+    });
+    const agent = await loginAsCandidateAgent();
+
+    const response = await agent.get("/job-roles/1/apply");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Apply for Backend Developer");
+  });
+
+  it("redirects away from the apply form when the role is not open", async () => {
+    mockedJobRoleService.getJobRoleById.mockResolvedValue({
+      jobRoleId: 1,
+      roleName: "Backend Developer",
+      status: "closed",
+      numberOfOpenPositions: 0
+    });
+    const agent = await loginAsCandidateAgent();
+
+    const response = await agent.get("/job-roles/1/apply");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles/1");
+  });
+
+  it("shows an error when submitting an application without a CV file", async () => {
+    const agent = await loginAsCandidateAgent();
+
+    const response = await agent.post("/job-roles/1/apply");
+
+    expect(response.status).toBe(400);
+    expect(response.text).toContain("Please choose a CV file to upload.");
+    expect(mockedApplicationService.submitApplication).not.toHaveBeenCalled();
+  });
+
+  it("submits a CV application and redirects to the confirmation page", async () => {
+    mockedApplicationService.submitApplication.mockResolvedValue(undefined);
+    const agent = await loginAsCandidateAgent();
+
+    const response = await agent
+      .post("/job-roles/1/apply")
+      .attach("cv", Buffer.from("cv contents"), {
+        filename: "cv.pdf",
+        contentType: "application/pdf"
+      });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles/1/apply/confirmation");
+    expect(mockedApplicationService.submitApplication).toHaveBeenCalledWith(
+      expect.objectContaining({ jobRoleId: "1" }),
+      "candidate-jwt-token"
+    );
+  });
+
+  it("redirects anonymous visitors away from submitting an application", async () => {
+    const response = await request(app).post("/job-roles/1/apply");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/login");
+    expect(mockedApplicationService.submitApplication).not.toHaveBeenCalled();
   });
 });
