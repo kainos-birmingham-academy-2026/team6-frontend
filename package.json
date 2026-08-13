@@ -32,13 +32,13 @@
     "@types/node": "^26.1.2",
     "@types/nunjucks": "^3.2.6",
     "@types/supertest": "^6.0.3",
-    "@vitest/coverage-v8": "^2.1.8",
-    "@vitest/ui": "^2.1.8",
-    "prettier": "^3.0.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/ui": "^4.1.10",
     "copyfiles": "^2.4.1",
+    "prettier": "^3.0.0",
     "supertest": "^7.1.1",
     "tsx": "^4.23.7",
     "typescript": "^7.0.2",
-    "vitest": "^2.1.8"
+    "vitest": "^4.1.10"
   }
 }

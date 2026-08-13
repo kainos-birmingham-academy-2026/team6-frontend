@@ -28,31 +28,89 @@
       </div>
     </header>
 
-    <main class="container page-content">
-      <h1>Apply{% if roleName %} for {{ roleName }}{% endif %}</h1>
-
-      <div class="card job-role-form-panel">
-        {% if errorMessage %}
-        <p class="auth-message auth-message-error" role="alert">{{ errorMessage }}</p>
-        {% endif %}
-
-        <form
-          action="/job-roles/{{ jobRoleId }}/apply"
-          method="post"
-          enctype="multipart/form-data"
-          class="job-role-form"
-          novalidate
-        >
-          <div class="form-field">
-            <label for="cv">Upload your CV (PDF or Word document)</label>
-            <input id="cv" name="cv" type="file" accept=".pdf,.doc,.docx" required />
+    <main>
+      <section class="page-hero">
+        <div class="page-hero-blobs" aria-hidden="true">
+          <span class="hero-blob hero-blob-green"></span>
+          <span class="hero-blob hero-blob-blue"></span>
+        </div>
+        <div class="container page-hero-inner">
+          <div>
+            <p class="eyebrow eyebrow-dark">Application</p>
+            <h1>Apply{% if roleName %} for {{ roleName }}{% endif %}</h1>
+            <p class="section-lede">
+              Upload your CV and our talent team will take it from there. It only takes a minute.
+            </p>
           </div>
+        </div>
+      </section>
 
-          <div class="form-actions">
-            <button type="submit" class="login-submit-btn">Submit Application</button>
-            <a href="/job-roles/{{ jobRoleId }}" class="btn-secondary-link">Cancel</a>
-          </div>
-        </form>
+      <div class="container page-content">
+        <div class="apply-grid">
+          <section class="card apply-form-panel reveal" aria-labelledby="apply-form-title">
+            <h2 id="apply-form-title">Upload your CV</h2>
+            {% if errorMessage %}
+            <p class="auth-message auth-message-error" role="alert">{{ errorMessage }}</p>
+            {% endif %}
+
+            <form
+              action="/job-roles/{{ jobRoleId }}/apply"
+              method="post"
+              enctype="multipart/form-data"
+              class="job-role-form apply-form"
+              novalidate
+            >
+              <div class="form-field">
+                <label for="cv">Upload your CV (PDF or Word document)</label>
+                <div class="file-drop" data-file-drop>
+                  <input
+                    id="cv"
+                    name="cv"
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    aria-describedby="cv-hint"
+                    required
+                  />
+                  <span class="file-drop-icon" aria-hidden="true">⬆</span>
+                  <span class="file-drop-title">Drag and drop your CV here</span>
+                  <span class="file-drop-hint" id="cv-hint">or click to browse · PDF, DOC, or DOCX</span>
+                  <span class="file-drop-selected" data-file-name hidden></span>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="login-submit-btn">Submit Application</button>
+                <a href="/job-roles/{{ jobRoleId }}" class="btn-secondary-link">Cancel</a>
+              </div>
+            </form>
+          </section>
+
+          <aside class="apply-aside reveal">
+            <h2>What happens next</h2>
+            <ol class="apply-steps">
+              <li>
+                <strong>We review your CV</strong>
+                <span>Our talent team reads every application.</span>
+              </li>
+              <li>
+                <strong>Assessment</strong>
+                <span>A practical exercise or technical chat matched to the role.</span>
+              </li>
+              <li>
+                <strong>Interview</strong>
+                <span>Meet the team and ask us anything.</span>
+              </li>
+              <li>
+                <strong>Offer</strong>
+                <span>We agree a start date and get onboarding ready.</span>
+              </li>
+            </ol>
+            <p class="apply-note">
+              Need an adjustment to the process? Email
+              <a href="mailto:careers@kainos.com">careers@kainos.com</a> and we'll sort it.
+            </p>
+          </aside>
+        </div>
       </div>
     </main>
 
@@ -68,7 +126,18 @@
           <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
           <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
         </div>
+        <div>
+          <p class="footer-title">Follow Us</p>
+          <p class="footer-socials">
+            <a href="https://www.linkedin.com/company/kainos/" rel="noreferrer noopener" target="_blank">LinkedIn</a>
+            <a href="https://twitter.com/KainosSoftware" rel="noreferrer noopener" target="_blank">Twitter</a>
+            <a href="https://www.facebook.com/KainosSoftware/" rel="noreferrer noopener" target="_blank">Facebook</a>
+          </p>
+        </div>
       </div>
     </footer>
+
+    <script src="/site.js" defer></script>
+    <script src="/apply.js" defer></script>
   </body>
 </html>
