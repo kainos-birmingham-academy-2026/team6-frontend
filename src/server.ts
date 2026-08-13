@@ -20,7 +20,8 @@ const cvUpload = multer({
 
 nunjucks.configure(viewsPath, {
   autoescape: true,
-  express: app
+  express: app,
+  noCache: process.env.NODE_ENV !== "production"
 });
 
 app.use(express.static(publicPath));

@@ -30,7 +30,7 @@
 
     <main class="container login-page-content">
       <section class="login-grid">
-        <article class="login-copy-panel card">
+        <article class="login-copy-panel card reveal">
           <p class="eyebrow">Kainos Careers</p>
           <h1>Create Your Account</h1>
           <p>
@@ -42,9 +42,12 @@
             <li>Track active applications and hiring progress</li>
             <li>Get alerts for relevant jobs and deadlines</li>
           </ul>
+          <p class="login-panel-footnote">
+            Just looking? <a href="/job-roles">Browse open roles</a> without an account.
+          </p>
         </article>
 
-        <section class="login-form-panel card" aria-labelledby="register-form-title">
+        <section class="login-form-panel card reveal" aria-labelledby="register-form-title">
           <h2 id="register-form-title">Create Account</h2>
           {% if registerErrorMessage %}
           <p class="auth-message {{ registerMessageClass or 'auth-message-error' }}" role="alert">{{ registerErrorMessage }}</p>
@@ -65,14 +68,28 @@
 
             <div class="form-field">
               <label for="register-password">Password</label>
-              <input
-                id="register-password"
-                name="password"
-                type="password"
-                autocomplete="new-password"
-                placeholder="Create a password"
-                required
-              />
+              <div class="password-field">
+                <input
+                  id="register-password"
+                  name="password"
+                  type="password"
+                  autocomplete="new-password"
+                  placeholder="Create a password"
+                  aria-describedby="password-hint"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-password-toggle="register-password"
+                  aria-label="Show password"
+                  aria-pressed="false"
+                  hidden
+                >
+                  Show
+                </button>
+              </div>
+              <p class="field-hint" id="password-hint">Use at least 8 characters.</p>
             </div>
 
             <button type="submit" class="login-submit-btn">Create Account</button>
@@ -101,7 +118,18 @@
           <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
           <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
         </div>
+        <div>
+          <p class="footer-title">Follow Us</p>
+          <p class="footer-socials">
+            <a href="https://www.linkedin.com/company/kainos/" rel="noreferrer noopener" target="_blank">LinkedIn</a>
+            <a href="https://twitter.com/KainosSoftware" rel="noreferrer noopener" target="_blank">Twitter</a>
+            <a href="https://www.facebook.com/KainosSoftware/" rel="noreferrer noopener" target="_blank">Facebook</a>
+          </p>
+        </div>
       </div>
     </footer>
+
+    <script src="/site.js" defer></script>
+    <script src="/auth.js" defer></script>
   </body>
 </html>
