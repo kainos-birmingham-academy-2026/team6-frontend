@@ -1,10 +1,10 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3001";
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3101";
 
 export default defineConfig({
   testDir: "./tests/e2e",
-  fullyParallel: true,
+  fullyParallel: false,
   timeout: 30_000,
   expect: {
     timeout: 7_000
@@ -30,10 +30,24 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] }
     }
   ],
-  webServer: {
-    command: "npm run build && npm run start",
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000
-  }
+  webServer: [
+    {
+      command: "node tests/mocks/mock-api-server.cjs",
+      url: "http://127.0.0.1:4010/health",
+      reuseExistingServer: false,
+      timeout: 120_000
+    },
+    {
+      command: "npm run build && npm run start",
+      url: baseURL,
+      env: {
+        ...process.env,
+        API_BASE_URL: "http://127.0.0.1:4010",
+        SESSION_SECRET: process.env.SESSION_SECRET || "e2e-session-secret",
+        PORT: "3101"
+      },
+      reuseExistingServer: false,
+      timeout: 120_000
+    }
+  ]
 });

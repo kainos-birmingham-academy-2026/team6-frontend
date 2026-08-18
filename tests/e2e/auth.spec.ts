@@ -1,46 +1,49 @@
 import { expect, test } from "@playwright/test";
 import { users } from "../fixtures/test-data";
-import { LoginPage } from "../pages/login.page";
+import { loginThroughUi } from "../helpers/auth";
+import { resetMockApi } from "../helpers/mock-api";
 
-test.describe("Authentication pages", () => {
-  test("renders login form fields and helper links", async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
-    await loginPage.visit();
-
-    await expect(page.getByRole("heading", { name: "Welcome Back" })).toBeVisible();
-    await expect(loginPage.emailInput).toBeVisible();
-    await expect(loginPage.passwordInput).toBeVisible();
-    await expect(page.getByRole("link", { name: "Create an account" })).toHaveAttribute("href", "/register");
-    await expect(page).toHaveTitle(/Login \| Kainos Careers/i);
+test.describe("Login system", () => {
+  test.beforeEach(async ({ request }) => {
+    await resetMockApi(request);
   });
 
-  test("renders register page with expected fields", async ({ page }) => {
-    await page.goto("/register");
+  test("empty email and password", async ({ page }) => {
+    await loginThroughUi(page, { email: "", password: "" });
 
-    await expect(page.getByRole("heading", { name: "Create Your Account" })).toBeVisible();
-    await expect(page.locator("#register-email")).toBeVisible();
-    await expect(page.locator("#register-password")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Create Account" })).toBeVisible();
-    await expect(page).toHaveTitle(/Register \| Kainos Careers/i);
+    await expect(page.locator(".auth-message.auth-message-error")).toContainText(
+      "Email and password are required"
+    );
   });
 
-  test("shows an error message for invalid login", async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  test("invalid email and valid password", async ({ page }) => {
+    await loginThroughUi(page, { email: "not-an-email", password: "Password123!" });
 
-    await loginPage.visit();
-    await loginPage.submitCredentials(users.invalid.email, users.invalid.password);
-
-    await expect(loginPage.errorMessage).toBeVisible();
+    await expect(page.locator(".auth-message.auth-message-error")).toContainText(
+      "Email or password is invalid"
+    );
   });
 
-  test("navigates from login to register page", async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  test("valid email and invalid password", async ({ page }) => {
+    await loginThroughUi(page, { email: users.candidateMany.email, password: "BadPassword123!" });
 
-    await loginPage.visit();
-    await page.getByRole("link", { name: "Create an account" }).click();
+    await expect(page.locator(".auth-message.auth-message-error")).toContainText(
+      "Email or password is invalid"
+    );
+  });
 
-    await expect(page).toHaveURL(/\/register/);
-    await expect(page.getByRole("heading", { name: "Create Your Account" })).toBeVisible();
+  test("invalid email and invalid password", async ({ page }) => {
+    await loginThroughUi(page, { email: "bad.email", password: "bad-password" });
+
+    await expect(page.locator(".auth-message.auth-message-error")).toContainText(
+      "Email or password is invalid"
+    );
+  });
+
+  test("valid email and password", async ({ page }) => {
+    await loginThroughUi(page, users.candidateMany);
+
+    await expect(page).toHaveURL(/\/job-roles/);
+    await expect(page.getByRole("heading", { level: 1, name: "Open Job Roles at Kainos" })).toBeVisible();
   });
 });
