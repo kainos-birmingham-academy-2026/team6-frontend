@@ -10,7 +10,6 @@ import session from "express-session";
 import { requireAuth } from "./middleware/requireAuth";
 
 export const app = express();
-const port = Number(process.env.PORT) || 3001;
 const viewsPath = path.join(__dirname, "views");
 const publicPath = path.join(__dirname, "public");
 const cvUpload = multer({
@@ -103,9 +102,3 @@ app.get("/health", (_req, res) => {
     time: new Date().toISOString()
   });
 });
-
-if (require.main === module) {
-  app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-  });
-}

@@ -1,0 +1,991 @@
+0 verbose cli /Users/mohammed.ali/.nvm/versions/node/v22.23.1/bin/node /Users/mohammed.ali/.nvm/versions/node/v22.23.1/bin/npm
+1 info using npm@10.9.8
+2 info using node@v22.23.1
+3 silly config load:file:/Users/mohammed.ali/.nvm/versions/node/v22.23.1/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/mohammed.ali/team6-frontend/.npmrc
+5 silly config load:file:/Users/mohammed.ali/.npmrc
+6 silly config load:file:/Users/mohammed.ali/.nvm/versions/node/v22.23.1/etc/npmrc
+7 verbose title npm install start-server-and-test
+8 verbose argv "install" "--save-dev" "start-server-and-test" "--cache" ".npm-cache"
+9 verbose logfile logs-max:10 dir:/Users/mohammed.ali/team6-frontend/.npm-cache/_logs/2026-08-18T10_33_41_163Z-
+10 verbose logfile /Users/mohammed.ali/team6-frontend/.npm-cache/_logs/2026-08-18T10_33_41_163Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 silly idealTree buildDeps
+14 silly fetch manifest start-server-and-test@*
+15 silly packumentCache full:https://registry.npmjs.org/start-server-and-test cache-miss
+16 http fetch GET 200 https://registry.npmjs.org/start-server-and-test 110ms (cache miss)
+17 silly packumentCache full:https://registry.npmjs.org/start-server-and-test set size:undefined disposed:false
+18 silly placeDep ROOT start-server-and-test@3.0.12 OK for: team6-frontend@1.0.0 want: *
+19 silly fetch manifest arg@5.0.2
+20 silly packumentCache full:https://registry.npmjs.org/arg cache-miss
+21 silly fetch manifest execa@5.1.1
+22 silly packumentCache full:https://registry.npmjs.org/execa cache-miss
+23 silly fetch manifest wait-on@9.1.0
+24 silly packumentCache full:https://registry.npmjs.org/wait-on cache-miss
+25 silly fetch manifest lazy-ass@2.0.3
+26 silly packumentCache full:https://registry.npmjs.org/lazy-ass cache-miss
+27 silly fetch manifest tree-kill@1.2.2
+28 silly packumentCache full:https://registry.npmjs.org/tree-kill cache-miss
+29 silly fetch manifest check-more-types@2.24.0
+30 silly packumentCache full:https://registry.npmjs.org/check-more-types cache-miss
+31 http fetch GET 200 https://registry.npmjs.org/arg 32ms (cache miss)
+32 silly packumentCache full:https://registry.npmjs.org/arg set size:undefined disposed:false
+33 http fetch GET 200 https://registry.npmjs.org/tree-kill 85ms (cache miss)
+34 silly packumentCache full:https://registry.npmjs.org/tree-kill set size:undefined disposed:false
+35 http fetch GET 200 https://registry.npmjs.org/execa 94ms (cache miss)
+36 silly packumentCache full:https://registry.npmjs.org/execa set size:undefined disposed:false
+37 http fetch GET 200 https://registry.npmjs.org/check-more-types 100ms (cache miss)
+38 silly packumentCache full:https://registry.npmjs.org/check-more-types set size:undefined disposed:false
+39 http fetch GET 200 https://registry.npmjs.org/lazy-ass 222ms (cache miss)
+40 silly packumentCache full:https://registry.npmjs.org/lazy-ass set size:undefined disposed:false
+41 http fetch GET 200 https://registry.npmjs.org/wait-on 259ms (cache miss)
+42 silly packumentCache full:https://registry.npmjs.org/wait-on set size:undefined disposed:false
+43 silly placeDep ROOT arg@5.0.2 OK for: start-server-and-test@3.0.12 want: 5.0.2
+44 silly placeDep ROOT check-more-types@2.24.0 OK for: start-server-and-test@3.0.12 want: 2.24.0
+45 silly placeDep ROOT execa@5.1.1 OK for: start-server-and-test@3.0.12 want: 5.1.1
+46 silly placeDep ROOT lazy-ass@2.0.3 OK for: start-server-and-test@3.0.12 want: 2.0.3
+47 silly placeDep ROOT tree-kill@1.2.2 OK for: start-server-and-test@3.0.12 want: 1.2.2
+48 silly placeDep ROOT wait-on@9.1.0 OK for: start-server-and-test@3.0.12 want: 9.1.0
+49 silly fetch manifest onetime@^5.1.2
+50 silly packumentCache full:https://registry.npmjs.org/onetime cache-miss
+51 silly fetch manifest is-stream@^2.0.0
+52 silly packumentCache full:https://registry.npmjs.org/is-stream cache-miss
+53 silly fetch manifest get-stream@^6.0.0
+54 silly packumentCache full:https://registry.npmjs.org/get-stream cache-miss
+55 silly fetch manifest cross-spawn@^7.0.3
+56 silly packumentCache full:https://registry.npmjs.org/cross-spawn cache-miss
+57 silly fetch manifest signal-exit@^3.0.3
+58 silly packumentCache full:https://registry.npmjs.org/signal-exit cache-miss
+59 silly fetch manifest merge-stream@^2.0.0
+60 silly packumentCache full:https://registry.npmjs.org/merge-stream cache-miss
+61 silly fetch manifest npm-run-path@^4.0.1
+62 silly packumentCache full:https://registry.npmjs.org/npm-run-path cache-miss
+63 silly fetch manifest human-signals@^2.1.0
+64 silly packumentCache full:https://registry.npmjs.org/human-signals cache-miss
+65 silly fetch manifest strip-final-newline@^2.0.0
+66 silly packumentCache full:https://registry.npmjs.org/strip-final-newline cache-miss
+67 silly fetch manifest joi@^18.2.3
+68 silly packumentCache full:https://registry.npmjs.org/joi cache-miss
+69 silly fetch manifest lodash@^4.18.1
+70 silly packumentCache full:https://registry.npmjs.org/lodash cache-miss
+71 silly fetch manifest minimist@^1.2.8
+72 silly packumentCache full:https://registry.npmjs.org/minimist cache-miss
+73 silly fetch manifest rxjs@^7.8.2
+74 silly packumentCache full:https://registry.npmjs.org/rxjs cache-miss
+75 http fetch GET 200 https://registry.npmjs.org/onetime 28ms (cache miss)
+76 silly packumentCache full:https://registry.npmjs.org/onetime set size:undefined disposed:false
+77 http fetch GET 200 https://registry.npmjs.org/get-stream 29ms (cache miss)
+78 silly packumentCache full:https://registry.npmjs.org/get-stream set size:undefined disposed:false
+79 http fetch GET 200 https://registry.npmjs.org/cross-spawn 37ms (cache miss)
+80 silly packumentCache full:https://registry.npmjs.org/cross-spawn set size:undefined disposed:false
+81 http fetch GET 200 https://registry.npmjs.org/is-stream 40ms (cache miss)
+82 silly packumentCache full:https://registry.npmjs.org/is-stream set size:undefined disposed:false
+83 http fetch GET 200 https://registry.npmjs.org/merge-stream 40ms (cache miss)
+84 silly packumentCache full:https://registry.npmjs.org/merge-stream set size:undefined disposed:false
+85 http fetch GET 200 https://registry.npmjs.org/signal-exit 40ms (cache miss)
+86 silly packumentCache full:https://registry.npmjs.org/signal-exit set size:undefined disposed:false
+87 http fetch GET 200 https://registry.npmjs.org/npm-run-path 73ms (cache miss)
+88 silly packumentCache full:https://registry.npmjs.org/npm-run-path set size:undefined disposed:false
+89 http fetch GET 200 https://registry.npmjs.org/strip-final-newline 78ms (cache miss)
+90 silly packumentCache full:https://registry.npmjs.org/strip-final-newline set size:undefined disposed:false
+91 http fetch GET 200 https://registry.npmjs.org/minimist 77ms (cache miss)
+92 silly packumentCache full:https://registry.npmjs.org/minimist set size:undefined disposed:false
+93 http fetch GET 200 https://registry.npmjs.org/human-signals 80ms (cache miss)
+94 silly packumentCache full:https://registry.npmjs.org/human-signals set size:undefined disposed:false
+95 http fetch GET 200 https://registry.npmjs.org/lodash 104ms (cache miss)
+96 silly packumentCache full:https://registry.npmjs.org/lodash set size:undefined disposed:false
+97 http fetch GET 200 https://registry.npmjs.org/joi 120ms (cache miss)
+98 silly packumentCache full:https://registry.npmjs.org/joi set size:undefined disposed:false
+99 http fetch GET 200 https://registry.npmjs.org/rxjs 135ms (cache miss)
+100 silly packumentCache full:https://registry.npmjs.org/rxjs set size:undefined disposed:false
+101 silly placeDep ROOT cross-spawn@7.0.6 OK for: execa@5.1.1 want: ^7.0.3
+102 silly placeDep ROOT get-stream@6.0.1 OK for: execa@5.1.1 want: ^6.0.0
+103 silly placeDep ROOT human-signals@2.1.0 OK for: execa@5.1.1 want: ^2.1.0
+104 silly placeDep ROOT is-stream@2.0.1 OK for: execa@5.1.1 want: ^2.0.0
+105 silly placeDep ROOT merge-stream@2.0.0 OK for: execa@5.1.1 want: ^2.0.0
+106 silly placeDep ROOT npm-run-path@4.0.1 OK for: execa@5.1.1 want: ^4.0.1
+107 silly placeDep ROOT onetime@5.1.2 OK for: execa@5.1.1 want: ^5.1.2
+108 silly placeDep ROOT signal-exit@3.0.7 OK for: execa@5.1.1 want: ^3.0.3
+109 silly placeDep ROOT strip-final-newline@2.0.0 OK for: execa@5.1.1 want: ^2.0.0
+110 silly fetch manifest which@^2.0.1
+111 silly packumentCache full:https://registry.npmjs.org/which cache-miss
+112 silly fetch manifest path-key@^3.1.0
+113 silly packumentCache full:https://registry.npmjs.org/path-key cache-miss
+114 silly fetch manifest shebang-command@^2.0.0
+115 silly packumentCache full:https://registry.npmjs.org/shebang-command cache-miss
+116 silly fetch manifest path-key@^3.0.0
+117 silly packumentCache full:https://registry.npmjs.org/path-key cache-miss
+118 silly fetch manifest mimic-fn@^2.1.0
+119 silly packumentCache full:https://registry.npmjs.org/mimic-fn cache-miss
+120 http fetch GET 200 https://registry.npmjs.org/path-key 26ms (cache miss)
+121 silly packumentCache full:https://registry.npmjs.org/path-key set size:undefined disposed:false
+122 http fetch GET 200 https://registry.npmjs.org/shebang-command 26ms (cache miss)
+123 silly packumentCache full:https://registry.npmjs.org/shebang-command set size:undefined disposed:false
+124 http fetch GET 200 https://registry.npmjs.org/which 28ms (cache miss)
+125 silly packumentCache full:https://registry.npmjs.org/which set size:undefined disposed:false
+126 http fetch GET 200 https://registry.npmjs.org/mimic-fn 34ms (cache miss)
+127 silly packumentCache full:https://registry.npmjs.org/mimic-fn set size:undefined disposed:false
+128 http fetch GET 200 https://registry.npmjs.org/path-key 36ms (cache miss)
+129 silly packumentCache full:https://registry.npmjs.org/path-key set size:undefined disposed:false
+130 silly placeDep ROOT path-key@3.1.1 OK for: cross-spawn@7.0.6 want: ^3.1.0
+131 silly placeDep ROOT shebang-command@2.0.0 OK for: cross-spawn@7.0.6 want: ^2.0.0
+132 silly placeDep ROOT which@2.0.2 OK for: cross-spawn@7.0.6 want: ^2.0.1
+133 silly fetch manifest shebang-regex@^3.0.0
+134 silly packumentCache full:https://registry.npmjs.org/shebang-regex cache-miss
+135 silly fetch manifest isexe@^2.0.0
+136 silly packumentCache full:https://registry.npmjs.org/isexe cache-miss
+137 http fetch GET 200 https://registry.npmjs.org/isexe 27ms (cache miss)
+138 silly packumentCache full:https://registry.npmjs.org/isexe set size:undefined disposed:false
+139 http fetch GET 200 https://registry.npmjs.org/shebang-regex 28ms (cache miss)
+140 silly packumentCache full:https://registry.npmjs.org/shebang-regex set size:undefined disposed:false
+141 silly placeDep ROOT mimic-fn@2.1.0 OK for: onetime@5.1.2 want: ^2.1.0
+142 silly placeDep ROOT shebang-regex@3.0.0 OK for: shebang-command@2.0.0 want: ^3.0.0
+143 silly placeDep ROOT joi@18.2.3 OK for: wait-on@9.1.0 want: ^18.2.3
+144 silly placeDep ROOT lodash@4.18.1 OK for: wait-on@9.1.0 want: ^4.18.1
+145 silly placeDep ROOT minimist@1.2.8 OK for: wait-on@9.1.0 want: ^1.2.8
+146 silly placeDep ROOT rxjs@7.8.2 OK for: wait-on@9.1.0 want: ^7.8.2
+147 silly fetch manifest @hapi/address@^5.1.1
+148 silly packumentCache full:https://registry.npmjs.org/@hapi%2faddress cache-miss
+149 silly fetch manifest @hapi/formula@^3.0.2
+150 silly packumentCache full:https://registry.npmjs.org/@hapi%2fformula cache-miss
+151 silly fetch manifest @hapi/hoek@^11.0.7
+152 silly packumentCache full:https://registry.npmjs.org/@hapi%2fhoek cache-miss
+153 silly fetch manifest @hapi/pinpoint@^2.0.1
+154 silly packumentCache full:https://registry.npmjs.org/@hapi%2fpinpoint cache-miss
+155 silly fetch manifest @hapi/tlds@^1.1.1
+156 silly packumentCache full:https://registry.npmjs.org/@hapi%2ftlds cache-miss
+157 silly fetch manifest @hapi/topo@^6.0.2
+158 silly packumentCache full:https://registry.npmjs.org/@hapi%2ftopo cache-miss
+159 silly fetch manifest tslib@^2.1.0
+160 silly packumentCache full:https://registry.npmjs.org/tslib cache-miss
+161 http fetch GET 200 https://registry.npmjs.org/tslib 28ms (cache miss)
+162 silly packumentCache full:https://registry.npmjs.org/tslib set size:undefined disposed:false
+163 http fetch GET 200 https://registry.npmjs.org/@hapi%2fhoek 47ms (cache miss)
+164 silly packumentCache full:https://registry.npmjs.org/@hapi%2fhoek set size:undefined disposed:false
+165 http fetch GET 200 https://registry.npmjs.org/@hapi%2fformula 48ms (cache miss)
+166 silly packumentCache full:https://registry.npmjs.org/@hapi%2fformula set size:undefined disposed:false
+167 http fetch GET 200 https://registry.npmjs.org/@hapi%2faddress 51ms (cache miss)
+168 silly packumentCache full:https://registry.npmjs.org/@hapi%2faddress set size:undefined disposed:false
+169 http fetch GET 200 https://registry.npmjs.org/@hapi%2ftopo 51ms (cache miss)
+170 silly packumentCache full:https://registry.npmjs.org/@hapi%2ftopo set size:undefined disposed:false
+171 http fetch GET 200 https://registry.npmjs.org/@hapi%2fpinpoint 52ms (cache miss)
+172 silly packumentCache full:https://registry.npmjs.org/@hapi%2fpinpoint set size:undefined disposed:false
+173 http fetch GET 200 https://registry.npmjs.org/@hapi%2ftlds 58ms (cache miss)
+174 silly packumentCache full:https://registry.npmjs.org/@hapi%2ftlds set size:undefined disposed:false
+175 silly placeDep ROOT @hapi/address@5.1.1 OK for: joi@18.2.3 want: ^5.1.1
+176 silly placeDep ROOT @hapi/formula@3.0.2 OK for: joi@18.2.3 want: ^3.0.2
+177 silly placeDep ROOT @hapi/hoek@11.0.7 OK for: joi@18.2.3 want: ^11.0.7
+178 silly placeDep ROOT @hapi/pinpoint@2.0.1 OK for: joi@18.2.3 want: ^2.0.1
+179 silly placeDep ROOT @hapi/tlds@1.1.7 OK for: joi@18.2.3 want: ^1.1.1
+180 silly placeDep ROOT @hapi/topo@6.0.2 OK for: joi@18.2.3 want: ^6.0.2
+181 silly fetch manifest @hapi/hoek@^11.0.2
+182 silly packumentCache full:https://registry.npmjs.org/@hapi%2fhoek cache-miss
+183 http cache https://registry.npmjs.org/@hapi%2fhoek 6ms (cache hit)
+184 silly packumentCache full:https://registry.npmjs.org/@hapi%2fhoek set size:122440 disposed:false
+185 silly placeDep ROOT tslib@2.8.1 OK for: rxjs@7.8.2 want: ^2.1.0
+186 silly placeDep ROOT isexe@2.0.0 OK for: which@2.0.2 want: ^2.0.0
+187 silly reify moves {}
+188 silly audit bulk request {
+188 silly audit   '@babel/helper-string-parser': [ '7.29.7' ],
+188 silly audit   '@babel/helper-validator-identifier': [ '7.29.7' ],
+188 silly audit   '@babel/parser': [ '7.29.8' ],
+188 silly audit   '@babel/types': [ '7.29.8' ],
+188 silly audit   '@bcoe/v8-coverage': [ '1.0.2' ],
+188 silly audit   '@esbuild/aix-ppc64': [ '0.28.1' ],
+188 silly audit   '@esbuild/android-arm': [ '0.28.1' ],
+188 silly audit   '@esbuild/android-arm64': [ '0.28.1' ],
+188 silly audit   '@esbuild/android-x64': [ '0.28.1' ],
+188 silly audit   '@esbuild/darwin-arm64': [ '0.28.1' ],
+188 silly audit   '@esbuild/darwin-x64': [ '0.28.1' ],
+188 silly audit   '@esbuild/freebsd-arm64': [ '0.28.1' ],
+188 silly audit   '@esbuild/freebsd-x64': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-arm': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-arm64': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-ia32': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-loong64': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-mips64el': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-ppc64': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-riscv64': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-s390x': [ '0.28.1' ],
+188 silly audit   '@esbuild/linux-x64': [ '0.28.1' ],
+188 silly audit   '@esbuild/netbsd-arm64': [ '0.28.1' ],
+188 silly audit   '@esbuild/netbsd-x64': [ '0.28.1' ],
+188 silly audit   '@esbuild/openbsd-arm64': [ '0.28.1' ],
+188 silly audit   '@esbuild/openbsd-x64': [ '0.28.1' ],
+188 silly audit   '@esbuild/openharmony-arm64': [ '0.28.1' ],
+188 silly audit   '@esbuild/sunos-x64': [ '0.28.1' ],
+188 silly audit   '@esbuild/win32-arm64': [ '0.28.1' ],
+188 silly audit   '@esbuild/win32-ia32': [ '0.28.1' ],
+188 silly audit   '@esbuild/win32-x64': [ '0.28.1' ],
+188 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+188 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.5' ],
+188 silly audit   '@jridgewell/trace-mapping': [ '0.3.31' ],
+188 silly audit   '@noble/hashes': [ '1.8.0' ],
+188 silly audit   '@oxc-project/types': [ '0.144.0' ],
+188 silly audit   '@paralleldrive/cuid2': [ '2.3.1' ],
+188 silly audit   '@playwright/test': [ '1.62.1' ],
+188 silly audit   '@polka/url': [ '1.0.0-next.29' ],
+188 silly audit   '@rolldown/binding-android-arm64': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-darwin-arm64': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-darwin-x64': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-freebsd-x64': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-linux-arm-gnueabihf': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-linux-arm64-gnu': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-linux-arm64-musl': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-linux-ppc64-gnu': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-linux-s390x-gnu': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-linux-x64-gnu': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-linux-x64-musl': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-openharmony-arm64': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-win32-arm64-msvc': [ '1.2.4' ],
+188 silly audit   '@rolldown/binding-win32-x64-msvc': [ '1.2.4' ],
+188 silly audit   '@rolldown/pluginutils': [ '1.0.1' ],
+188 silly audit   '@standard-schema/spec': [ '1.1.0' ],
+188 silly audit   '@types/body-parser': [ '1.19.6' ],
+188 silly audit   '@types/chai': [ '5.2.3' ],
+188 silly audit   '@types/connect': [ '3.4.38' ],
+188 silly audit   '@types/cookiejar': [ '2.1.5' ],
+188 silly audit   '@types/deep-eql': [ '4.0.2' ],
+188 silly audit   '@types/estree': [ '1.0.9' ],
+188 silly audit   '@types/express': [ '5.0.6' ],
+188 silly audit   '@types/express-serve-static-core': [ '5.1.3' ],
+188 silly audit   '@types/express-session': [ '1.19.0' ],
+188 silly audit   '@types/http-errors': [ '2.0.5' ],
+188 silly audit   '@types/methods': [ '1.1.4' ],
+188 silly audit   '@types/multer': [ '2.2.0' ],
+188 silly audit   '@types/node': [ '26.1.2' ],
+188 silly audit   '@types/nunjucks': [ '3.2.6' ],
+188 silly audit   '@types/qs': [ '6.15.1' ],
+188 silly audit   '@types/range-parser': [ '1.2.7' ],
+188 silly audit   '@types/send': [ '1.2.1' ],
+188 silly audit   '@types/serve-static': [ '2.2.0' ],
+188 silly audit   '@types/superagent': [ '8.1.11' ],
+188 silly audit   '@types/supertest': [ '6.0.3' ],
+188 silly audit   '@typescript/typescript-aix-ppc64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-darwin-arm64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-darwin-x64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-freebsd-arm64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-freebsd-x64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-linux-arm': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-linux-arm64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-linux-loong64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-linux-mips64el': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-linux-ppc64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-linux-riscv64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-linux-s390x': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-linux-x64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-netbsd-arm64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-netbsd-x64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-openbsd-arm64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-openbsd-x64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-sunos-x64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-win32-arm64': [ '7.0.2' ],
+188 silly audit   '@typescript/typescript-win32-x64': [ '7.0.2' ],
+188 silly audit   '@vitest/coverage-v8': [ '4.1.10' ],
+188 silly audit   '@vitest/expect': [ '4.1.10' ],
+188 silly audit   '@vitest/mocker': [ '4.1.10' ],
+188 silly audit   '@vitest/pretty-format': [ '4.1.10' ],
+188 silly audit   '@vitest/runner': [ '4.1.10' ],
+188 silly audit   '@vitest/snapshot': [ '4.1.10' ],
+188 silly audit   '@vitest/spy': [ '4.1.10' ],
+188 silly audit   '@vitest/ui': [ '4.1.10' ],
+188 silly audit   '@vitest/utils': [ '4.1.10' ],
+188 silly audit   'a-sync-waterfall': [ '1.0.1' ],
+188 silly audit   accepts: [ '2.0.0' ],
+188 silly audit   'agent-base': [ '6.0.2' ],
+188 silly audit   'ansi-regex': [ '5.0.1' ],
+188 silly audit   'ansi-styles': [ '4.3.0' ],
+188 silly audit   'append-field': [ '1.0.0' ],
+188 silly audit   asap: [ '2.0.6' ],
+188 silly audit   'assertion-error': [ '2.0.1' ],
+188 silly audit   'ast-v8-to-istanbul': [ '1.0.5' ],
+188 silly audit   asynckit: [ '0.4.0' ],
+188 silly audit   axios: [ '1.19.0' ],
+188 silly audit   'body-parser': [ '2.3.0' ],
+188 silly audit   'content-type': [ '2.0.0', '1.0.5' ],
+188 silly audit   'buffer-from': [ '1.1.2' ],
+188 silly audit   busboy: [ '1.6.0' ],
+188 silly audit   bytes: [ '3.1.2' ],
+188 silly audit   'call-bind-apply-helpers': [ '1.0.2' ],
+188 silly audit   'call-bound': [ '1.0.4' ],
+188 silly audit   chai: [ '6.2.2' ],
+188 silly audit   cliui: [ '7.0.4' ],
+188 silly audit   'color-convert': [ '2.0.1' ],
+188 silly audit   'color-name': [ '1.1.4' ],
+188 silly audit   'combined-stream': [ '1.0.8' ],
+188 silly audit   commander: [ '5.1.0' ],
+188 silly audit   'component-emitter': [ '1.3.1' ],
+188 silly audit   'concat-map': [ '0.0.1' ],
+188 silly audit   'concat-stream': [ '2.0.0' ],
+188 silly audit   'readable-stream': [ '3.6.2', '1.0.34', '2.3.8' ],
+188 silly audit   'safe-buffer': [ '5.2.1', '5.1.2' ],
+188 silly audit   string_decoder: [ '1.3.0', '0.10.31', '1.1.1' ],
+188 silly audit   'content-disposition': [ '1.1.0' ],
+188 silly audit   'convert-source-map': [ '2.0.0' ],
+188 silly audit   cookie: [ '0.7.2' ],
+188 silly audit   'cookie-signature': [ '1.2.2', '1.0.7' ],
+188 silly audit   cookiejar: [ '2.1.4' ],
+188 silly audit   copyfiles: [ '2.4.1' ],
+188 silly audit   'balanced-match': [ '1.0.2' ],
+188 silly audit   'brace-expansion': [ '1.1.18' ],
+188 silly audit   minimatch: [ '3.1.5' ],
+188 silly audit   'core-util-is': [ '1.0.3' ],
+188 silly audit   debug: [ '4.4.3', '2.6.9' ],
+188 silly audit   'delayed-stream': [ '1.0.0' ],
+188 silly audit   depd: [ '2.0.0' ],
+188 silly audit   'detect-libc': [ '2.1.2' ],
+188 silly audit   dezalgo: [ '1.0.4' ],
+188 silly audit   dotenv: [ '17.4.2' ],
+188 silly audit   'dunder-proto': [ '1.0.1' ],
+188 silly audit   'ee-first': [ '1.1.1' ],
+188 silly audit   'emoji-regex': [ '8.0.0' ],
+188 silly audit   encodeurl: [ '2.0.0' ],
+188 silly audit   'es-define-property': [ '1.0.1' ],
+188 silly audit   'es-errors': [ '1.3.0' ],
+188 silly audit   'es-module-lexer': [ '2.3.1' ],
+188 silly audit   'es-object-atoms': [ '1.1.2' ],
+188 silly audit   'es-set-tostringtag': [ '2.1.0' ],
+188 silly audit   esbuild: [ '0.28.1' ],
+188 silly audit   escalade: [ '3.2.0' ],
+188 silly audit   'escape-html': [ '1.0.3' ],
+188 silly audit   'estree-walker': [ '3.0.3' ],
+188 silly audit   etag: [ '1.8.1' ],
+188 silly audit   'expect-type': [ '1.4.0' ],
+188 silly audit   express: [ '5.2.1' ],
+188 silly audit   'express-session': [ '1.19.0' ],
+188 silly audit   ms: [ '2.0.0', '2.1.3' ],
+188 silly audit   'fast-safe-stringify': [ '2.1.1' ],
+188 silly audit   fdir: [ '6.5.0' ],
+188 silly audit   fflate: [ '0.8.3' ],
+188 silly audit   finalhandler: [ '2.1.1' ],
+188 silly audit   flatted: [ '3.4.4' ],
+188 silly audit   'follow-redirects': [ '1.16.0' ],
+188 silly audit   'form-data': [ '4.0.6' ],
+188 silly audit   'mime-db': [ '1.52.0', '1.54.0' ],
+188 silly audit   'mime-types': [ '2.1.35', '3.0.2' ],
+188 silly audit   formidable: [ '3.5.4' ],
+188 silly audit   forwarded: [ '0.2.0' ],
+188 silly audit   fresh: [ '2.0.0' ],
+188 silly audit   'fs.realpath': [ '1.0.0' ],
+188 silly audit   fsevents: [ '2.3.3', '2.3.2' ],
+188 silly audit   'function-bind': [ '1.1.2' ],
+188 silly audit   'get-caller-file': [ '2.0.5' ],
+188 silly audit   'get-intrinsic': [ '1.3.0' ],
+188 silly audit   'get-proto': [ '1.0.1' ],
+188 silly audit   glob: [ '7.2.3' ],
+188 silly audit   gopd: [ '1.2.0' ],
+188 silly audit   'has-flag': [ '4.0.0' ],
+188 silly audit   'has-symbols': [ '1.1.0' ],
+188 silly audit   'has-tostringtag': [ '1.0.2' ],
+188 silly audit   hasown: [ '2.0.4' ],
+188 silly audit   'html-escaper': [ '2.0.2' ],
+188 silly audit   'http-errors': [ '2.0.1' ],
+188 silly audit   'https-proxy-agent': [ '5.0.1' ],
+188 silly audit   'iconv-lite': [ '0.7.3' ],
+188 silly audit   inflight: [ '1.0.6' ],
+188 silly audit   inherits: [ '2.0.4' ],
+188 silly audit   'ipaddr.js': [ '1.9.1' ],
+188 silly audit   'is-fullwidth-code-point': [ '3.0.0' ],
+188 silly audit   'is-promise': [ '4.0.0' ],
+188 silly audit   isarray: [ '0.0.1', '1.0.0' ],
+188 silly audit   'istanbul-lib-coverage': [ '3.2.2' ],
+188 silly audit   'istanbul-lib-report': [ '3.0.1' ],
+188 silly audit   'istanbul-reports': [ '3.2.0' ],
+188 silly audit   'js-tokens': [ '10.0.0' ],
+188 silly audit   lightningcss: [ '1.33.0' ],
+188 silly audit   'lightningcss-android-arm64': [ '1.33.0' ],
+188 silly audit   'lightningcss-darwin-arm64': [ '1.33.0' ],
+188 silly audit   'lightningcss-darwin-x64': [ '1.33.0' ],
+188 silly audit   'lightningcss-freebsd-x64': [ '1.33.0' ],
+188 silly audit   'lightningcss-linux-arm-gnueabihf': [ '1.33.0' ],
+188 silly audit   'lightningcss-linux-arm64-gnu': [ '1.33.0' ],
+188 silly audit   'lightningcss-linux-arm64-musl': [ '1.33.0' ],
+188 silly audit   'lightningcss-linux-x64-gnu': [ '1.33.0' ],
+188 silly audit   'lightningcss-linux-x64-musl': [ '1.33.0' ],
+188 silly audit   'lightningcss-win32-arm64-msvc': [ '1.33.0' ],
+188 silly audit   'lightningcss-win32-x64-msvc': [ '1.33.0' ],
+188 silly audit   'magic-string': [ '0.30.21' ],
+188 silly audit   magicast: [ '0.5.4' ],
+188 silly audit   'make-dir': [ '4.0.0' ],
+188 silly audit   'math-intrinsics': [ '1.1.0' ],
+188 silly audit   'media-typer': [ '1.1.1', '0.3.0' ],
+188 silly audit   'merge-descriptors': [ '2.0.0' ],
+188 silly audit   methods: [ '1.1.2' ],
+188 silly audit   mime: [ '2.6.0' ],
+188 silly audit   mkdirp: [ '1.0.4' ],
+188 silly audit   mrmime: [ '2.0.1' ],
+188 silly audit   multer: [ '2.2.0' ],
+188 silly audit   'type-is': [ '1.6.18', '2.1.0' ],
+188 silly audit   nanoid: [ '3.3.18' ],
+188 silly audit   negotiator: [ '1.0.0' ],
+188 silly audit   noms: [ '0.0.0' ],
+188 silly audit   nunjucks: [ '3.2.4' ],
+188 silly audit   'object-inspect': [ '1.13.4' ],
+188 silly audit   obug: [ '2.1.4' ],
+188 silly audit   'on-finished': [ '2.4.1' ],
+188 silly audit   'on-headers': [ '1.1.0' ],
+188 silly audit   once: [ '1.4.0' ],
+188 silly audit   parseurl: [ '1.3.3' ],
+188 silly audit   'path-is-absolute': [ '1.0.1' ],
+188 silly audit   'path-to-regexp': [ '8.4.2' ],
+188 silly audit   pathe: [ '2.0.3' ],
+188 silly audit   picocolors: [ '1.1.1' ],
+188 silly audit   picomatch: [ '4.0.5' ],
+188 silly audit   playwright: [ '1.62.1' ],
+188 silly audit   'playwright-core': [ '1.62.1' ],
+188 silly audit   postcss: [ '8.5.26' ],
+188 silly audit   prettier: [ '3.9.6' ],
+188 silly audit   'process-nextick-args': [ '2.0.1' ],
+188 silly audit   'proxy-addr': [ '2.0.7' ],
+188 silly audit   'proxy-from-env': [ '2.1.0' ],
+188 silly audit   qs: [ '6.15.3' ],
+188 silly audit   'random-bytes': [ '1.0.0' ],
+188 silly audit   'range-parser': [ '1.3.0' ],
+188 silly audit   'raw-body': [ '3.0.2' ],
+188 silly audit   'require-directory': [ '2.1.1' ],
+188 silly audit   rolldown: [ '1.2.4' ],
+188 silly audit   router: [ '2.2.0' ],
+188 silly audit   'safer-buffer': [ '2.1.2' ],
+188 silly audit   semver: [ '7.8.5' ],
+188 silly audit   send: [ '1.2.1' ],
+188 silly audit   'serve-static': [ '2.2.1' ],
+188 silly audit   setprototypeof: [ '1.2.0' ],
+188 silly audit   'side-channel': [ '1.1.1' ],
+188 silly audit   'side-channel-list': [ '1.0.1' ],
+188 silly audit   'side-channel-map': [ '1.0.1' ],
+188 silly audit   'side-channel-weakmap': [ '1.0.2' ],
+188 silly audit   siginfo: [ '2.0.0' ],
+188 silly audit   sirv: [ '3.0.2' ],
+188 silly audit   'source-map-js': [ '1.2.1' ],
+188 silly audit   stackback: [ '0.0.2' ],
+188 silly audit   statuses: [ '2.0.2' ],
+188 silly audit   'std-env': [ '4.2.0' ],
+188 silly audit   streamsearch: [ '1.1.0' ],
+188 silly audit   'string-width': [ '4.2.3' ],
+188 silly audit   'strip-ansi': [ '6.0.1' ],
+188 silly audit   superagent: [ '10.3.0' ],
+188 silly audit   supertest: [ '7.2.2' ],
+188 silly audit   'supports-color': [ '7.2.0' ],
+188 silly audit   through2: [ '2.0.5' ],
+188 silly audit   tinybench: [ '2.9.0' ],
+188 silly audit   tinyexec: [ '1.3.0' ],
+188 silly audit   tinyglobby: [ '0.2.17' ],
+188 silly audit   tinyrainbow: [ '3.1.1' ],
+188 silly audit   toidentifier: [ '1.0.1' ],
+188 silly audit   totalist: [ '3.0.1' ],
+188 silly audit   tsx: [ '4.23.7' ],
+188 silly audit   typedarray: [ '0.0.6' ],
+188 silly audit   typescript: [ '7.0.2' ],
+188 silly audit   'uid-safe': [ '2.1.5' ],
+188 silly audit   'undici-types': [ '8.3.0' ],
+188 silly audit   unpipe: [ '1.0.0' ],
+188 silly audit   untildify: [ '4.0.0' ],
+188 silly audit   'util-deprecate': [ '1.0.2' ],
+188 silly audit   vary: [ '1.1.2' ],
+188 silly audit   vite: [ '8.2.1' ],
+188 silly audit   vitest: [ '4.1.10' ],
+188 silly audit   'why-is-node-running': [ '2.3.0' ],
+188 silly audit   'wrap-ansi': [ '7.0.0' ],
+188 silly audit   wrappy: [ '1.0.2' ],
+188 silly audit   xtend: [ '4.0.2' ],
+188 silly audit   y18n: [ '5.0.8' ],
+188 silly audit   yargs: [ '16.2.2' ],
+188 silly audit   'yargs-parser': [ '20.2.9' ],
+188 silly audit   'start-server-and-test': [ '3.0.12' ],
+188 silly audit   arg: [ '5.0.2' ],
+188 silly audit   'check-more-types': [ '2.24.0' ],
+188 silly audit   execa: [ '5.1.1' ],
+188 silly audit   'lazy-ass': [ '2.0.3' ],
+188 silly audit   'tree-kill': [ '1.2.2' ],
+188 silly audit   'wait-on': [ '9.1.0' ],
+188 silly audit   'cross-spawn': [ '7.0.6' ],
+188 silly audit   'get-stream': [ '6.0.1' ],
+188 silly audit   'human-signals': [ '2.1.0' ],
+188 silly audit   'is-stream': [ '2.0.1' ],
+188 silly audit   'merge-stream': [ '2.0.0' ],
+188 silly audit   'npm-run-path': [ '4.0.1' ],
+188 silly audit   onetime: [ '5.1.2' ],
+188 silly audit   'signal-exit': [ '3.0.7' ],
+188 silly audit   'strip-final-newline': [ '2.0.0' ],
+188 silly audit   'path-key': [ '3.1.1' ],
+188 silly audit   'shebang-command': [ '2.0.0' ],
+188 silly audit   which: [ '2.0.2' ],
+188 silly audit   'mimic-fn': [ '2.1.0' ],
+188 silly audit   'shebang-regex': [ '3.0.0' ],
+188 silly audit   joi: [ '18.2.3' ],
+188 silly audit   lodash: [ '4.18.1' ],
+188 silly audit   minimist: [ '1.2.8' ],
+188 silly audit   rxjs: [ '7.8.2' ],
+188 silly audit   '@hapi/address': [ '5.1.1' ],
+188 silly audit   '@hapi/formula': [ '3.0.2' ],
+188 silly audit   '@hapi/hoek': [ '11.0.7' ],
+188 silly audit   '@hapi/pinpoint': [ '2.0.1' ],
+188 silly audit   '@hapi/tlds': [ '1.1.7' ],
+188 silly audit   '@hapi/topo': [ '6.0.2' ],
+188 silly audit   tslib: [ '2.8.1' ],
+188 silly audit   isexe: [ '2.0.0' ]
+188 silly audit }
+189 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-win32-x64-msvc
+190 silly reify mark deleted [
+190 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-win32-x64-msvc'
+190 silly reify ]
+191 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-win32-arm64-msvc
+192 silly reify mark deleted [
+192 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-win32-arm64-msvc'
+192 silly reify ]
+193 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-x64-musl
+194 silly reify mark deleted [
+194 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-x64-musl'
+194 silly reify ]
+195 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-x64-gnu
+196 silly reify mark deleted [
+196 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-x64-gnu'
+196 silly reify ]
+197 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-arm64-musl
+198 silly reify mark deleted [
+198 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-arm64-musl'
+198 silly reify ]
+199 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-arm64-gnu
+200 silly reify mark deleted [
+200 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-arm64-gnu'
+200 silly reify ]
+201 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-arm-gnueabihf
+202 silly reify mark deleted [
+202 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-linux-arm-gnueabihf'
+202 silly reify ]
+203 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-freebsd-x64
+204 silly reify mark deleted [
+204 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-freebsd-x64'
+204 silly reify ]
+205 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-darwin-x64
+206 silly reify mark deleted [
+206 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-darwin-x64'
+206 silly reify ]
+207 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/lightningcss-android-arm64
+208 silly reify mark deleted [
+208 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/lightningcss-android-arm64'
+208 silly reify ]
+209 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-win32-x64
+210 silly reify mark deleted [
+210 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-win32-x64'
+210 silly reify ]
+211 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-win32-arm64
+212 silly reify mark deleted [
+212 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-win32-arm64'
+212 silly reify ]
+213 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-sunos-x64
+214 silly reify mark deleted [
+214 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-sunos-x64'
+214 silly reify ]
+215 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-openbsd-x64
+216 silly reify mark deleted [
+216 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-openbsd-x64'
+216 silly reify ]
+217 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-openbsd-arm64
+218 silly reify mark deleted [
+218 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-openbsd-arm64'
+218 silly reify ]
+219 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-netbsd-x64
+220 silly reify mark deleted [
+220 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-netbsd-x64'
+220 silly reify ]
+221 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-netbsd-arm64
+222 silly reify mark deleted [
+222 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-netbsd-arm64'
+222 silly reify ]
+223 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-x64
+224 silly reify mark deleted [
+224 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-x64'
+224 silly reify ]
+225 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-s390x
+226 silly reify mark deleted [
+226 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-s390x'
+226 silly reify ]
+227 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-riscv64
+228 silly reify mark deleted [
+228 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-riscv64'
+228 silly reify ]
+229 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-ppc64
+230 silly reify mark deleted [
+230 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-ppc64'
+230 silly reify ]
+231 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-mips64el
+232 silly reify mark deleted [
+232 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-mips64el'
+232 silly reify ]
+233 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-loong64
+234 silly reify mark deleted [
+234 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-loong64'
+234 silly reify ]
+235 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-arm64
+236 silly reify mark deleted [
+236 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-arm64'
+236 silly reify ]
+237 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-arm
+238 silly reify mark deleted [
+238 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-linux-arm'
+238 silly reify ]
+239 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-freebsd-x64
+240 silly reify mark deleted [
+240 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-freebsd-x64'
+240 silly reify ]
+241 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-freebsd-arm64
+242 silly reify mark deleted [
+242 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-freebsd-arm64'
+242 silly reify ]
+243 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-darwin-x64
+244 silly reify mark deleted [
+244 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-darwin-x64'
+244 silly reify ]
+245 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-aix-ppc64
+246 silly reify mark deleted [
+246 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@typescript/typescript-aix-ppc64'
+246 silly reify ]
+247 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-win32-x64-msvc
+248 silly reify mark deleted [
+248 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-win32-x64-msvc'
+248 silly reify ]
+249 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-win32-arm64-msvc
+250 silly reify mark deleted [
+250 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-win32-arm64-msvc'
+250 silly reify ]
+251 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-openharmony-arm64
+252 silly reify mark deleted [
+252 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-openharmony-arm64'
+252 silly reify ]
+253 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-x64-musl
+254 silly reify mark deleted [
+254 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-x64-musl'
+254 silly reify ]
+255 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-x64-gnu
+256 silly reify mark deleted [
+256 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-x64-gnu'
+256 silly reify ]
+257 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-s390x-gnu
+258 silly reify mark deleted [
+258 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-s390x-gnu'
+258 silly reify ]
+259 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-ppc64-gnu
+260 silly reify mark deleted [
+260 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-ppc64-gnu'
+260 silly reify ]
+261 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-arm64-musl
+262 silly reify mark deleted [
+262 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-arm64-musl'
+262 silly reify ]
+263 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-arm64-gnu
+264 silly reify mark deleted [
+264 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-arm64-gnu'
+264 silly reify ]
+265 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-arm-gnueabihf
+266 silly reify mark deleted [
+266 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-linux-arm-gnueabihf'
+266 silly reify ]
+267 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-freebsd-x64
+268 silly reify mark deleted [
+268 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-freebsd-x64'
+268 silly reify ]
+269 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-darwin-x64
+270 silly reify mark deleted [
+270 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-darwin-x64'
+270 silly reify ]
+271 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-android-arm64
+272 silly reify mark deleted [
+272 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@rolldown/binding-android-arm64'
+272 silly reify ]
+273 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/win32-x64
+274 silly reify mark deleted [
+274 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/win32-x64'
+274 silly reify ]
+275 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/win32-ia32
+276 silly reify mark deleted [
+276 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/win32-ia32'
+276 silly reify ]
+277 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/win32-arm64
+278 silly reify mark deleted [
+278 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/win32-arm64'
+278 silly reify ]
+279 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/sunos-x64
+280 silly reify mark deleted [
+280 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/sunos-x64'
+280 silly reify ]
+281 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/openharmony-arm64
+282 silly reify mark deleted [
+282 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/openharmony-arm64'
+282 silly reify ]
+283 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/openbsd-x64
+284 silly reify mark deleted [
+284 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/openbsd-x64'
+284 silly reify ]
+285 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/openbsd-arm64
+286 silly reify mark deleted [
+286 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/openbsd-arm64'
+286 silly reify ]
+287 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/netbsd-x64
+288 silly reify mark deleted [
+288 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/netbsd-x64'
+288 silly reify ]
+289 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/netbsd-arm64
+290 silly reify mark deleted [
+290 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/netbsd-arm64'
+290 silly reify ]
+291 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-x64
+292 silly reify mark deleted [
+292 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-x64'
+292 silly reify ]
+293 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-s390x
+294 silly reify mark deleted [
+294 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-s390x'
+294 silly reify ]
+295 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-riscv64
+296 silly reify mark deleted [
+296 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-riscv64'
+296 silly reify ]
+297 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-ppc64
+298 silly reify mark deleted [
+298 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-ppc64'
+298 silly reify ]
+299 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-mips64el
+300 silly reify mark deleted [
+300 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-mips64el'
+300 silly reify ]
+301 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-loong64
+302 silly reify mark deleted [
+302 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-loong64'
+302 silly reify ]
+303 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-ia32
+304 silly reify mark deleted [
+304 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-ia32'
+304 silly reify ]
+305 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-arm64
+306 silly reify mark deleted [
+306 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-arm64'
+306 silly reify ]
+307 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-arm
+308 silly reify mark deleted [
+308 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/linux-arm'
+308 silly reify ]
+309 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/freebsd-x64
+310 silly reify mark deleted [
+310 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/freebsd-x64'
+310 silly reify ]
+311 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/freebsd-arm64
+312 silly reify mark deleted [
+312 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/freebsd-arm64'
+312 silly reify ]
+313 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/darwin-x64
+314 silly reify mark deleted [
+314 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/darwin-x64'
+314 silly reify ]
+315 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/android-x64
+316 silly reify mark deleted [
+316 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/android-x64'
+316 silly reify ]
+317 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/android-arm64
+318 silly reify mark deleted [
+318 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/android-arm64'
+318 silly reify ]
+319 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/android-arm
+320 silly reify mark deleted [
+320 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/android-arm'
+320 silly reify ]
+321 verbose reify failed optional dependency /Users/mohammed.ali/team6-frontend/node_modules/@esbuild/aix-ppc64
+322 silly reify mark deleted [
+322 silly reify   '/Users/mohammed.ali/team6-frontend/node_modules/@esbuild/aix-ppc64'
+322 silly reify ]
+323 http cache isexe@https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz 0ms (cache hit)
+324 http cache tslib@https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz 0ms (cache hit)
+325 http cache @hapi/topo@https://registry.npmjs.org/@hapi/topo/-/topo-6.0.2.tgz 0ms (cache hit)
+326 http cache @hapi/tlds@https://registry.npmjs.org/@hapi/tlds/-/tlds-1.1.7.tgz 0ms (cache hit)
+327 http cache @hapi/pinpoint@https://registry.npmjs.org/@hapi/pinpoint/-/pinpoint-2.0.1.tgz 0ms (cache hit)
+328 http cache @hapi/formula@https://registry.npmjs.org/@hapi/formula/-/formula-3.0.2.tgz 0ms (cache hit)
+329 http cache @hapi/address@https://registry.npmjs.org/@hapi/address/-/address-5.1.1.tgz 0ms (cache hit)
+330 http cache rxjs@https://registry.npmjs.org/rxjs/-/rxjs-7.8.2.tgz 0ms (cache hit)
+331 http cache minimist@https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz 0ms (cache hit)
+332 http cache joi@https://registry.npmjs.org/joi/-/joi-18.2.3.tgz 0ms (cache hit)
+333 http cache @hapi/hoek@https://registry.npmjs.org/@hapi/hoek/-/hoek-11.0.7.tgz 0ms (cache hit)
+334 http cache lodash@https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz 0ms (cache hit)
+335 http cache shebang-regex@https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz 0ms (cache hit)
+336 http cache shebang-command@https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz 0ms (cache hit)
+337 http cache which@https://registry.npmjs.org/which/-/which-2.0.2.tgz 0ms (cache hit)
+338 http cache mimic-fn@https://registry.npmjs.org/mimic-fn/-/mimic-fn-2.1.0.tgz 0ms (cache hit)
+339 http cache path-key@https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz 0ms (cache hit)
+340 http cache strip-final-newline@https://registry.npmjs.org/strip-final-newline/-/strip-final-newline-2.0.0.tgz 0ms (cache hit)
+341 http cache signal-exit@https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.7.tgz 0ms (cache hit)
+342 http cache merge-stream@https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz 0ms (cache hit)
+343 http cache is-stream@https://registry.npmjs.org/is-stream/-/is-stream-2.0.1.tgz 0ms (cache hit)
+344 http cache human-signals@https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz 0ms (cache hit)
+345 http cache npm-run-path@https://registry.npmjs.org/npm-run-path/-/npm-run-path-4.0.1.tgz 0ms (cache hit)
+346 http cache onetime@https://registry.npmjs.org/onetime/-/onetime-5.1.2.tgz 0ms (cache hit)
+347 http cache cross-spawn@https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz 0ms (cache hit)
+348 http cache wait-on@https://registry.npmjs.org/wait-on/-/wait-on-9.1.0.tgz 0ms (cache hit)
+349 http cache get-stream@https://registry.npmjs.org/get-stream/-/get-stream-6.0.1.tgz 0ms (cache hit)
+350 http cache tree-kill@https://registry.npmjs.org/tree-kill/-/tree-kill-1.2.2.tgz 0ms (cache hit)
+351 http cache lazy-ass@https://registry.npmjs.org/lazy-ass/-/lazy-ass-2.0.3.tgz 0ms (cache hit)
+352 http cache execa@https://registry.npmjs.org/execa/-/execa-5.1.1.tgz 0ms (cache hit)
+353 silly tarball no local data for tslib@https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz. Extracting by manifest.
+354 silly tarball no local data for @hapi/topo@https://registry.npmjs.org/@hapi/topo/-/topo-6.0.2.tgz. Extracting by manifest.
+355 silly tarball no local data for @hapi/tlds@https://registry.npmjs.org/@hapi/tlds/-/tlds-1.1.7.tgz. Extracting by manifest.
+356 silly tarball no local data for @hapi/pinpoint@https://registry.npmjs.org/@hapi/pinpoint/-/pinpoint-2.0.1.tgz. Extracting by manifest.
+357 silly tarball no local data for @hapi/formula@https://registry.npmjs.org/@hapi/formula/-/formula-3.0.2.tgz. Extracting by manifest.
+358 silly tarball no local data for @hapi/address@https://registry.npmjs.org/@hapi/address/-/address-5.1.1.tgz. Extracting by manifest.
+359 http cache arg@https://registry.npmjs.org/arg/-/arg-5.0.2.tgz 0ms (cache hit)
+360 silly tarball no local data for rxjs@https://registry.npmjs.org/rxjs/-/rxjs-7.8.2.tgz. Extracting by manifest.
+361 silly tarball no local data for minimist@https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz. Extracting by manifest.
+362 silly tarball no local data for joi@https://registry.npmjs.org/joi/-/joi-18.2.3.tgz. Extracting by manifest.
+363 silly tarball no local data for @hapi/hoek@https://registry.npmjs.org/@hapi/hoek/-/hoek-11.0.7.tgz. Extracting by manifest.
+364 silly tarball no local data for lodash@https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz. Extracting by manifest.
+365 silly tarball no local data for mimic-fn@https://registry.npmjs.org/mimic-fn/-/mimic-fn-2.1.0.tgz. Extracting by manifest.
+366 silly tarball no local data for strip-final-newline@https://registry.npmjs.org/strip-final-newline/-/strip-final-newline-2.0.0.tgz. Extracting by manifest.
+367 silly tarball no local data for signal-exit@https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.7.tgz. Extracting by manifest.
+368 silly tarball no local data for merge-stream@https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz. Extracting by manifest.
+369 http cache check-more-types@https://registry.npmjs.org/check-more-types/-/check-more-types-2.24.0.tgz 0ms (cache hit)
+370 silly tarball no local data for is-stream@https://registry.npmjs.org/is-stream/-/is-stream-2.0.1.tgz. Extracting by manifest.
+371 silly tarball no local data for human-signals@https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz. Extracting by manifest.
+372 silly tarball no local data for npm-run-path@https://registry.npmjs.org/npm-run-path/-/npm-run-path-4.0.1.tgz. Extracting by manifest.
+373 silly tarball no local data for onetime@https://registry.npmjs.org/onetime/-/onetime-5.1.2.tgz. Extracting by manifest.
+374 silly tarball no local data for wait-on@https://registry.npmjs.org/wait-on/-/wait-on-9.1.0.tgz. Extracting by manifest.
+375 silly tarball no local data for get-stream@https://registry.npmjs.org/get-stream/-/get-stream-6.0.1.tgz. Extracting by manifest.
+376 silly tarball no local data for tree-kill@https://registry.npmjs.org/tree-kill/-/tree-kill-1.2.2.tgz. Extracting by manifest.
+377 silly tarball no local data for lazy-ass@https://registry.npmjs.org/lazy-ass/-/lazy-ass-2.0.3.tgz. Extracting by manifest.
+378 silly tarball no local data for execa@https://registry.npmjs.org/execa/-/execa-5.1.1.tgz. Extracting by manifest.
+379 silly tarball no local data for arg@https://registry.npmjs.org/arg/-/arg-5.0.2.tgz. Extracting by manifest.
+380 silly tarball no local data for check-more-types@https://registry.npmjs.org/check-more-types/-/check-more-types-2.24.0.tgz. Extracting by manifest.
+381 http cache start-server-and-test@https://registry.npmjs.org/start-server-and-test/-/start-server-and-test-3.0.12.tgz 0ms (cache hit)
+382 silly tarball no local data for start-server-and-test@https://registry.npmjs.org/start-server-and-test/-/start-server-and-test-3.0.12.tgz. Extracting by manifest.
+383 http fetch GET 200 https://registry.npmjs.org/mimic-fn/-/mimic-fn-2.1.0.tgz 44ms (cache miss)
+384 http fetch GET 200 https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz 45ms (cache miss)
+385 http fetch GET 200 https://registry.npmjs.org/@hapi/pinpoint/-/pinpoint-2.0.1.tgz 48ms (cache miss)
+386 http fetch GET 200 https://registry.npmjs.org/@hapi/topo/-/topo-6.0.2.tgz 57ms (cache miss)
+387 http fetch GET 200 https://registry.npmjs.org/@hapi/formula/-/formula-3.0.2.tgz 59ms (cache miss)
+388 http fetch GET 200 https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz 67ms (cache miss)
+389 http fetch GET 200 https://registry.npmjs.org/is-stream/-/is-stream-2.0.1.tgz 66ms (cache miss)
+390 http fetch GET 200 https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz 67ms (cache miss)
+391 http fetch GET 200 https://registry.npmjs.org/@hapi/tlds/-/tlds-1.1.7.tgz 82ms (cache miss)
+392 http fetch GET 200 https://registry.npmjs.org/onetime/-/onetime-5.1.2.tgz 83ms (cache miss)
+393 http fetch GET 200 https://registry.npmjs.org/npm-run-path/-/npm-run-path-4.0.1.tgz 83ms (cache miss)
+394 http fetch GET 200 https://registry.npmjs.org/tree-kill/-/tree-kill-1.2.2.tgz 86ms (cache miss)
+395 http fetch GET 200 https://registry.npmjs.org/get-stream/-/get-stream-6.0.1.tgz 87ms (cache miss)
+396 http fetch GET 200 https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz 92ms (cache miss)
+397 http fetch GET 200 https://registry.npmjs.org/@hapi/address/-/address-5.1.1.tgz 93ms (cache miss)
+398 http fetch GET 200 https://registry.npmjs.org/strip-final-newline/-/strip-final-newline-2.0.0.tgz 107ms (cache miss)
+399 http fetch GET 200 https://registry.npmjs.org/arg/-/arg-5.0.2.tgz 107ms (cache miss)
+400 http fetch GET 200 https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.7.tgz 109ms (cache miss)
+401 http fetch GET 200 https://registry.npmjs.org/check-more-types/-/check-more-types-2.24.0.tgz 106ms (cache miss)
+402 http fetch GET 200 https://registry.npmjs.org/lazy-ass/-/lazy-ass-2.0.3.tgz 110ms (cache miss)
+403 http fetch GET 200 https://registry.npmjs.org/execa/-/execa-5.1.1.tgz 110ms (cache miss)
+404 http fetch GET 200 https://registry.npmjs.org/wait-on/-/wait-on-9.1.0.tgz 112ms (cache miss)
+405 http fetch GET 200 https://registry.npmjs.org/@hapi/hoek/-/hoek-11.0.7.tgz 115ms (cache miss)
+406 http fetch GET 200 https://registry.npmjs.org/start-server-and-test/-/start-server-and-test-3.0.12.tgz 107ms (cache miss)
+407 http fetch GET 200 https://registry.npmjs.org/joi/-/joi-18.2.3.tgz 124ms (cache miss)
+408 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 178ms
+409 silly audit report {}
+410 http fetch GET 200 https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz 333ms (cache miss)
+411 http fetch GET 200 https://registry.npmjs.org/rxjs/-/rxjs-7.8.2.tgz 777ms (cache miss)
+412 silly ADD node_modules/isexe
+413 silly ADD node_modules/tslib
+414 silly ADD node_modules/@hapi/topo
+415 silly ADD node_modules/@hapi/tlds
+416 silly ADD node_modules/@hapi/pinpoint
+417 silly ADD node_modules/@hapi/hoek
+418 silly ADD node_modules/@hapi/formula
+419 silly ADD node_modules/@hapi/address
+420 silly ADD node_modules/rxjs
+421 silly ADD node_modules/minimist
+422 silly ADD node_modules/lodash
+423 silly ADD node_modules/joi
+424 silly ADD node_modules/shebang-regex
+425 silly ADD node_modules/mimic-fn
+426 silly ADD node_modules/which
+427 silly ADD node_modules/shebang-command
+428 silly ADD node_modules/path-key
+429 silly ADD node_modules/strip-final-newline
+430 silly ADD node_modules/signal-exit
+431 silly ADD node_modules/onetime
+432 silly ADD node_modules/npm-run-path
+433 silly ADD node_modules/merge-stream
+434 silly ADD node_modules/is-stream
+435 silly ADD node_modules/human-signals
+436 silly ADD node_modules/get-stream
+437 silly ADD node_modules/cross-spawn
+438 silly ADD node_modules/wait-on
+439 silly ADD node_modules/tree-kill
+440 silly ADD node_modules/lazy-ass
+441 silly ADD node_modules/execa
+442 silly ADD node_modules/check-more-types
+443 silly ADD node_modules/arg
+444 silly ADD node_modules/start-server-and-test
+445 silly ADD
+446 silly ADD
+447 silly ADD
+448 silly ADD
+449 silly ADD
+450 silly ADD
+451 silly ADD
+452 silly ADD
+453 silly ADD
+454 silly ADD
+455 silly ADD
+456 silly ADD
+457 silly ADD
+458 silly ADD
+459 silly ADD
+460 silly ADD
+461 silly ADD
+462 silly ADD
+463 silly ADD
+464 silly ADD
+465 silly ADD
+466 silly ADD
+467 silly ADD
+468 silly ADD
+469 silly ADD
+470 silly ADD
+471 silly ADD
+472 silly ADD
+473 silly ADD
+474 silly ADD
+475 silly ADD
+476 silly ADD
+477 silly ADD
+478 silly ADD
+479 silly ADD
+480 silly ADD
+481 silly ADD
+482 silly ADD
+483 silly ADD
+484 silly ADD
+485 silly ADD
+486 silly ADD
+487 silly ADD
+488 silly ADD
+489 silly ADD
+490 silly ADD
+491 silly ADD
+492 silly ADD
+493 silly ADD
+494 silly ADD
+495 silly ADD
+496 silly ADD
+497 silly ADD
+498 silly ADD
+499 silly ADD
+500 silly ADD
+501 silly ADD
+502 silly ADD
+503 silly ADD
+504 silly ADD
+505 silly ADD
+506 silly ADD
+507 silly ADD
+508 silly ADD
+509 silly ADD
+510 silly ADD
+511 silly ADD
+512 verbose cwd /Users/mohammed.ali/team6-frontend
+513 verbose os Darwin 25.6.0
+514 verbose node v22.23.1
+515 verbose npm  v10.9.8
+516 verbose exit 0
+517 info ok

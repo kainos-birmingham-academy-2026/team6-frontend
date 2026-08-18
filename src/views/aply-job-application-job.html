@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Apply For Job | Kainos Careers</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="brand-bar">Kainos Careers</p>
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Kainos Careers Home">
+          <img src="/images/kainos-logo-primary-transparent.png" alt="Kainos" class="brand-logo" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/job-roles" class="nav-link nav-link-active">Job Roles</a>
+          {% if isAuthenticated %}
+          <form action="/logout" method="post" class="nav-inline-form">
+            <button type="submit" class="nav-link nav-link-button">Sign Out</button>
+          </form>
+          {% else %}
+          <a href="/login" class="nav-link">Login</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content apply-page-content">
+      <h1>Apply For Job</h1>
+      <section class="card apply-card">
+        <div class="apply-card-copy">
+          <p class="eyebrow">Application</p>
+          <h2>Upload Your CV</h2>
+          <p>
+            Add your latest CV so our hiring team can review your experience for this role.
+            You can drag and drop your file or use the button to choose it.
+          </p>
+        </div>
+
+        <form class="apply-form" action="#" method="post" enctype="multipart/form-data">
+          <input
+            id="cv-upload"
+            class="cv-file-input"
+            type="file"
+            name="cv"
+            accept=".pdf,.doc,.docx"
+            required
+          />
+
+          <label for="cv-upload" id="cv-drop-zone" class="cv-drop-zone" aria-live="polite">
+            <strong>Drag your CV here</strong>
+            <span>or use the button below to choose a file</span>
+          </label>
+
+          <label for="cv-upload" class="table-action-btn cv-choose-btn">Choose CV File</label>
+          <p id="cv-file-name" class="cv-file-name">No file selected yet.</p>
+
+          <button type="submit" class="login-submit-btn cv-submit-btn">Submit Application</button>
+          <p class="login-help-text">Accepted file types: PDF, DOC, DOCX.</p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <div>
+          <p class="footer-title">Kainos Careers</p>
+          <p>Partner with the best people in tech to shape what comes next.</p>
+        </div>
+        <div>
+          <p class="footer-title">Contact</p>
+          <p><a href="mailto:careers@kainos.com">careers@kainos.com</a></p>
+          <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
+          <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const fileInput = document.getElementById("cv-upload");
+      const dropZone = document.getElementById("cv-drop-zone");
+      const fileName = document.getElementById("cv-file-name");
+
+      if (fileInput && dropZone && fileName) {
+        const updateFileName = (files) => {
+          if (!files || files.length === 0) {
+            fileName.textContent = "No file selected yet.";
+            return;
+          }
+
+          fileName.textContent = `Selected: ${files[0].name}`;
+        };
+
+        fileInput.addEventListener("change", (event) => {
+          updateFileName(event.target.files);
+        });
+
+        dropZone.addEventListener("dragover", (event) => {
+          event.preventDefault();
+          dropZone.classList.add("cv-drop-zone-active");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+          dropZone.classList.remove("cv-drop-zone-active");
+        });
+
+        dropZone.addEventListener("drop", (event) => {
+          event.preventDefault();
+          dropZone.classList.remove("cv-drop-zone-active");
+
+          const files = event.dataTransfer?.files;
+          if (!files || files.length === 0) {
+            return;
+          }
+
+          fileInput.files = files;
+          updateFileName(files);
+        });
+      }
+    </script>
+  </body>
+</html>
