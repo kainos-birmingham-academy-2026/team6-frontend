@@ -11,7 +11,9 @@ export default defineConfig({
   },
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  // Tests share a single mock API process and mutable in-memory state.
+  // Running with one worker prevents cross-file reset/data races.
+  workers: 1,
   reporter: process.env.CI
     ? [["github"], ["list"], ["html", { open: "never" }]]
     : [["list"], ["html", { open: "never" }]],
