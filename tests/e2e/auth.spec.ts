@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { users } from "../fixtures/test-data";
-import { loginThroughUi } from "../helpers/auth";
 import { resetMockApi } from "../helpers/mock-api";
+import { LoginPage } from "../pages/login.page";
 
 test.describe("Login system", () => {
   test.beforeEach(async ({ request }) => {
@@ -9,39 +9,41 @@ test.describe("Login system", () => {
   });
 
   test("empty email and password", async ({ page }) => {
-    await loginThroughUi(page, { email: "", password: "" });
+    const loginPage = new LoginPage(page);
+    await loginPage.visit();
+    await loginPage.submitCredentials("", "");
 
-    await expect(page.locator(".auth-message.auth-message-error")).toContainText(
-      "Email and password are required"
-    );
+    await expect(loginPage.errorMessage("Email and password are required")).toBeVisible();
   });
 
   test("invalid email and valid password", async ({ page }) => {
-    await loginThroughUi(page, { email: "not-an-email", password: "Password123!" });
+    const loginPage = new LoginPage(page);
+    await loginPage.visit();
+    await loginPage.submitCredentials("not-an-email", "Password123!");
 
-    await expect(page.locator(".auth-message.auth-message-error")).toContainText(
-      "Email or password is invalid"
-    );
+    await expect(loginPage.errorMessage("Email or password is invalid")).toBeVisible();
   });
 
   test("valid email and invalid password", async ({ page }) => {
-    await loginThroughUi(page, { email: users.candidateMany.email, password: "BadPassword123!" });
+    const loginPage = new LoginPage(page);
+    await loginPage.visit();
+    await loginPage.submitCredentials(users.candidateMany.email, "BadPassword123!");
 
-    await expect(page.locator(".auth-message.auth-message-error")).toContainText(
-      "Email or password is invalid"
-    );
+    await expect(loginPage.errorMessage("Email or password is invalid")).toBeVisible();
   });
 
   test("invalid email and invalid password", async ({ page }) => {
-    await loginThroughUi(page, { email: "bad.email", password: "bad-password" });
+    const loginPage = new LoginPage(page);
+    await loginPage.visit();
+    await loginPage.submitCredentials("bad.email", "bad-password");
 
-    await expect(page.locator(".auth-message.auth-message-error")).toContainText(
-      "Email or password is invalid"
-    );
+    await expect(loginPage.errorMessage("Email or password is invalid")).toBeVisible();
   });
 
   test("valid email and password", async ({ page }) => {
-    await loginThroughUi(page, users.candidateMany);
+    const loginPage = new LoginPage(page);
+    await loginPage.visit();
+    await loginPage.submitCredentials(users.candidateMany.email, users.candidateMany.password);
 
     await expect(page).toHaveURL(/\/job-roles/);
     await expect(page.getByRole("heading", { level: 1, name: "Open Job Roles at Kainos" })).toBeVisible();

@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 import { users } from "../fixtures/test-data";
 import { loginThroughUi } from "../helpers/auth";
 import { resetMockApi } from "../helpers/mock-api";
+import { JobRoleDetailsPage } from "../pages/job-role-details.page";
+import { JobRolesPage } from "../pages/job-roles.page";
 
 test.describe("Viewing job roles", () => {
   test.beforeEach(async ({ request }) => {
@@ -9,26 +11,31 @@ test.describe("Viewing job roles", () => {
   });
 
   test("no job roles to view", async ({ page }) => {
+    const jobRolesPage = new JobRolesPage(page);
+
     await loginThroughUi(page, users.candidateEmpty);
 
-    await expect(page).toHaveURL(/\/job-roles/);
-    await expect(page.getByText("No open job roles available at the moment.")).toBeVisible();
+    await jobRolesPage.expectLoaded();
+    await expect(jobRolesPage.emptyState).toBeVisible();
   });
 
   test("1 job role to view", async ({ page }) => {
+    const jobRolesPage = new JobRolesPage(page);
+
     await loginThroughUi(page, users.candidateOne);
 
-    await expect(page).toHaveURL(/\/job-roles/);
-    await expect(page.locator("[data-role-item]")).toHaveCount(1);
-    await expect(page.getByRole("link", { name: "Single Role Tester" })).toBeVisible();
+    await jobRolesPage.expectLoaded();
+    await expect(jobRolesPage.roleItems).toHaveCount(1);
+    await expect(jobRolesPage.roleLinkByName("Single Role Tester")).toBeVisible();
   });
 
   test("lots of job roles to view", async ({ page }) => {
+    const jobRolesPage = new JobRolesPage(page);
+
     await loginThroughUi(page, users.candidateMany);
 
-    await expect(page).toHaveURL(/\/job-roles/);
-    const roleItems = page.locator("[data-role-item]");
-    expect(await roleItems.count()).toBeGreaterThan(1);
+    await jobRolesPage.expectLoaded();
+    expect(await jobRolesPage.roleItems.count()).toBeGreaterThan(1);
   });
 });
 
@@ -38,12 +45,14 @@ test.describe("Viewing correct job details", () => {
   });
 
   test("correct information for each job role", async ({ page }) => {
+    const jobRolesPage = new JobRolesPage(page);
+    const detailsPage = new JobRoleDetailsPage(page);
+
     await loginThroughUi(page, users.candidateMany);
 
-    await page.getByRole("link", { name: "Backend Engineer" }).first().click();
+    await jobRolesPage.openRoleByName("Backend Engineer");
 
-    await expect(page.getByRole("heading", { level: 1, name: "Job Role Information" })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "Backend Engineer" })).toBeVisible();
+    await detailsPage.expectLoaded("Backend Engineer");
     await expect(page.locator("article.info-panel").first()).toContainText("Location");
     await expect(page.locator("article.info-panel").first()).toContainText("Belfast");
     await expect(page.getByText("Engineering")).toBeVisible();

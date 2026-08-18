@@ -3,6 +3,9 @@ import { expect, test } from "@playwright/test";
 import { users } from "../fixtures/test-data";
 import { loginThroughUi } from "../helpers/auth";
 import { getMockApplications, resetMockApi } from "../helpers/mock-api";
+import { ApplyJobPage } from "../pages/apply-job.page";
+import { JobRoleDetailsPage } from "../pages/job-role-details.page";
+import { JobRolesPage } from "../pages/job-roles.page";
 
 test.describe("Applying for job by submitting CV", () => {
   test.beforeEach(async ({ request }) => {
@@ -11,18 +14,20 @@ test.describe("Applying for job by submitting CV", () => {
 
   test("pdfs get attached correctly and submit button shows confirmation", async ({ page, request }) => {
     const pdfPath = path.resolve(__dirname, "../fixtures/files/cv.pdf");
+    const jobRolesPage = new JobRolesPage(page);
+    const detailsPage = new JobRoleDetailsPage(page);
+    const applyJobPage = new ApplyJobPage(page);
 
     await loginThroughUi(page, users.candidateMany);
-    await page.locator('a[href="/job-roles/1"]').first().click();
-    await page.getByRole("link", { name: "Apply Now" }).click();
+    await jobRolesPage.openRoleByName("Backend Engineer");
+    await detailsPage.clickApplyNow();
 
-    await expect(page.getByRole("heading", { level: 1, name: /Apply for Backend Engineer/i })).toBeVisible();
+    await applyJobPage.expectApplyFormLoaded("Backend Engineer");
 
-    await page.locator("#cv").setInputFiles(pdfPath);
-    await page.getByRole("button", { name: "Submit Application" }).click();
+    await applyJobPage.uploadCv(pdfPath);
+    await applyJobPage.submitApplication();
 
-    await expect(page).toHaveURL(/\/apply\/confirmation/);
-    await expect(page.getByText("Your application has been received and is now in progress.")).toBeVisible();
+    await applyJobPage.expectConfirmation();
 
     const applications = await getMockApplications(request);
     expect(applications).toHaveLength(1);

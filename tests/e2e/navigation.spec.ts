@@ -2,6 +2,11 @@ import { expect, test } from "@playwright/test";
 import { users } from "../fixtures/test-data";
 import { loginThroughUi } from "../helpers/auth";
 import { resetMockApi } from "../helpers/mock-api";
+import { HomePage } from "../pages/home.page";
+import { JobRoleDetailsPage } from "../pages/job-role-details.page";
+import { JobRolesPage } from "../pages/job-roles.page";
+import { LoginPage } from "../pages/login.page";
+import { RegisterPage } from "../pages/register.page";
 
 test.describe("Navigating pages", () => {
   test.beforeEach(async ({ request }) => {
@@ -9,23 +14,29 @@ test.describe("Navigating pages", () => {
   });
 
   test("buttons between pages work correctly", async ({ page }) => {
-    await page.goto("/");
+    const homePage = new HomePage(page);
+    const loginPage = new LoginPage(page);
+    const registerPage = new RegisterPage(page);
+    const jobRolesPage = new JobRolesPage(page);
+    const detailsPage = new JobRoleDetailsPage(page);
+
+    await homePage.visit();
     await page.getByRole("link", { name: "Login" }).click();
     await expect(page).toHaveURL(/\/login/);
 
-    await page.getByRole("link", { name: "Create an account" }).click();
-    await expect(page).toHaveURL(/\/register/);
+    await loginPage.createAccountLink.click();
+    await registerPage.expectLoaded();
 
-    await page.getByRole("link", { name: "Sign in" }).click();
+    await registerPage.signInLink.click();
     await expect(page).toHaveURL(/\/login/);
 
     await loginThroughUi(page, users.candidateMany);
-    await expect(page).toHaveURL(/\/job-roles/);
+    await jobRolesPage.expectLoaded();
 
-    await page.locator("a.role-name-link, .featured-role h2 a").first().click();
+    await jobRolesPage.openFirstRole();
     await expect(page).toHaveURL(/\/job-roles\/\d+$/);
 
-    await page.getByRole("link", { name: "Back to Job Roles" }).click();
-    await expect(page).toHaveURL(/\/job-roles/);
+    await detailsPage.clickBackToRoles();
+    await jobRolesPage.expectLoaded();
   });
 });
