@@ -33,6 +33,32 @@ Run tests:
 npm test
 ```
 
+Run UI end-to-end tests (Playwright):
+
+```bash
+npm run test:e2e
+```
+
+`test:e2e` runs Playwright against a running app (default base URL: `http://localhost:3001`).
+
+If you want the script to build/start/stop the app automatically:
+
+```bash
+npm run test:e2e:with-server
+```
+
+Open Playwright UI mode:
+
+```bash
+npm run test:e2e:ui
+```
+
+Open Playwright HTML report:
+
+```bash
+npm run test:e2e:report
+```
+
 Git pre-push checks (lint + test):
 
 ```bash
@@ -40,6 +66,45 @@ npm run setup-hooks
 ```
 
 After this is set once, every `git push` will run lint and tests locally before push.
+
+## Playwright Test Framework
+
+This repository includes a Playwright + TypeScript E2E framework with:
+
+- `playwright.config.ts`:
+	- Base URL support via `PLAYWRIGHT_BASE_URL`
+	- Auto-starts the app server for test runs
+	- Failure artifacts (trace, screenshot, video)
+	- CI-safe retries and reporters
+- `tests/e2e/`: user-facing E2E specs
+- `tests/pages/`: page objects to keep selectors and page actions reusable
+- `tests/fixtures/`: shared test data
+
+Unit and E2E test runners are separated:
+
+- Vitest: `src/**/*.test.ts`
+- Playwright: `tests/e2e/**/*.spec.ts`
+
+### Good Practices Used
+
+- Keep test intent in specs, and page interaction details in page objects.
+- Prefer accessible selectors (`getByRole`, `getByLabel`) for resilient tests.
+- Keep test data separate from test logic.
+- Keep each test independent; no ordering assumptions.
+- Capture debug artifacts only on failure to reduce noise.
+
+### Useful E2E Commands
+
+```bash
+# Headless run
+npm run test:e2e
+
+# Run with real browser window
+npm run test:e2e:headed
+
+# Interactive inspector/debug mode
+npm run test:e2e:debug
+```
 
 ## Endpoints
 
