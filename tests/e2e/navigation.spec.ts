@@ -8,12 +8,17 @@ import { JobRolesPage } from "../pages/job-roles.page";
 import { LoginPage } from "../pages/login.page";
 import { RegisterPage } from "../pages/register.page";
 
+const hasCandidateCredentials = Boolean(
+  process.env.E2E_CANDIDATE_EMAIL && process.env.E2E_CANDIDATE_PASSWORD
+);
+
 test.describe("Navigating pages", () => {
   test.beforeEach(async ({ request }) => {
     await resetMockApi(request);
   });
 
   test("buttons between pages work correctly", async ({ page }) => {
+    test.skip(!hasCandidateCredentials, "Set E2E_CANDIDATE_EMAIL and E2E_CANDIDATE_PASSWORD for the real backend.");
     const homePage = new HomePage(page);
     const loginPage = new LoginPage(page);
     const registerPage = new RegisterPage(page);

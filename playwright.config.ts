@@ -1,6 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3101";
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3101";
+const backendApiBaseUrl = process.env.PLAYWRIGHT_BACKEND_API_BASE_URL || "http://localhost:3000";
+const serverUrl = new URL(baseURL);
+const healthUrl = `${serverUrl.origin}/health`;
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -11,8 +14,7 @@ export default defineConfig({
   },
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  // Tests share a single mock API process and mutable in-memory state.
-  // Running with one worker prevents cross-file reset/data races.
+  // Keep one worker for stable session-dependent test flows.
   workers: 1,
   reporter: process.env.CI
     ? [["github"], ["list"], ["html", { open: "never" }]]
@@ -32,24 +34,17 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] }
     }
   ],
-  webServer: [
-    {
-      command: "node tests/mocks/mock-api-server.cjs",
-      url: "http://127.0.0.1:4010/health",
-      reuseExistingServer: false,
-      timeout: 120_000
+  webServer: {
+    command: "npm run build && npm run start",
+    url: healthUrl,
+    env: {
+      ...process.env,
+      API_BASE_URL: backendApiBaseUrl,
+      PLAYWRIGHT_BACKEND_API_BASE_URL: backendApiBaseUrl,
+      SESSION_SECRET: process.env.SESSION_SECRET || "e2e-session-secret",
+      PORT: "3101"
     },
-    {
-      command: "npm run build && npm run start",
-      url: baseURL,
-      env: {
-        ...process.env,
-        API_BASE_URL: "http://127.0.0.1:4010",
-        SESSION_SECRET: process.env.SESSION_SECRET || "e2e-session-secret",
-        PORT: "3101"
-      },
-      reuseExistingServer: false,
-      timeout: 120_000
-    }
-  ]
+    reuseExistingServer: true,
+    timeout: 120_000
+  }
 });

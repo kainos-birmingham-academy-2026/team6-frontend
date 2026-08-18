@@ -5,7 +5,12 @@ import { resetMockApi } from "../helpers/mock-api";
 import { JobRoleDetailsPage } from "../pages/job-role-details.page";
 import { JobRolesPage } from "../pages/job-roles.page";
 
+const hasCandidateCredentials = Boolean(
+  process.env.E2E_CANDIDATE_EMAIL && process.env.E2E_CANDIDATE_PASSWORD
+);
+
 test.describe("Viewing job roles", () => {
+  test.skip(!hasCandidateCredentials, "Set E2E_CANDIDATE_EMAIL and E2E_CANDIDATE_PASSWORD for the real backend.");
   test.beforeEach(async ({ request }) => {
     await resetMockApi(request);
   });
@@ -40,6 +45,7 @@ test.describe("Viewing job roles", () => {
 });
 
 test.describe("Viewing correct job details", () => {
+  test.skip(!hasCandidateCredentials, "Set E2E_CANDIDATE_EMAIL and E2E_CANDIDATE_PASSWORD for the real backend.");
   test.beforeEach(async ({ request }) => {
     await resetMockApi(request);
   });

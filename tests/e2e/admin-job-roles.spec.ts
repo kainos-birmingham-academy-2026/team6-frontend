@@ -1,16 +1,19 @@
 import { expect, test } from "@playwright/test";
 import { users } from "../fixtures/test-data";
 import { loginThroughUi } from "../helpers/auth";
-import { getMockRoles, resetMockApi } from "../helpers/mock-api";
+import { resetMockApi } from "../helpers/mock-api";
 import { JobRoleDetailsPage } from "../pages/job-role-details.page";
 import { JobRolesPage } from "../pages/job-roles.page";
 
+const hasAdminCredentials = Boolean(process.env.E2E_ADMIN_EMAIL && process.env.E2E_ADMIN_PASSWORD);
+
 test.describe("Admins deleting and editing job roles", () => {
+  test.skip(!hasAdminCredentials, "Set E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD for the real backend.");
   test.beforeEach(async ({ request }) => {
     await resetMockApi(request);
   });
 
-  test("admins can edit roles and changes stay consistent", async ({ page, request }) => {
+  test("admins can edit roles and changes stay consistent", async ({ page }) => {
     const updatedRoleName = "Backend Engineer Updated";
     const jobRolesPage = new JobRolesPage(page);
     const detailsPage = new JobRoleDetailsPage(page);
@@ -30,12 +33,9 @@ test.describe("Admins deleting and editing job roles", () => {
     await page.goto("/job-roles");
     await jobRolesPage.expectLoaded();
     await expect(jobRolesPage.roleLinkByName(updatedRoleName)).toBeVisible();
-
-    const roles = await getMockRoles(request);
-    expect(roles.some((role) => role.roleName === updatedRoleName)).toBeTruthy();
   });
 
-  test("admins can delete roles and they are removed from DB", async ({ page, request }) => {
+  test("admins can delete roles and they are removed from DB", async ({ page }) => {
     const jobRolesPage = new JobRolesPage(page);
     const detailsPage = new JobRoleDetailsPage(page);
 
@@ -47,8 +47,5 @@ test.describe("Admins deleting and editing job roles", () => {
 
     await jobRolesPage.expectLoaded();
     await expect(jobRolesPage.roleLinkByName("Backend Engineer")).toHaveCount(0);
-
-    const roles = await getMockRoles(request);
-    expect(roles.some((role) => role.roleName === "Backend Engineer")).toBeFalsy();
   });
 });

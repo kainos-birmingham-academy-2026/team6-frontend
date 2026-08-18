@@ -3,6 +3,10 @@ import { users } from "../fixtures/test-data";
 import { resetMockApi } from "../helpers/mock-api";
 import { LoginPage } from "../pages/login.page";
 
+const hasCandidateCredentials = Boolean(
+  process.env.E2E_CANDIDATE_EMAIL && process.env.E2E_CANDIDATE_PASSWORD
+);
+
 test.describe("Login system", () => {
   test.beforeEach(async ({ request }) => {
     await resetMockApi(request);
@@ -21,7 +25,7 @@ test.describe("Login system", () => {
     await loginPage.visit();
     await loginPage.submitCredentials("not-an-email", "Password123!");
 
-    await expect(loginPage.errorMessage("Email or password is invalid")).toBeVisible();
+    await expect(loginPage.errorMessage("Invalid email format")).toBeVisible();
   });
 
   test("valid email and invalid password", async ({ page }) => {
@@ -29,7 +33,7 @@ test.describe("Login system", () => {
     await loginPage.visit();
     await loginPage.submitCredentials(users.candidateMany.email, "BadPassword123!");
 
-    await expect(loginPage.errorMessage("Email or password is invalid")).toBeVisible();
+    await expect(loginPage.errorMessage("Invalid email or password")).toBeVisible();
   });
 
   test("invalid email and invalid password", async ({ page }) => {
@@ -37,10 +41,11 @@ test.describe("Login system", () => {
     await loginPage.visit();
     await loginPage.submitCredentials("bad.email", "bad-password");
 
-    await expect(loginPage.errorMessage("Email or password is invalid")).toBeVisible();
+    await expect(loginPage.errorMessage("Invalid email format")).toBeVisible();
   });
 
   test("valid email and password", async ({ page }) => {
+    test.skip(!hasCandidateCredentials, "Set E2E_CANDIDATE_EMAIL and E2E_CANDIDATE_PASSWORD for the real backend.");
     const loginPage = new LoginPage(page);
     await loginPage.visit();
     await loginPage.submitCredentials(users.candidateMany.email, users.candidateMany.password);
