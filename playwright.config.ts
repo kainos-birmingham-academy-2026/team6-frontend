@@ -1,10 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3101";
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3001";
 const useMockApi = !process.env.PLAYWRIGHT_BACKEND_API_BASE_URL;
 const backendApiBaseUrl = process.env.PLAYWRIGHT_BACKEND_API_BASE_URL || "http://127.0.0.1:4010";
 const serverUrl = new URL(baseURL);
 const healthUrl = `${serverUrl.origin}/health`;
+const appPort = serverUrl.port || "3001";
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -35,5 +36,27 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] }
     }
   ],
-  webServer: []
+  webServer: [
+    {
+      command: "npm run build && npm run start",
+      url: healthUrl,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      env: {
+        ...process.env,
+        PORT: appPort,
+        API_BASE_URL: backendApiBaseUrl
+      }
+    },
+    ...(useMockApi
+      ? [
+          {
+            command: "node tests/mocks/mock-api-server.cjs",
+            url: `${backendApiBaseUrl}/health`,
+            reuseExistingServer: !process.env.CI,
+            timeout: 60_000
+          }
+        ]
+      : [])
+  ]
 });

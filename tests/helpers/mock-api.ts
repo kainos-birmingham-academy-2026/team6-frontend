@@ -1,6 +1,11 @@
 import type { APIRequestContext } from "@playwright/test";
 
-export const MOCK_API_BASE_URL = process.env.PLAYWRIGHT_BACKEND_API_BASE_URL || "http://localhost:3000";
+const runtimeEnv =
+  typeof globalThis === "object" && "process" in globalThis
+    ? ((globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {})
+    : {};
+
+export const MOCK_API_BASE_URL = runtimeEnv.PLAYWRIGHT_BACKEND_API_BASE_URL || "http://127.0.0.1:4010";
 
 export async function resetMockApi(request: APIRequestContext): Promise<void> {
   // Real backend environments usually do not expose a test reset endpoint.
