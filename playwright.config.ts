@@ -35,29 +35,5 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] }
     }
   ],
-  webServer: [
-    ...(useMockApi
-      ? [
-          {
-            command: "node tests/mocks/mock-api-server.cjs",
-            url: "http://127.0.0.1:4010/health",
-            reuseExistingServer: true,
-            timeout: 30_000
-          }
-        ]
-      : []),
-    {
-      command: "npm run build && npm run start",
-      url: healthUrl,
-      env: {
-        ...process.env,
-        API_BASE_URL: backendApiBaseUrl,
-        PLAYWRIGHT_BACKEND_API_BASE_URL: backendApiBaseUrl,
-        SESSION_SECRET: process.env.SESSION_SECRET || "e2e-session-secret",
-        PORT: serverUrl.port || "3101"
-      },
-      reuseExistingServer: true,
-      timeout: 120_000
-    }
-  ]
+  webServer: []
 });
