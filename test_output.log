@@ -1,0 +1,12 @@
+
+> team6-frontend@1.0.0 test:e2e
+> playwright test
+
+◇ injected env (9) from .env // tip: ⌘ override existing { override: true }
+Error: Process from config.webServer exited early.
+
+
+To open last HTML report run:
+[36m[39m
+[36m  npx playwright show-report[39m
+[36m[39m

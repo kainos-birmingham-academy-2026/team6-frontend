@@ -1,7 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3101";
-const backendApiBaseUrl = process.env.PLAYWRIGHT_BACKEND_API_BASE_URL || "http://localhost:3000";
+const useMockApi = !process.env.PLAYWRIGHT_BACKEND_API_BASE_URL;
+const backendApiBaseUrl = process.env.PLAYWRIGHT_BACKEND_API_BASE_URL || "http://127.0.0.1:4010";
 const serverUrl = new URL(baseURL);
 const healthUrl = `${serverUrl.origin}/health`;
 
@@ -34,17 +35,5 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] }
     }
   ],
-  webServer: {
-    command: "npm run build && npm run start",
-    url: healthUrl,
-    env: {
-      ...process.env,
-      API_BASE_URL: backendApiBaseUrl,
-      PLAYWRIGHT_BACKEND_API_BASE_URL: backendApiBaseUrl,
-      SESSION_SECRET: process.env.SESSION_SECRET || "e2e-session-secret",
-      PORT: "3101"
-    },
-    reuseExistingServer: true,
-    timeout: 120_000
-  }
+  webServer: []
 });
