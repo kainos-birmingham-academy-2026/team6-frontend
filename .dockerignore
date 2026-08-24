@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+test-results
+playwright-report
+blob-report
+playwright/.cache
+playwright/.auth
+.git
+.gitignore
+.env
+.env.*
+.DS_Store
+.vscode
+README.md
+tests
