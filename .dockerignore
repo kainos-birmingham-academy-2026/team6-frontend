@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+
+# VCS metadata
+.git
+.gitignore
+
+# Environment files
+.env
+.env.*
+
+# Documentation
+README.md
+*.md
+
+# Tests and test artifacts
+tests
+**/*.test.ts
+**/*.spec.ts
+coverage
+playwright-report
+test-results
+
+# Build artifacts
+dist
+
+# Local tooling/cache artifacts
+.npm-cache
+
+# Misc
+.DS_Store
