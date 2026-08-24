@@ -33,6 +33,31 @@ Run tests:
 npm test
 ```
 
+## Run With Docker Containers
+
+Build the frontend image:
+
+```bash
+docker build -t team6-frontend:v1 .
+```
+
+Run backend container (required):
+
+```bash
+docker run -p 3000:3000 team6-backend:v1
+```
+
+Run frontend container in a new terminal:
+
+```bash
+docker run -p 3001:3001 team6-frontend:v1
+```
+
+Then open:
+
+- Frontend: http://localhost:3001
+- Backend health (if exposed): http://localhost:3000/health
+
 Run UI end-to-end tests (Playwright):
 
 ```bash
