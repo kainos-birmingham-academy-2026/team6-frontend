@@ -17,8 +17,8 @@ FROM node:24-bookworm-slim AS build
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-
-COPY . .
+COPY src ./src
+COPY tsconfig.json ./tsconfig.json
 RUN npm run build
 
 FROM node:24-bookworm-slim AS runtime
@@ -30,10 +30,14 @@ ENV PORT=3001
 ENV API_BASE_URL=http://host.docker.internal:3000
 ENV SESSION_SECRET=team6-frontend-session-secret
 
-COPY package*.json ./
-COPY --from=prod-deps /app/node_modules ./node_modules
+RUN groupadd --system app && useradd --system --gid app --create-home --home-dir /home/app app
 
-COPY --from=build /app/dist ./dist
+COPY --chown=app:app package*.json ./
+COPY --from=prod-deps --chown=app:app /app/node_modules ./node_modules
+
+COPY --from=build --chown=app:app /app/dist ./dist
+
+USER app
 
 EXPOSE 3001
 
