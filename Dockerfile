@@ -16,6 +16,7 @@ FROM node:24-bookworm-slim AS build
 
 WORKDIR /app
 
+COPY package*.json ./
 COPY --from=deps /app/node_modules ./node_modules
 COPY src ./src
 COPY tsconfig.json ./tsconfig.json
@@ -28,7 +29,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3001
 ENV API_BASE_URL=http://host.docker.internal:3000
-ENV SESSION_SECRET=team6-frontend-session-secret
 
 RUN groupadd --system app && useradd --system --gid app --create-home --home-dir /home/app app
 
