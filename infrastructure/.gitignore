@@ -1,0 +1,15 @@
+# Terraform
+.terraform/
+my-infrastructure/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# non-secret env naming values are committed; ignore only files that might hold real secrets
+*.auto.tfvars
+secrets.tfvars
+*.tfvars.json
