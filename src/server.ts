@@ -22,7 +22,7 @@ nunjucks.configure(viewsPath, {
   express: app,
   noCache: process.env.NODE_ENV !== "production"
 });
-
+secret: process.env.SESSION_SECRET as string,
 app.use(express.static(publicPath));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
