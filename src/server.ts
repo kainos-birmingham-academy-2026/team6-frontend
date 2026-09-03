@@ -94,6 +94,11 @@ app.get(
   requireAuth,
   applicationController.showConfirmation.bind(applicationController)
 );
+app.get(
+  "/applications",
+  requireAuth,
+  applicationController.listMyApplications.bind(applicationController)
+);
 app.get("/job-roles/:id", jobRoleController.getById);
 
 app.get("/health", (_req, res) => {

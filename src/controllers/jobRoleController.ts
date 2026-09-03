@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import { applicationService } from "../services/applicationService";
 import {
   BackendRequestError,
   jobRoleService,
@@ -324,6 +325,15 @@ export class JobRoleController {
 
       const role = await jobRoleService.getJobRoleById(id, req.session.token);
       const roleStatus = (role.statusName || role.status || "").toLowerCase();
+
+      let alreadyApplied = false;
+      if (req.session.token) {
+        const myApplications = await applicationService.getMyApplications(req.session.token);
+        alreadyApplied = myApplications.some(
+          (application) => String(application.jobRoleId) === String(id)
+        );
+      }
+
       const jobRoleViewModel = {
         ...role,
         capabilityDisplay: role.capabilityName || role.capabilityId || "N/A",
@@ -336,7 +346,8 @@ export class JobRoleController {
             : "N/A",
         responsibilitiesDisplay: role.responsibilities || "No responsibilities provided.",
         sharepointUrlDisplay: role.sharepointUrl || "",
-        canApply: roleStatus === "open" && (role.numberOfOpenPositions ?? 0) > 0
+        alreadyApplied,
+        canApply: roleStatus === "open" && (role.numberOfOpenPositions ?? 0) > 0 && !alreadyApplied
       };
 
       res.render("job-role-information.html", {
