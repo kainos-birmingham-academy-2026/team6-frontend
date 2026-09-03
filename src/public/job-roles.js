@@ -5,7 +5,6 @@
 
   const search = toolbar.querySelector("[data-filter-search]");
   const selects = Array.from(toolbar.querySelectorAll("[data-filter-field]"));
-  const sortSelect = toolbar.querySelector("[data-role-sort]");
   const clearBtn = toolbar.querySelector("[data-filter-clear]");
   const resultCount = document.querySelector("[data-role-count]");
   const emptyState = document.querySelector("[data-role-empty]");
@@ -47,23 +46,8 @@
     }
   };
 
-  const sortCards = () => {
-    const mode = sortSelect?.value || "closing";
-    const sorted = [...cards].sort((a, b) => {
-      if (mode === "name") {
-        return (a.dataset.sortName || "").localeCompare(b.dataset.sortName || "");
-      }
-      if (mode === "band") {
-        return (a.dataset.sortBand || "").localeCompare(b.dataset.sortBand || "");
-      }
-      return Number(a.dataset.sortClosing || 0) - Number(b.dataset.sortClosing || 0);
-    });
-    sorted.forEach((card) => grid.appendChild(card));
-  };
-
   search?.addEventListener("input", apply);
   selects.forEach((select) => select.addEventListener("change", apply));
-  sortSelect?.addEventListener("change", sortCards);
   clearBtn?.addEventListener("click", () => {
     if (search) search.value = "";
     selects.forEach((select) => {
@@ -72,6 +56,5 @@
     apply();
   });
 
-  sortCards();
   apply();
 })();

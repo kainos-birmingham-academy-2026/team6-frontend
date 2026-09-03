@@ -2,8 +2,71 @@ import type { Request, Response } from "express";
 import {
   BackendRequestError,
   jobRoleService,
-  type JobRolePayload
+  type JobRolePayload,
+  type JobRoleSortColumn,
+  type JobRoleSortOrder
 } from "../services/jobRoleService";
+
+const SORTABLE_COLUMNS: JobRoleSortColumn[] = [
+  "roleName",
+  "location",
+  "capabilityName",
+  "bandName",
+  "closingDate"
+];
+
+const parseSortQuery = (
+  query: Request["query"]
+): { sortBy?: JobRoleSortColumn; sortOrder?: JobRoleSortOrder } => {
+  const sortBy = query.sortBy;
+  const sortOrder = query.sortOrder;
+
+  if (
+    typeof sortBy === "string" &&
+    (SORTABLE_COLUMNS as string[]).includes(sortBy) &&
+    (sortOrder === "asc" || sortOrder === "desc")
+  ) {
+    return { sortBy: sortBy as JobRoleSortColumn, sortOrder };
+  }
+
+  return {};
+};
+
+// Builds the href + indicator for each clickable column heading, cycling asc -> desc -> none.
+const buildSortLinks = (
+  currentSortBy?: JobRoleSortColumn,
+  currentSortOrder?: JobRoleSortOrder
+): Record<JobRoleSortColumn, { href: string; indicator: string; ariaSort: string }> => {
+  const links = {} as Record<
+    JobRoleSortColumn,
+    { href: string; indicator: string; ariaSort: string }
+  >;
+
+  for (const column of SORTABLE_COLUMNS) {
+    const isActive = currentSortBy === column;
+    let nextOrder: JobRoleSortOrder | null = "asc";
+    let indicator = "";
+    let ariaSort = "none";
+
+    if (isActive && currentSortOrder === "asc") {
+      nextOrder = "desc";
+      indicator = " ▲";
+      ariaSort = "ascending";
+    } else if (isActive && currentSortOrder === "desc") {
+      nextOrder = null;
+      indicator = " ▼";
+      ariaSort = "descending";
+    }
+
+    links[column] = {
+      href: nextOrder ? `/job-roles?sortBy=${column}&sortOrder=${nextOrder}` : "/job-roles",
+      indicator,
+      ariaSort
+    };
+  }
+
+  return links;
+};
 
 const redirectToLoginOnAuthFailure = async (
   error: unknown,
@@ -191,8 +254,10 @@ const toPayload = (values: JobRoleFormValues): JobRolePayload => ({
 
 export class JobRoleController {
   async list(req: Request, res: Response): Promise<void> {
+    const { sortBy, sortOrder } = parseSortQuery(req.query);
+
     try {
-      const jobRoles = await jobRoleService.getOpenJobRoles(req.session.token);
+      const jobRoles = await jobRoleService.getOpenJobRoles(req.session.token, sortBy, sortOrder);
       const jobRolesViewModel = jobRoles.map((role, index) => {
         const capabilityDisplay = String(role.capabilityName || role.capabilityId || "N/A");
         const daysRemaining = daysUntil(role.closingDate);
@@ -221,7 +286,9 @@ export class JobRoleController {
         jobRoles: jobRolesViewModel,
         featuredRole,
         otherRoles: jobRolesViewModel.filter((role) => role !== featuredRole),
-        hasLoadError: false
+        hasLoadError: false,
+        sortLinks: buildSortLinks(sortBy, sortOrder),
+        currentSort: { sortBy, sortOrder }
       });
     } catch (error) {
       if (await redirectToLoginOnAuthFailure(error, req, res)) {
@@ -230,7 +297,9 @@ export class JobRoleController {
 
       res.status(502).render("job-role-list.html", {
         jobRoles: [],
-        hasLoadError: true
+        hasLoadError: true,
+        sortLinks: buildSortLinks(),
+        currentSort: {}
       });
     }
   }

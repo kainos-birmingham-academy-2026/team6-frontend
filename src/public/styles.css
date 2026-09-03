@@ -1573,6 +1573,46 @@ tbody tr:nth-child(even) {
   --accent-2: var(--kainos-dark-green);
 }
 
+.role-sort-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: -0.4rem 0 1.1rem;
+}
+
+.role-sort-label {
+  color: var(--kainos-grey);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.sort-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--kainos-line);
+  border-radius: 999px;
+  background: var(--kainos-white);
+  color: inherit;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.sort-pill:hover,
+.sort-pill:focus-visible {
+  border-color: var(--kainos-mid-blue, #1c3e78);
+  background: rgba(28, 62, 120, 0.06);
+}
+
+.sort-pill[aria-sort="ascending"],
+.sort-pill[aria-sort="descending"] {
+  border-color: var(--kainos-mid-blue, #1c3e78);
+  background: rgba(28, 62, 120, 0.08);
+  font-weight: 600;
+}
+
 .role-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
