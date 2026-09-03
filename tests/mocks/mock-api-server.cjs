@@ -197,7 +197,18 @@ app.get("/bands", (_req, res) => {
 });
 
 app.get("/job-roles", requireAuth, (req, res) => {
-  res.json(rolesForToken(getToken(req)));
+  const roles = rolesForToken(getToken(req));
+  const requestedLimit = Number(req.query.limit);
+  const requestedOffset = Number(req.query.offset);
+  const limit = Number.isInteger(requestedLimit) && requestedLimit > 0 ? requestedLimit : 10;
+  const offset = Number.isInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0;
+
+  res.json({
+    items: roles.slice(offset, offset + limit),
+    total: roles.length,
+    limit,
+    offset
+  });
 });
 
 app.get("/job-roles/:id", requireAuth, (req, res) => {

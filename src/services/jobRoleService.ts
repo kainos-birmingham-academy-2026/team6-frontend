@@ -27,6 +27,13 @@ export type BackendJobRole = {
   numberOfOpenPositions?: number;
 };
 
+export type BackendJobRolePage = {
+  items: BackendJobRole[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
 export type BackendCapability = {
   capabilityId: number;
   capabilityName: string;
@@ -89,15 +96,16 @@ export class JobRoleService {
   async getOpenJobRoles(
     token?: string,
     sortBy?: JobRoleSortColumn,
-    sortOrder?: JobRoleSortOrder
-  ): Promise<BackendJobRole[]> {
+    sortOrder?: JobRoleSortOrder,
+    limit = 10,
+    offset = 0
+  ): Promise<BackendJobRolePage> {
     try {
-      const response = await this.client.get<BackendJobRole[]>("/job-roles", {
+      const response = await this.client.get<BackendJobRolePage>("/job-roles", {
         headers: this.buildAuthHeaders(token),
-        params: sortBy ? { sortBy, sortOrder } : undefined
+        params: { limit, offset, ...(sortBy ? { sortBy, sortOrder } : {}) }
       });
 
-      // Render backend data as-is so roles without a status field are still shown.
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

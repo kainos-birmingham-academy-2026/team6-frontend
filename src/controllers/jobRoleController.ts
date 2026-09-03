@@ -32,10 +32,36 @@ const parseSortQuery = (
   return {};
 };
 
+const PAGE_SIZE = 10;
+
+const parseOffsetQuery = (query: Request["query"]): number => {
+  const offset = query.offset;
+  if (typeof offset !== "string") {
+    return 0;
+  }
+
+  const parsedOffset = Number(offset);
+  return Number.isInteger(parsedOffset) && parsedOffset >= 0 ? parsedOffset : 0;
+};
+
+const buildJobRolesHref = (
+  offset: number,
+  sortBy?: JobRoleSortColumn,
+  sortOrder?: JobRoleSortOrder
+): string => {
+  const params = new URLSearchParams({ limit: String(PAGE_SIZE), offset: String(offset) });
+  if (sortBy && sortOrder) {
+    params.set("sortBy", sortBy);
+    params.set("sortOrder", sortOrder);
+  }
+  return `/job-roles?${params.toString()}`;
+};
+
 // Builds the href + indicator for each clickable column heading, cycling asc -> desc -> none.
 const buildSortLinks = (
   currentSortBy?: JobRoleSortColumn,
-  currentSortOrder?: JobRoleSortOrder
+  currentSortOrder?: JobRoleSortOrder,
+  offset = 0
 ): Record<JobRoleSortColumn, { href: string; indicator: string; ariaSort: string }> => {
   const links = {} as Record<
     JobRoleSortColumn,
@@ -59,7 +85,9 @@ const buildSortLinks = (
     }
 
     links[column] = {
-      href: nextOrder ? `/job-roles?sortBy=${column}&sortOrder=${nextOrder}` : "/job-roles",
+      href: nextOrder
+        ? buildJobRolesHref(offset, column, nextOrder)
+        : buildJobRolesHref(offset),
       indicator,
       ariaSort
     };
@@ -255,10 +283,17 @@ const toPayload = (values: JobRoleFormValues): JobRolePayload => ({
 export class JobRoleController {
   async list(req: Request, res: Response): Promise<void> {
     const { sortBy, sortOrder } = parseSortQuery(req.query);
+    const offset = parseOffsetQuery(req.query);
 
     try {
-      const jobRoles = await jobRoleService.getOpenJobRoles(req.session.token, sortBy, sortOrder);
-      const jobRolesViewModel = jobRoles.map((role, index) => {
+      const jobRolesPage = await jobRoleService.getOpenJobRoles(
+        req.session.token,
+        sortBy,
+        sortOrder,
+        PAGE_SIZE,
+        offset
+      );
+      const jobRolesViewModel = jobRolesPage.items.map((role, index) => {
         const capabilityDisplay = String(role.capabilityName || role.capabilityId || "N/A");
         const daysRemaining = daysUntil(role.closingDate);
         const urgency = closingUrgency(daysRemaining);
@@ -281,14 +316,24 @@ export class JobRoleController {
         (soonest, role) => (role.closingSort < soonest.closingSort ? role : soonest),
         jobRolesViewModel[0]
       );
+      const lastOffset = Math.max(0, Math.floor((jobRolesPage.total - 1) / PAGE_SIZE) * PAGE_SIZE);
+      const currentOffset = jobRolesPage.offset;
 
       res.render("job-role-list.html", {
         jobRoles: jobRolesViewModel,
         featuredRole,
         otherRoles: jobRolesViewModel.filter((role) => role !== featuredRole),
         hasLoadError: false,
-        sortLinks: buildSortLinks(sortBy, sortOrder),
-        currentSort: { sortBy, sortOrder }
+        sortLinks: buildSortLinks(sortBy, sortOrder, currentOffset),
+        currentSort: { sortBy, sortOrder },
+        pagination: {
+          hasPrevious: currentOffset > 0,
+          hasNext: currentOffset + jobRolesViewModel.length < jobRolesPage.total,
+          firstHref: buildJobRolesHref(0, sortBy, sortOrder),
+          previousHref: buildJobRolesHref(Math.max(0, currentOffset - PAGE_SIZE), sortBy, sortOrder),
+          nextHref: buildJobRolesHref(currentOffset + PAGE_SIZE, sortBy, sortOrder),
+          lastHref: buildJobRolesHref(lastOffset, sortBy, sortOrder)
+        }
       });
     } catch (error) {
       if (await redirectToLoginOnAuthFailure(error, req, res)) {
@@ -299,7 +344,8 @@ export class JobRoleController {
         jobRoles: [],
         hasLoadError: true,
         sortLinks: buildSortLinks(),
-        currentSort: {}
+        currentSort: {},
+        pagination: null
       });
     }
   }

@@ -207,6 +207,24 @@
           {% endfor %}
         </div>
         <p class="message" data-role-empty hidden>No roles match your filters. Try clearing them.</p>
+        {% if pagination %}
+        <nav class="pagination" aria-label="Job role pages">
+          {% if pagination.hasPrevious %}
+          <a href="{{ pagination.firstHref }}">First</a>
+          <a href="{{ pagination.previousHref }}">Previous</a>
+          {% else %}
+          <span aria-disabled="true">First</span>
+          <span aria-disabled="true">Previous</span>
+          {% endif %}
+          {% if pagination.hasNext %}
+          <a href="{{ pagination.nextHref }}">Next</a>
+          <a href="{{ pagination.lastHref }}">Last</a>
+          {% else %}
+          <span aria-disabled="true">Next</span>
+          <span aria-disabled="true">Last</span>
+          {% endif %}
+        </nav>
+        {% endif %}
         {% else %}
         <p class="message">No open job roles available at the moment.</p>
         {% endif %}

@@ -1619,6 +1619,41 @@ tbody tr:nth-child(even) {
   gap: 1.1rem;
 }
 
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 2rem 0 0;
+}
+
+.pagination a,
+.pagination span {
+  min-width: 5.5rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--kainos-line);
+  border-radius: 4px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.pagination a {
+  background: var(--kainos-white);
+  color: var(--kainos-mid-blue);
+  text-decoration: none;
+}
+
+.pagination a:hover,
+.pagination a:focus-visible {
+  border-color: var(--kainos-mid-blue);
+  background: rgba(28, 62, 120, 0.08);
+}
+
+.pagination span {
+  color: var(--kainos-grey);
+  cursor: not-allowed;
+}
+
 .role-card {
   position: relative;
   display: flex;
