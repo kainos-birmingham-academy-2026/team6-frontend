@@ -64,7 +64,8 @@ app.get("/register", authController.showRegister.bind(authController));
 app.post("/register", authController.register.bind(authController));
 app.post("/logout", authController.logout.bind(authController));
 
-app.get("/job-roles", jobRoleController.list);
+app.get("/api/jobRoles", jobRoleController.apiList.bind(jobRoleController));
+app.get("/job-roles", jobRoleController.list.bind(jobRoleController));
 app.get("/job-roles/add", requireAdmin, jobRoleController.showAddForm.bind(jobRoleController));
 app.post("/job-roles/add", requireAdmin, jobRoleController.createRole.bind(jobRoleController));
 app.get(

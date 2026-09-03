@@ -49,6 +49,13 @@ export type JobRolePayload = {
   numberOfOpenPositions?: number;
 };
 
+export type JobRoleFilters = {
+  search?: string;
+  capabilities?: string;
+  bands?: string;
+  locations?: string;
+};
+
 type ErrorPayload = {
   error?: string;
   details?: Array<{ message?: string }>;
@@ -78,10 +85,11 @@ export class JobRoleService {
     return headers;
   }
 
-  async getOpenJobRoles(token?: string): Promise<BackendJobRole[]> {
+  async getOpenJobRoles(token?: string, filters: JobRoleFilters = {}): Promise<BackendJobRole[]> {
     try {
       const response = await this.client.get<BackendJobRole[]>("/job-roles", {
-        headers: this.buildAuthHeaders(token)
+        headers: this.buildAuthHeaders(token),
+        params: filters
       });
 
       // Render backend data as-is so roles without a status field are still shown.

@@ -4,74 +4,108 @@
   if (!toolbar || !grid) return;
 
   const search = toolbar.querySelector("[data-filter-search]");
-  const selects = Array.from(toolbar.querySelectorAll("[data-filter-field]"));
-  const sortSelect = toolbar.querySelector("[data-role-sort]");
+  const capabilityFilters = Array.from(toolbar.querySelectorAll("[data-filter-capability]"));
+  const bandFilters = Array.from(toolbar.querySelectorAll("[data-filter-band]"));
+  const locationFilters = Array.from(toolbar.querySelectorAll("[data-filter-location]"));
   const clearBtn = toolbar.querySelector("[data-filter-clear]");
   const resultCount = document.querySelector("[data-role-count]");
   const emptyState = document.querySelector("[data-role-empty]");
   const featured = document.querySelector(".featured-role[data-role-item]");
-  const cards = Array.from(grid.querySelectorAll("[data-role-item]"));
-  const items = featured ? [featured, ...cards] : cards;
-
-  selects.forEach((select) => {
-    const field = select.dataset.filterField;
-    const values = [...new Set(items.map((item) => item.dataset[field]).filter(Boolean))].sort();
-    values.forEach((value) => {
-      const option = document.createElement("option");
-      option.value = value;
-      option.textContent = value;
-      select.appendChild(option);
+  const initialCards = Array.from(grid.querySelectorAll("[data-role-item]"));
+  let roles = initialCards.map((item) => ({
+    jobRoleId: item.querySelector("a")?.getAttribute("href")?.split("/").pop(),
+    roleName: item.querySelector(".role-card-title")?.textContent?.trim(),
+    location: item.dataset.location,
+    capabilityName: item.dataset.capability,
+    bandName: item.dataset.band,
+    closingDate: item.dataset.sortClosing
+  }));
+  if (featured) {
+    roles.unshift({
+      jobRoleId: featured.querySelector("h2 a")?.getAttribute("href")?.split("/").pop(),
+      roleName: featured.querySelector("h2")?.textContent?.trim(),
+      location: featured.dataset.location,
+      capabilityName: featured.dataset.capability,
+      bandName: featured.dataset.band,
+      closingDate: featured.dataset.sortClosing
     });
+  }
+
+  const selectedValues = (filters) => filters.filter((filter) => filter.checked).map((filter) => filter.value);
+
+  const renderRole = (role) => {
+    const article = document.createElement("article");
+    article.className = "role-card reveal is-visible";
+    article.dataset.roleItem = "";
+    article.innerHTML = `
+      <div class="role-card-head"><span class="role-card-icon" aria-hidden="true">&#10022;</span><p class="role-card-cap"></p></div>
+      <div class="role-card-body"><h2 class="role-card-title"><a class="role-name-link"></a></h2>
+        <p class="role-card-meta"><span class="role-card-location"></span><span class="pill pill-band"></span></p></div>
+      <div class="role-card-foot"><p class="closing"></p><a class="card-cta">View More Info</a></div>`;
+    article.querySelector(".role-card-cap").textContent = role.capabilityName || role.capabilityId || "N/A";
+    article.querySelector(".role-name-link").textContent = role.roleName || "Unnamed role";
+    article.querySelector(".role-name-link").href = `/job-roles/${role.jobRoleId}`;
+    article.querySelector(".role-card-location").textContent = role.location || "N/A";
+    article.querySelector(".pill-band").textContent = role.bandName || role.bandId || "N/A";
+    article.querySelector(".closing").textContent = role.closingDate || "Closing date unavailable";
+    article.querySelector(".card-cta").href = `/job-roles/${role.jobRoleId}`;
+    return article;
+  };
+
+  const renderResults = () => {
+    grid.replaceChildren(...roles.map(renderRole));
+    if (featured) featured.hidden = true;
+    const count = roles.length;
+    if (resultCount) resultCount.textContent = `${count} ${count === 1 ? "role" : "roles"}`;
+    if (emptyState) emptyState.hidden = count !== 0;
+  };
+
+  const showError = (message) => {
+    let error = toolbar.querySelector("[data-role-filter-error]");
+    if (!error) {
+      error = document.createElement("p");
+      error.className = "message message-error";
+      error.dataset.roleFilterError = "";
+      toolbar.appendChild(error);
+    }
+    error.textContent = message;
+  };
+
+  const apply = async () => {
+    const queryParams = new URLSearchParams();
+    const term = (search?.value || "").trim();
+    const capabilities = selectedValues(capabilityFilters);
+    const bands = selectedValues(bandFilters);
+    const locations = selectedValues(locationFilters);
+    if (term) queryParams.set("search", term);
+    if (capabilities.length) queryParams.set("capabilities", capabilities.join(","));
+    if (bands.length) queryParams.set("bands", bands.join(","));
+    if (locations.length) queryParams.set("locations", locations.join(","));
+
+    try {
+      const response = await fetch(`/api/jobRoles?${queryParams.toString()}`);
+      if (!response.ok) {
+        throw new Error(response.status === 400 ? "Invalid filter selection." : "Unable to load filtered roles right now.");
+      }
+      roles = await response.json();
+      toolbar.querySelector("[data-role-filter-error]")?.remove();
+      renderResults();
+    } catch (error) {
+      showError(error instanceof Error ? error.message : "Unable to load filtered roles right now.");
+    }
+  };
+
+  let searchTimer;
+  search?.addEventListener("input", () => {
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(apply, 250);
   });
-
-  const apply = () => {
-    const term = (search?.value || "").trim().toLowerCase();
-    let visible = 0;
-
-    items.forEach((item) => {
-      const matchesTerm = !term || item.textContent.toLowerCase().includes(term);
-      const matchesSelects = selects.every((select) => {
-        if (!select.value) return true;
-        return item.dataset[select.dataset.filterField] === select.value;
-      });
-      const show = matchesTerm && matchesSelects;
-      item.hidden = !show;
-      if (show) visible += 1;
-    });
-
-    if (resultCount) {
-      resultCount.textContent = `${visible} ${visible === 1 ? "role" : "roles"}`;
-    }
-    if (emptyState) {
-      emptyState.hidden = visible !== 0;
-    }
-  };
-
-  const sortCards = () => {
-    const mode = sortSelect?.value || "closing";
-    const sorted = [...cards].sort((a, b) => {
-      if (mode === "name") {
-        return (a.dataset.sortName || "").localeCompare(b.dataset.sortName || "");
-      }
-      if (mode === "band") {
-        return (a.dataset.sortBand || "").localeCompare(b.dataset.sortBand || "");
-      }
-      return Number(a.dataset.sortClosing || 0) - Number(b.dataset.sortClosing || 0);
-    });
-    sorted.forEach((card) => grid.appendChild(card));
-  };
-
-  search?.addEventListener("input", apply);
-  selects.forEach((select) => select.addEventListener("change", apply));
-  sortSelect?.addEventListener("change", sortCards);
+  [...capabilityFilters, ...bandFilters, ...locationFilters].forEach((filter) => filter.addEventListener("change", apply));
   clearBtn?.addEventListener("click", () => {
     if (search) search.value = "";
-    selects.forEach((select) => {
-      select.value = "";
-    });
+    [...capabilityFilters, ...bandFilters, ...locationFilters].forEach((filter) => { filter.checked = false; });
     apply();
   });
 
-  sortCards();
-  apply();
+  if (resultCount) resultCount.textContent = `${roles.length} ${roles.length === 1 ? "role" : "roles"}`;
 })();

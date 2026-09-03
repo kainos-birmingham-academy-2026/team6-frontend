@@ -1486,8 +1486,7 @@ tbody tr:nth-child(even) {
   flex: 1 1 260px;
 }
 
-.role-search input,
-.role-filter select {
+.role-search input {
   width: 100%;
   border: 1px solid var(--kainos-line);
   border-radius: 9px;
@@ -1498,15 +1497,37 @@ tbody tr:nth-child(even) {
   transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.role-search input:focus-visible,
-.role-filter select:focus-visible {
+.role-search input:focus-visible {
   border-color: var(--kainos-blue);
   box-shadow: 0 0 0 3px rgba(40, 53, 131, 0.16);
   outline: none;
 }
 
-.role-filter {
-  flex: 0 1 170px;
+.role-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  min-width: 130px;
+  margin: 0;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--kainos-line);
+  border-radius: 9px;
+}
+
+.role-filter-group legend {
+  padding: 0 0.25rem;
+  color: var(--kainos-blue);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.role-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--kainos-grey);
+  font-size: 0.82rem;
+  white-space: nowrap;
 }
 
 .role-clear-btn {
