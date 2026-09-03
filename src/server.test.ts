@@ -290,6 +290,24 @@ describe("server endpoints", () => {
     expect(response.text).toContain("/job-roles");
   });
 
+  it("forwards job role filters through the API endpoint", async () => {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue([]);
+
+    const agent = await loginAsCandidateAgent();
+    const response = await agent.get(
+      "/api/jobRoles?search=Engineer&capabilities=1,2&bands=3&locations=London,NYC"
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([]);
+    expect(mockedJobRoleService.getOpenJobRoles).toHaveBeenCalledWith("candidate-jwt-token", {
+      search: "Engineer",
+      capabilities: "1,2",
+      bands: "3",
+      locations: "London,NYC"
+    });
+  });
+
   it("renders open job roles on /job-roles", async () => {
     mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
       {

@@ -201,13 +201,14 @@ app.get("/job-roles", requireAuth, (req, res) => {
   const values = (value) => String(value || "").split(",").filter(Boolean);
   const capabilitiesFilter = values(query.capabilities).map(Number);
   const bandsFilter = values(query.bands).map(Number);
-  const locationsFilter = values(query.locations).map((value) => value.toLowerCase());
+  const locationsFilter = values(query.locations).map((value) => value.trim().toLowerCase());
   const search = String(query.search || "").toLowerCase();
   const roles = rolesForToken(getToken(req)).filter((role) => {
     const matchesSearch = !search || `${role.roleName} ${role.location}`.toLowerCase().includes(search);
     const matchesCapabilities = !capabilitiesFilter.length || capabilitiesFilter.includes(Number(role.capabilityId));
     const matchesBands = !bandsFilter.length || bandsFilter.includes(Number(role.bandId));
-    const matchesLocations = !locationsFilter.length || locationsFilter.includes(String(role.location).toLowerCase());
+    const matchesLocations =
+      !locationsFilter.length || locationsFilter.includes(String(role.location).trim().toLowerCase());
     return matchesSearch && matchesCapabilities && matchesBands && matchesLocations;
   });
   res.json(roles);

@@ -3,7 +3,13 @@
   const grid = document.querySelector("[data-role-grid]");
   if (!toolbar || !grid) return;
 
-  // Get initial roles from DOM
+  const search = toolbar.querySelector("[data-filter-search]");
+  const capabilityFilters = Array.from(toolbar.querySelectorAll("[data-filter-capability]"));
+  const bandFilters = Array.from(toolbar.querySelectorAll("[data-filter-band]"));
+  const locationFilters = Array.from(toolbar.querySelectorAll("[data-filter-location]"));
+  const clearBtn = toolbar.querySelector("[data-filter-clear]");
+  const resultCount = document.querySelector("[data-role-count]");
+  const emptyState = document.querySelector("[data-role-empty]");
   const featured = document.querySelector(".featured-role[data-role-item]");
   const initialCards = Array.from(grid.querySelectorAll("[data-role-item]"));
   let roles = initialCards.map((item) => ({
@@ -25,21 +31,7 @@
     });
   }
 
-  const searchInput = toolbar.querySelector("[data-filter-search]");
-  const countElement = toolbar.querySelector("[data-role-count]");
-  const emptyState = document.querySelector("[data-role-empty]");
-  const getSelectedValues = (selector) =>
-    Array.from(toolbar.querySelectorAll(`${selector}:checked`))
-      .map((input) => input.value.trim())
-      .filter(Boolean);
-
-  const getFilters = () => {
-    return {
-      capabilities: getSelectedValues("[data-filter-capability]"),
-      bands: getSelectedValues("[data-filter-band]"),
-      locations: getSelectedValues("[data-filter-location]")
-    };
-  };
+  const selectedValues = (filters) => filters.filter((filter) => filter.checked).map((filter) => filter.value);
 
   const renderRole = (role) => {
     const article = document.createElement("article");
@@ -64,7 +56,7 @@
     grid.replaceChildren(...roles.map(renderRole));
     if (featured) featured.hidden = true;
     const count = roles.length;
-    if (countElement) countElement.textContent = `${count}`;
+    if (resultCount) resultCount.textContent = `${count} ${count === 1 ? "role" : "roles"}`;
     if (emptyState) emptyState.hidden = count !== 0;
   };
 
@@ -79,51 +71,23 @@
     error.textContent = message;
   };
 
-  let requestNumber = 0;
-  const fetchRoles = async (queryParams, locations) => {
-    const response = await fetch(`/api/jobRoles?${queryParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(response.status === 400 ? "Invalid filter selection." : "Unable to load filtered roles right now.");
-    }
-
-    const filteredRoles = await response.json();
-    if (filteredRoles.length || locations.length < 2) return filteredRoles;
-
-    // Some backend versions treat a comma-separated location list as one value.
-    const roleResults = await Promise.all(
-      locations.map(async (location) => {
-        const locationParams = new URLSearchParams(queryParams);
-        locationParams.set("locations", location);
-        const locationResponse = await fetch(`/api/jobRoles?${locationParams.toString()}`);
-        if (!locationResponse.ok) {
-          throw new Error(
-            locationResponse.status === 400
-              ? "Invalid filter selection."
-              : "Unable to load filtered roles right now."
-          );
-        }
-        return locationResponse.json();
-      })
-    );
-
-    const uniqueRoles = new Map(roleResults.flat().map((role) => [String(role.jobRoleId), role]));
-    return Array.from(uniqueRoles.values());
-  };
-
   const apply = async () => {
-    const currentRequest = ++requestNumber;
     const queryParams = new URLSearchParams();
-    const term = (searchInput?.value || "").trim();
-    const { capabilities, bands, locations } = getFilters();
+    const term = (search?.value || "").trim();
+    const capabilities = selectedValues(capabilityFilters);
+    const bands = selectedValues(bandFilters);
+    const locations = selectedValues(locationFilters);
     if (term) queryParams.set("search", term);
     if (capabilities.length) queryParams.set("capabilities", capabilities.join(","));
     if (bands.length) queryParams.set("bands", bands.join(","));
     if (locations.length) queryParams.set("locations", locations.join(","));
 
     try {
-      const nextRoles = await fetchRoles(queryParams, locations);
-      if (currentRequest !== requestNumber) return;
-      roles = nextRoles;
+      const response = await fetch(`/api/jobRoles?${queryParams.toString()}`);
+      if (!response.ok) {
+        throw new Error(response.status === 400 ? "Invalid filter selection." : "Unable to load filtered roles right now.");
+      }
+      roles = await response.json();
       toolbar.querySelector("[data-role-filter-error]")?.remove();
       renderResults();
     } catch (error) {
@@ -132,21 +96,16 @@
   };
 
   let searchTimer;
-  searchInput?.addEventListener("input", () => {
+  search?.addEventListener("input", () => {
     window.clearTimeout(searchTimer);
     searchTimer = window.setTimeout(apply, 250);
   });
-
-  toolbar
-    .querySelectorAll("[data-filter-capability], [data-filter-band], [data-filter-location]")
-    .forEach((input) => input.addEventListener("change", apply));
-  toolbar.querySelector("[data-filter-clear]")?.addEventListener("click", () => {
-    if (searchInput) searchInput.value = "";
-    toolbar.querySelectorAll("input[type='checkbox']").forEach((input) => {
-      input.checked = false;
-    });
+  [...capabilityFilters, ...bandFilters, ...locationFilters].forEach((filter) => filter.addEventListener("change", apply));
+  clearBtn?.addEventListener("click", () => {
+    if (search) search.value = "";
+    [...capabilityFilters, ...bandFilters, ...locationFilters].forEach((filter) => { filter.checked = false; });
     apply();
   });
 
-  renderResults();
+  if (resultCount) resultCount.textContent = `${roles.length} ${roles.length === 1 ? "role" : "roles"}`;
 })();
