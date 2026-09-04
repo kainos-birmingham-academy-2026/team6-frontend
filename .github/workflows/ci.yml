@@ -92,3 +92,18 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -var-file=environments/dev.tfvars -input=false -lock-timeout=5m
+
+  # The frontend container app is defined in the backend repo's Terraform, so ask it to redeploy.
+  trigger-backend-deploy:
+    name: Trigger backend deployment
+    needs: [build, terraform]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch to team6-backend
+        run: |
+          curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.DEPLOY_TRIGGER_TOKEN }}" \
+            https://api.github.com/repos/kainos-birmingham-academy-2026/team6-backend/dispatches \
+            -d '{"event_type":"frontend-deployed","client_payload":{"sha":"${{ github.sha }}"}}'
