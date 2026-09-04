@@ -27,6 +27,13 @@ export type BackendJobRole = {
   numberOfOpenPositions?: number;
 };
 
+export type BackendJobRolePage = {
+  items: BackendJobRole[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
 export type BackendCapability = {
   capabilityId: number;
   capabilityName: string;
@@ -54,6 +61,14 @@ type ErrorPayload = {
   details?: Array<{ message?: string }>;
 };
 
+export type JobRoleSortColumn =
+  | "roleName"
+  | "location"
+  | "capabilityName"
+  | "bandName"
+  | "closingDate";
+export type JobRoleSortOrder = "asc" | "desc";
+
 export class JobRoleService {
   private readonly client: AxiosInstance;
 
@@ -78,13 +93,19 @@ export class JobRoleService {
     return headers;
   }
 
-  async getOpenJobRoles(token?: string): Promise<BackendJobRole[]> {
+  async getOpenJobRoles(
+    token?: string,
+    sortBy?: JobRoleSortColumn,
+    sortOrder?: JobRoleSortOrder,
+    limit = 10,
+    offset = 0
+  ): Promise<BackendJobRolePage> {
     try {
-      const response = await this.client.get<BackendJobRole[]>("/job-roles", {
-        headers: this.buildAuthHeaders(token)
+      const response = await this.client.get<BackendJobRolePage>("/job-roles", {
+        headers: this.buildAuthHeaders(token),
+        params: { limit, offset, ...(sortBy ? { sortBy, sortOrder } : {}) }
       });
 
-      // Render backend data as-is so roles without a status field are still shown.
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

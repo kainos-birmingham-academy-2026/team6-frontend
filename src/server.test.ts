@@ -269,8 +269,8 @@ describe("server endpoints", () => {
   });
 
   it("renders open job roles on /job-roles", async () => {
-    mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
-      {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue({
+      items: [{
         jobRoleId: 1,
         roleName: "Backend Developer",
         location: "London",
@@ -278,8 +278,11 @@ describe("server endpoints", () => {
         bandName: "Junior",
         closingDate: "2026-09-15T23:59:59.000Z",
         status: "Open"
-      }
-    ]);
+      }],
+      total: 1,
+      limit: 10,
+      offset: 0
+    });
 
     const agent = await loginAgent();
     const response = await agent.get("/job-roles");
@@ -291,8 +294,8 @@ describe("server endpoints", () => {
   });
 
   it("renders open job roles on /job-roles", async () => {
-    mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
-      {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue({
+      items: [{
         jobRoleId: 1,
         roleName: "Backend Developer",
         location: "London",
@@ -300,8 +303,11 @@ describe("server endpoints", () => {
         bandName: "Junior",
         closingDate: "2026-09-15T23:59:59.000Z",
         status: "Open"
-      }
-    ]);
+      }],
+      total: 1,
+      limit: 10,
+      offset: 0
+    });
 
     const agent = await loginAgent();
     const response = await agent.get("/job-roles");
@@ -318,15 +324,18 @@ describe("server endpoints", () => {
   });
 
   it("renders details links when list payload has no jobRoleId", async () => {
-    mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
-      {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue({
+      items: [{
         roleName: "Backend Developer",
         location: "London",
         capabilityName: "Backend Engineering",
         bandName: "Junior",
         closingDate: "2026-09-15T23:59:59.000Z"
-      }
-    ]);
+      }],
+      total: 1,
+      limit: 10,
+      offset: 0
+    });
 
     const agent = await loginAgent();
     const response = await agent.get("/job-roles");
@@ -334,6 +343,41 @@ describe("server endpoints", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain('href="/job-roles/1"');
     expect(response.text).not.toContain("Unavailable");
+  });
+
+  it("renders pagination links and requests the selected page of job roles", async () => {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue({
+      items: [
+        {
+          jobRoleId: 11,
+          roleName: "Backend Developer",
+          location: "London",
+          capabilityName: "Backend Engineering",
+          bandName: "Junior",
+          closingDate: "2026-09-15T23:59:59.000Z"
+        }
+      ],
+      total: 25,
+      limit: 10,
+      offset: 10
+    });
+
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles?limit=10&offset=10");
+
+    expect(response.status).toBe(200);
+    expect(mockedJobRoleService.getOpenJobRoles).toHaveBeenCalledWith(
+      "jwt-token",
+      undefined,
+      undefined,
+      10,
+      10
+    );
+    expect(response.text).toContain('href="/job-roles?limit=10&amp;offset=0"');
+    expect(response.text).toContain('href="/job-roles?limit=10&amp;offset=20"');
+    expect(response.text).toContain(
+      'aria-label="Job role pages"'
+    );
   });
 
   it("renders role details on /job-roles/:id", async () => {
@@ -409,16 +453,19 @@ describe("server endpoints", () => {
   });
 
   it("hides add/edit/delete role actions from anonymous visitors", async () => {
-    mockedJobRoleService.getOpenJobRoles.mockResolvedValue([
-      {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue({
+      items: [{
         jobRoleId: 1,
         roleName: "Backend Developer",
         location: "London",
         capabilityName: "Backend Engineering",
         bandName: "Junior",
         closingDate: "2026-09-15T23:59:59.000Z"
-      }
-    ]);
+      }],
+      total: 1,
+      limit: 10,
+      offset: 0
+    });
 
     const response = await request(app).get("/job-roles");
 
