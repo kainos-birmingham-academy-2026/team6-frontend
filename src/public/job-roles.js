@@ -1,4 +1,16 @@
 (() => {
+  const formatClosingDate = (value) => {
+    if (!value) return "Closing date unavailable";
+
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return value;
+
+    const day = String(parsed.getUTCDate()).padStart(2, "0");
+    const month = String(parsed.getUTCMonth() + 1).padStart(2, "0");
+    const year = String(parsed.getUTCFullYear()).slice(-2);
+    return `${day}/${month}/${year}`;
+  };
+
   const toolbar = document.querySelector("[data-role-filters]");
   const grid = document.querySelector("[data-role-grid]");
   if (!toolbar || !grid) return;
@@ -12,7 +24,7 @@
     location: item.dataset.location,
     capabilityName: item.dataset.capability,
     bandName: item.dataset.band,
-    closingDate: item.dataset.sortClosing
+    closingDate: item.dataset.closingDate
   }));
   if (featured) {
     roles.unshift({
@@ -21,7 +33,7 @@
       location: featured.dataset.location,
       capabilityName: featured.dataset.capability,
       bandName: featured.dataset.band,
-      closingDate: featured.dataset.sortClosing
+      closingDate: featured.dataset.closingDate
     });
   }
 
@@ -55,7 +67,7 @@
     article.querySelector(".role-name-link").href = `/job-roles/${role.jobRoleId}`;
     article.querySelector(".role-card-location").textContent = role.location || "N/A";
     article.querySelector(".pill-band").textContent = role.bandName || role.bandId || "N/A";
-    article.querySelector(".closing").textContent = role.closingDate || "Closing date unavailable";
+    article.querySelector(".closing").textContent = formatClosingDate(role.closingDate);
     article.querySelector(".card-cta").href = `/job-roles/${role.jobRoleId}`;
     return article;
   };
