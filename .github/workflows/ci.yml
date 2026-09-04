@@ -5,6 +5,11 @@ on:
   pull_request:
     branches: [main]
 
+# The push and pull_request runs share one terraform state file, so they must not run concurrently.
+concurrency:
+  group: team6-frontend-dev-terraform
+  cancel-in-progress: false
+
 jobs:
   test:
     name: Test and quality checks
@@ -82,8 +87,8 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -var-file=environments/dev.tfvars -input=false
+        run: terraform plan -var-file=environments/dev.tfvars -input=false -lock-timeout=5m
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -var-file=environments/dev.tfvars -input=false
+        run: terraform apply -auto-approve -var-file=environments/dev.tfvars -input=false -lock-timeout=5m
