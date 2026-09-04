@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Applications | Kainos Careers</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="brand-bar">Kainos Careers</p>
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Kainos Careers Home">
+          <img src="/images/kainos-logo-primary-transparent.png" alt="Kainos" class="brand-logo" />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/job-roles" class="nav-link">Job Roles</a>
+          {% if isAuthenticated %}
+          <a href="/applications" class="nav-link nav-link-active">My Applications</a>
+          <form action="/logout" method="post" class="nav-inline-form">
+            <button type="submit" class="nav-link nav-link-button">Sign Out</button>
+          </form>
+          {% else %}
+          <a href="/login" class="nav-link">Login</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="page-hero-blobs" aria-hidden="true">
+          <span class="hero-blob hero-blob-green"></span>
+          <span class="hero-blob hero-blob-blue"></span>
+        </div>
+        <div class="container page-hero-inner">
+          <div>
+            <p class="eyebrow eyebrow-dark">Your Applications</p>
+            <h1>My Applications</h1>
+            <p class="section-lede">
+              Keep track of every role you've applied for and see where each application stands.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="container page-content">
+        {% if hasLoadError %}
+        <p class="message message-error">Unable to load your applications right now. Please try again later.</p>
+        {% endif %}
+
+        {% if applications and applications.length > 0 %}
+        <div class="role-grid">
+          {% for application in applications %}
+          <article class="role-card {{ application.accentClass }} reveal">
+            <div class="role-card-head">
+              <p class="role-card-cap">{{ application.capabilityName }}</p>
+            </div>
+            <div class="role-card-body">
+              <h2 class="role-card-title">
+                <a href="/job-roles/{{ application.jobRoleId }}" class="role-name-link">{{ application.roleName }}</a>
+              </h2>
+              <p class="role-card-meta">
+                <span class="status-pill {{ application.statusClass }}">{{ application.statusLabel }}</span>
+                <span class="pill pill-band">{{ application.bandName }}</span>
+              </p>
+              <p class="role-card-meta">
+                <span class="role-card-location">{{ application.location }}</span>
+              </p>
+            </div>
+            <div class="role-card-foot">
+              <p class="closing">Closes {{ application.closingDateDisplay }}</p>
+              <a href="/job-roles/{{ application.jobRoleId }}" class="card-cta">View Role</a>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="message">
+          You haven't applied for any roles yet.
+          <a href="/job-roles" class="primary-link">Browse open job roles</a>
+        </p>
+        {% endif %}
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <div>
+          <p class="footer-title">Kainos Careers</p>
+          <p>Partner with the best people in tech to shape what comes next.</p>
+        </div>
+        <div>
+          <p class="footer-title">Contact</p>
+          <p><a href="mailto:careers@kainos.com">careers@kainos.com</a></p>
+          <p><a href="tel:+442890322600">+44 (0) 28 9032 2600</a></p>
+          <p>4-6 Upper Crescent, Belfast BT7 1NT</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/site.js" defer></script>
+  </body>
+</html>
