@@ -3,6 +3,7 @@ import { applicationService } from "../services/applicationService";
 import {
   BackendRequestError,
   jobRoleService,
+  type JobRoleFilters,
   type JobRolePayload,
   type JobRoleSortColumn,
   type JobRoleSortOrder
@@ -208,6 +209,23 @@ const formatDateForInput = (value?: string): string => {
   return parsed.toISOString().slice(0, 10);
 };
 
+const queryString = (value: unknown): string | undefined => {
+  if (typeof value === "string") {
+    return value;
+  }
+  if (Array.isArray(value) && typeof value[0] === "string") {
+    return value[0];
+  }
+  return undefined;
+};
+
+const jobRoleFiltersFromQuery = (query: Request["query"]): JobRoleFilters => ({
+  search: queryString(query.search),
+  capabilities: queryString(query.capabilities),
+  bands: queryString(query.bands),
+  locations: queryString(query.locations)
+});
+
 type JobRoleFormValues = {
   roleName: string;
   location: string;
@@ -287,13 +305,16 @@ export class JobRoleController {
     const offset = parseOffsetQuery(req.query);
 
     try {
-      const jobRolesPage = await jobRoleService.getOpenJobRoles(
-        req.session.token,
-        sortBy,
-        sortOrder,
-        PAGE_SIZE,
-        offset
-      );
+      const [jobRolesPage, capabilities, bands] = await Promise.all([
+        jobRoleService.getOpenJobRoles(req.session.token, {
+          sortBy,
+          sortOrder,
+          limit: PAGE_SIZE,
+          offset
+        }),
+        jobRoleService.getCapabilities(),
+        jobRoleService.getBands()
+      ]);
       const jobRolesViewModel = jobRolesPage.items.map((role, index) => {
         const capabilityDisplay = String(role.capabilityName || role.capabilityId || "N/A");
         const daysRemaining = daysUntil(role.closingDate);
@@ -324,6 +345,11 @@ export class JobRoleController {
         jobRoles: jobRolesViewModel,
         featuredRole,
         otherRoles: jobRolesViewModel.filter((role) => role !== featuredRole),
+        capabilities: capabilities || [],
+        bands: bands || [],
+        locations: [
+          ...new Set(jobRolesPage.items.map((role) => role.location).filter(Boolean))
+        ].sort(),
         hasLoadError: false,
         sortLinks: buildSortLinks(sortBy, sortOrder, currentOffset),
         currentSort: { sortBy, sortOrder },
@@ -343,11 +369,31 @@ export class JobRoleController {
 
       res.status(502).render("job-role-list.html", {
         jobRoles: [],
+        capabilities: [],
+        bands: [],
+        locations: [],
         hasLoadError: true,
         sortLinks: buildSortLinks(),
         currentSort: {},
         pagination: null
       });
+    }
+  }
+
+  async apiList(req: Request, res: Response): Promise<void> {
+    try {
+      const jobRolesPage = await jobRoleService.getOpenJobRoles(req.session.token, {
+        filters: jobRoleFiltersFromQuery(req.query)
+      });
+      res.json(jobRolesPage.items);
+    } catch (error) {
+      if (error instanceof BackendRequestError) {
+        res.status(error.statusCode && error.statusCode >= 400 ? error.statusCode : 502).json({
+          error: error.message
+        });
+        return;
+      }
+      res.status(500).json({ error: "Unable to load job roles right now." });
     }
   }
 

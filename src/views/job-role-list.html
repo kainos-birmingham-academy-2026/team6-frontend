@@ -66,26 +66,35 @@
               data-filter-search
             />
           </div>
-          <div class="role-filter">
-            <label for="filter-capability" class="visually-hidden">Filter by capability</label>
-            <select id="filter-capability" data-filter-field="capability">
-              <option value="">All capabilities</option>
-            </select>
-          </div>
-          <div class="role-filter">
-            <label for="filter-band" class="visually-hidden">Filter by band</label>
-            <select id="filter-band" data-filter-field="band">
-              <option value="">All bands</option>
-            </select>
-          </div>
-          <div class="role-filter">
-            <label for="filter-location" class="visually-hidden">Filter by location</label>
-            <select id="filter-location" data-filter-field="location">
-              <option value="">All locations</option>
-            </select>
-          </div>
+          <fieldset class="role-filter-group">
+            <legend>Capabilities</legend>
+            {% for capability in capabilities %}
+            <label class="role-checkbox">
+              <input type="checkbox" value="{{ capability.capabilityId }}" data-filter-capability />
+              <span>{{ capability.capabilityName }}</span>
+            </label>
+            {% endfor %}
+          </fieldset>
+          <fieldset class="role-filter-group">
+            <legend>Bands</legend>
+            {% for band in bands %}
+            <label class="role-checkbox">
+              <input type="checkbox" value="{{ band.bandId }}" data-filter-band />
+              <span>{{ band.bandName }}</span>
+            </label>
+            {% endfor %}
+          </fieldset>
+          <fieldset class="role-filter-group">
+            <legend>Locations</legend>
+            {% for location in locations %}
+            <label class="role-checkbox">
+              <input type="checkbox" value="{{ location }}" data-filter-location />
+              <span>{{ location }}</span>
+            </label>
+            {% endfor %}
+          </fieldset>
           <button type="button" class="role-clear-btn" data-filter-clear>Clear</button>
-          <p class="role-count"><span data-role-count>{{ jobRoles.length }}</span> found</p>
+          <p class="role-count"><span data-role-count>{{ jobRoles.length }}</span> roles found</p>
         </div>
 
         <div class="role-sort-bar reveal" aria-label="Sort roles">
@@ -104,6 +113,7 @@
           data-location="{{ featuredRole.location }}"
           data-capability="{{ featuredRole.capabilityDisplay }}"
           data-band="{{ featuredRole.bandDisplay }}"
+          data-closing-date="{{ featuredRole.closingDate }}"
         >
           <div class="featured-role-copy">
             <p class="featured-badge">Closing soonest</p>
@@ -170,6 +180,10 @@
             data-location="{{ role.location }}"
             data-capability="{{ role.capabilityDisplay }}"
             data-band="{{ role.bandDisplay }}"
+            data-sort-name="{{ role.roleName }}"
+            data-sort-band="{{ role.bandDisplay }}"
+            data-sort-closing="{{ role.closingSort }}"
+            data-closing-date="{{ role.closingDate }}"
           >
             <div class="role-card-head">
               <span class="role-card-icon" aria-hidden="true">{{ role.capabilityIcon }}</span>
