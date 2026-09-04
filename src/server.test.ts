@@ -35,7 +35,8 @@ vi.mock("./services/authService", () => ({
 
 vi.mock("./services/applicationService", () => ({
   applicationService: {
-    submitApplication: vi.fn()
+    submitApplication: vi.fn(),
+    getMyApplications: vi.fn().mockResolvedValue([])
   }
 }));
 

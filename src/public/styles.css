@@ -1654,6 +1654,32 @@ tbody tr:nth-child(even) {
   cursor: not-allowed;
 }
 
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.status-pill-progress {
+  background: rgba(40, 53, 131, 0.1);
+  color: var(--kainos-mid-blue, #1c3e78);
+}
+
+.status-pill-success {
+  background: rgba(97, 168, 63, 0.15);
+  color: var(--kainos-green);
+}
+
+.status-pill-danger {
+  background: rgba(179, 38, 30, 0.12);
+  color: #b3261e;
+}
+
 .role-card {
   position: relative;
   display: flex;
