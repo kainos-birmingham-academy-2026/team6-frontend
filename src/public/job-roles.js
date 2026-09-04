@@ -53,21 +53,83 @@
     };
   };
 
+  const CAPABILITY_ICONS = {
+    engineering: "</>",
+    "software engineering": "</>",
+    "backend engineering": "</>",
+    "backend development": "</>",
+    "frontend development": "</>",
+    "cloud and engineering": "</>",
+    devops: "</>",
+    data: "◧",
+    "data & ai": "◧",
+    "data and ai": "◧",
+    "data science": "◧",
+    design: "✎",
+    "experience design": "✎",
+    "user-centred design": "✎",
+    workday: "⬡",
+    product: "◆",
+    delivery: "◆",
+    "delivery & product": "◆"
+  };
+
+  const capabilityIcon = (name) => CAPABILITY_ICONS[String(name).trim().toLowerCase()] || "✦";
+
+  // Mirrors capabilityAccent in jobRoleController.ts so client-rendered cards keep their colour.
+  const capabilityAccent = (name) => {
+    let hash = 0;
+    for (const character of String(name)) {
+      hash = (hash * 31 + character.charCodeAt(0)) % 5;
+    }
+    return hash + 1;
+  };
+
+  const daysUntil = (value) => {
+    if (!value) return null;
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return null;
+    const startOfDay = (date) => Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    return Math.round((startOfDay(parsed) - startOfDay(new Date())) / 86400000);
+  };
+
+  const closingUrgency = (days) => {
+    if (days === null) return { label: "", className: "" };
+    if (days < 0) return { label: "Closed", className: "closing-closed" };
+    if (days === 0) return { label: "Closes today", className: "closing-urgent" };
+    if (days === 1) return { label: "1 day left", className: "closing-urgent" };
+    if (days <= 7) return { label: `${days} days left`, className: "closing-urgent" };
+    if (days <= 14) return { label: `${days} days left`, className: "closing-soon" };
+    return { label: "", className: "" };
+  };
+
   const renderRole = (role) => {
+    const capabilityDisplay = String(role.capabilityName || role.capabilityId || "N/A");
+    const urgency = closingUrgency(daysUntil(role.closingDate));
     const article = document.createElement("article");
-    article.className = "role-card reveal is-visible";
+    article.className = `role-card cap-accent-${capabilityAccent(capabilityDisplay)} reveal is-visible`;
     article.dataset.roleItem = "";
+    article.dataset.location = role.location || "";
+    article.dataset.capability = capabilityDisplay;
+    article.dataset.band = String(role.bandName || role.bandId || "N/A");
     article.innerHTML = `
-      <div class="role-card-head"><span class="role-card-icon" aria-hidden="true">&#10022;</span><p class="role-card-cap"></p></div>
+      <div class="role-card-head"><span class="role-card-icon" aria-hidden="true"></span><p class="role-card-cap"></p></div>
       <div class="role-card-body"><h2 class="role-card-title"><a class="role-name-link"></a></h2>
         <p class="role-card-meta"><span class="role-card-location"></span><span class="pill pill-band"></span></p></div>
       <div class="role-card-foot"><p class="closing"></p><a class="card-cta">View More Info</a></div>`;
-    article.querySelector(".role-card-cap").textContent = role.capabilityName || role.capabilityId || "N/A";
+    article.querySelector(".role-card-icon").textContent = capabilityIcon(capabilityDisplay);
+    article.querySelector(".role-card-cap").textContent = capabilityDisplay;
     article.querySelector(".role-name-link").textContent = role.roleName || "Unnamed role";
     article.querySelector(".role-name-link").href = `/job-roles/${role.jobRoleId}`;
     article.querySelector(".role-card-location").textContent = role.location || "N/A";
     article.querySelector(".pill-band").textContent = role.bandName || role.bandId || "N/A";
-    article.querySelector(".closing").textContent = formatClosingDate(role.closingDate);
+
+    const closing = article.querySelector(".closing");
+    if (urgency.className) closing.classList.add(urgency.className);
+    closing.textContent = urgency.label
+      ? `${urgency.label} · ${formatClosingDate(role.closingDate)}`
+      : formatClosingDate(role.closingDate);
+
     article.querySelector(".card-cta").href = `/job-roles/${role.jobRoleId}`;
     return article;
   };
@@ -132,11 +194,19 @@
     if (bands.length) queryParams.set("bands", bands.join(","));
     if (locations.length) queryParams.set("locations", locations.join(","));
 
+    // No filters left: reload so the server restores the paginated, sorted view.
+    if (![...queryParams.keys()].length) {
+      window.location.reload();
+      return;
+    }
+
     try {
       const nextRoles = await fetchRoles(queryParams, locations);
       if (currentRequest !== requestNumber) return;
       roles = nextRoles;
       toolbar.querySelector("[data-role-filter-error]")?.remove();
+      // Filtered results aren't paged, so the page links no longer apply.
+      document.querySelector(".pagination")?.setAttribute("hidden", "");
       renderResults();
     } catch (error) {
       showError(error instanceof Error ? error.message : "Unable to load filtered roles right now.");
@@ -159,6 +229,4 @@
     });
     apply();
   });
-
-  renderResults();
 })();
