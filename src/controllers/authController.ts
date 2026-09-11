@@ -13,6 +13,30 @@ declare module "express-session" {
 }
 
 export class AuthController {
+  private async startSession(
+    req: Request,
+    result: { token: string; user: { userid: number; email: string; role: string } }
+  ): Promise<void> {
+    req.session.user = {
+      userid: result.user.userid,
+      email: result.user.email,
+      role: result.user.role
+    };
+
+    req.session.token = result.token;
+
+    await new Promise<void>((resolve, reject) => {
+      req.session.save((sessionError) => {
+        if (sessionError) {
+          reject(sessionError);
+          return;
+        }
+
+        resolve();
+      });
+    });
+  }
+
   showLogin(req: Request, res: Response): void {
     if (req.session.token) {
       res.redirect("/job-roles");
@@ -35,23 +59,7 @@ export class AuthController {
         password
       });
 
-      req.session.user = {
-        userid: result.user.userid,
-        email: result.user.email,
-        role: result.user.role
-      };
-
-      req.session.token = result.token;
-      await new Promise<void>((resolve, reject) => {
-        req.session.save((sessionError) => {
-          if (sessionError) {
-            reject(sessionError);
-            return;
-          }
-
-          resolve();
-        });
-      });
+      await this.startSession(req, result);
 
       res.redirect("/job-roles");
     } catch (error) {
@@ -83,19 +91,19 @@ export class AuthController {
     const password = typeof req.body.password === "string" ? req.body.password : "";
 
     try {
-      await authService.register({ email, password });
-      res.redirect("/login");
+      const result = await authService.register({ email, password });
+
+      await this.startSession(req, result);
+
+      res.redirect("/");
     } catch (error) {
       const registerErrorMessage =
         error instanceof Error ? error.message : "Unable to create account right now.";
-      const isSuccessMessage = registerErrorMessage.startsWith(
-        "Account has been created successfully"
-      );
 
-      res.status(isSuccessMessage ? 200 : 401).render("register.html", {
+      res.status(401).render("register.html", {
         registerEmail: email,
         registerErrorMessage,
-        registerMessageClass: isSuccessMessage ? "auth-message-success" : "auth-message-error"
+        registerMessageClass: "auth-message-error"
       });
     }
   }

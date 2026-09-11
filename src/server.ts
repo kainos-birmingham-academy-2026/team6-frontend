@@ -3,6 +3,7 @@ import nunjucks from "nunjucks";
 import path from "path";
 import multer from "multer";
 import { authController } from "./controllers/authController";
+import { chatController } from "./controllers/chatController";
 import { jobRoleController } from "./controllers/jobRoleController";
 import { applicationController } from "./controllers/applicationController";
 import "dotenv/config";
@@ -22,7 +23,6 @@ nunjucks.configure(viewsPath, {
   express: app,
   noCache: process.env.NODE_ENV !== "production"
 });
-secret: process.env.SESSION_SECRET as string,
 app.use(express.static(publicPath));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -65,6 +65,7 @@ app.post("/register", authController.register.bind(authController));
 app.post("/logout", authController.logout.bind(authController));
 
 app.get("/api/jobRoles", jobRoleController.apiList.bind(jobRoleController));
+app.post("/chat", chatController.ask.bind(chatController));
 app.get("/job-roles", jobRoleController.list.bind(jobRoleController));
 app.get("/job-roles/add", requireAdmin, jobRoleController.showAddForm.bind(jobRoleController));
 app.post("/job-roles/add", requireAdmin, jobRoleController.createRole.bind(jobRoleController));

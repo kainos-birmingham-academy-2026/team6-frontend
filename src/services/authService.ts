@@ -112,7 +112,7 @@ export class AuthService {
     const token = payload.token || payload.accessToken || payload.jwt;
 
     if (!token) {
-      throw new Error("Account has been created successfully, sign in ");
+      throw new Error("Your account was created, but sign in failed. Please log in.");
     }
 
     return {
