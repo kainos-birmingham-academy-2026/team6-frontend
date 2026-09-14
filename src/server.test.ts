@@ -35,7 +35,8 @@ vi.mock("./services/authService", () => ({
 
 vi.mock("./services/applicationService", () => ({
   applicationService: {
-    submitApplication: vi.fn()
+    submitApplication: vi.fn(),
+    getMyApplications: vi.fn().mockResolvedValue([])
   }
 }));
 
@@ -293,6 +294,31 @@ describe("server endpoints", () => {
     expect(response.text).toContain("/job-roles");
   });
 
+  it("forwards job role filters through the API endpoint", async () => {
+    mockedJobRoleService.getOpenJobRoles.mockResolvedValue({
+      items: [],
+      total: 0,
+      limit: 0,
+      offset: 0
+    });
+
+    const agent = await loginAsCandidateAgent();
+    const response = await agent.get(
+      "/api/jobRoles?search=Engineer&capabilities=1,2&bands=3&locations=London,NYC"
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([]);
+    expect(mockedJobRoleService.getOpenJobRoles).toHaveBeenCalledWith("candidate-jwt-token", {
+      filters: {
+        search: "Engineer",
+        capabilities: "1,2",
+        bands: "3",
+        locations: "London,NYC"
+      }
+    });
+  });
+
   it("renders open job roles on /job-roles", async () => {
     mockedJobRoleService.getOpenJobRoles.mockResolvedValue({
       items: [{
@@ -366,13 +392,12 @@ describe("server endpoints", () => {
     const response = await agent.get("/job-roles?limit=10&offset=10");
 
     expect(response.status).toBe(200);
-    expect(mockedJobRoleService.getOpenJobRoles).toHaveBeenCalledWith(
-      "jwt-token",
-      undefined,
-      undefined,
-      10,
-      10
-    );
+    expect(mockedJobRoleService.getOpenJobRoles).toHaveBeenCalledWith("jwt-token", {
+      sortBy: undefined,
+      sortOrder: undefined,
+      limit: 10,
+      offset: 10
+    });
     expect(response.text).toContain('href="/job-roles?limit=10&amp;offset=0"');
     expect(response.text).toContain('href="/job-roles?limit=10&amp;offset=20"');
     expect(response.text).toContain(

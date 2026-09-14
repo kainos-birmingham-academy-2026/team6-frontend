@@ -1,5 +1,6 @@
 import axios, { AxiosError, type AxiosInstance } from "axios";
 import FormData from "form-data";
+import { BackendRequestError } from "./jobRoleService";
 
 export type ApplicationCvFile = {
   buffer: Buffer;
@@ -10,6 +11,17 @@ export type ApplicationCvFile = {
 export type ApplicationSubmission = {
   jobRoleId: string | number;
   cvFile: ApplicationCvFile;
+};
+
+export type BackendMyApplication = {
+  applicationId: number;
+  applicationStatusName: string;
+  jobRoleId: number;
+  roleName: string;
+  location: string;
+  capabilityName: string;
+  bandName: string;
+  closingDate: string;
 };
 
 type ErrorPayload = {
@@ -48,9 +60,34 @@ export class ApplicationService {
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new Error(
+        throw new BackendRequestError(
           this.extractBackendMessage(error.response?.data) ||
-            "Unable to submit your application right now."
+            "Unable to submit your application right now.",
+          error.response?.status
+        );
+      }
+
+      throw error;
+    }
+  }
+
+  async getMyApplications(token?: string): Promise<BackendMyApplication[]> {
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    try {
+      const response = await this.client.get<BackendMyApplication[]>("/applications", {
+        headers
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new BackendRequestError(
+          this.extractBackendMessage(error.response?.data) ||
+            "Unable to load your applications right now.",
+          error.response?.status
         );
       }
 

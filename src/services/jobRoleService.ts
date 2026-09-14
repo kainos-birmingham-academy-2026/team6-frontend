@@ -56,6 +56,13 @@ export type JobRolePayload = {
   numberOfOpenPositions?: number;
 };
 
+export type JobRoleFilters = {
+  search?: string;
+  capabilities?: string;
+  bands?: string;
+  locations?: string;
+};
+
 type ErrorPayload = {
   error?: string;
   details?: Array<{ message?: string }>;
@@ -68,6 +75,14 @@ export type JobRoleSortColumn =
   | "bandName"
   | "closingDate";
 export type JobRoleSortOrder = "asc" | "desc";
+
+export type JobRoleQueryOptions = {
+  sortBy?: JobRoleSortColumn;
+  sortOrder?: JobRoleSortOrder;
+  limit?: number;
+  offset?: number;
+  filters?: JobRoleFilters;
+};
 
 export class JobRoleService {
   private readonly client: AxiosInstance;
@@ -93,18 +108,65 @@ export class JobRoleService {
     return headers;
   }
 
+  // Drops blank values so an empty filter form doesn't trigger the backend filter path.
+  private normalizeFilters(filters: JobRoleFilters): Record<string, string> {
+    const normalized: Record<string, string> = {};
+
+    const csv = (value?: string) =>
+      value
+        ?.split(",")
+        .map((entry) => entry.trim())
+        .filter(Boolean)
+        .join(",") ?? "";
+
+    const search = filters.search?.trim() ?? "";
+    if (search) {
+      normalized.search = search;
+    }
+
+    const capabilities = csv(filters.capabilities);
+    if (capabilities) {
+      normalized.capabilities = capabilities;
+    }
+
+    const bands = csv(filters.bands);
+    if (bands) {
+      normalized.bands = bands;
+    }
+
+    const locations = csv(filters.locations);
+    if (locations) {
+      normalized.locations = locations;
+    }
+
+    return normalized;
+  }
+
   async getOpenJobRoles(
     token?: string,
-    sortBy?: JobRoleSortColumn,
-    sortOrder?: JobRoleSortOrder,
-    limit = 10,
-    offset = 0
+    options: JobRoleQueryOptions = {}
   ): Promise<BackendJobRolePage> {
+    const { sortBy, sortOrder, limit = 10, offset = 0, filters = {} } = options;
+    const normalizedFilters = this.normalizeFilters(filters);
+    const isFiltering = Object.keys(normalizedFilters).length > 0;
+
     try {
-      const response = await this.client.get<BackendJobRolePage>("/job-roles", {
+      const response = await this.client.get<BackendJobRole[] | BackendJobRolePage>("/job-roles", {
         headers: this.buildAuthHeaders(token),
-        params: { limit, offset, ...(sortBy ? { sortBy, sortOrder } : {}) }
+        params: isFiltering
+          ? normalizedFilters
+          : { limit, offset, ...(sortBy ? { sortBy, sortOrder } : {}) }
       });
+
+      // The backend filter endpoint returns a bare array; normalise it to the paged shape.
+      if (Array.isArray(response.data)) {
+        return {
+          items: response.data,
+          total: response.data.length,
+          limit: response.data.length,
+          offset: 0
+        };
+      }
 
       return response.data;
     } catch (error) {

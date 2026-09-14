@@ -197,7 +197,30 @@ app.get("/bands", (_req, res) => {
 });
 
 app.get("/job-roles", requireAuth, (req, res) => {
-  const roles = rolesForToken(getToken(req));
+  const query = req.query;
+  const values = (value) => String(value || "").split(",").filter(Boolean);
+  const capabilitiesFilter = values(query.capabilities).map(Number);
+  const bandsFilter = values(query.bands).map(Number);
+  const locationsFilter = values(query.locations).map((value) => value.trim().toLowerCase());
+  const search = String(query.search || "").toLowerCase();
+  const isFiltering =
+    Boolean(search) || capabilitiesFilter.length > 0 || bandsFilter.length > 0 || locationsFilter.length > 0;
+
+  const roles = rolesForToken(getToken(req)).filter((role) => {
+    const matchesSearch = !search || `${role.roleName} ${role.location}`.toLowerCase().includes(search);
+    const matchesCapabilities = !capabilitiesFilter.length || capabilitiesFilter.includes(Number(role.capabilityId));
+    const matchesBands = !bandsFilter.length || bandsFilter.includes(Number(role.bandId));
+    const matchesLocations =
+      !locationsFilter.length || locationsFilter.includes(String(role.location).trim().toLowerCase());
+    return matchesSearch && matchesCapabilities && matchesBands && matchesLocations;
+  });
+
+  // Mirrors the real backend: the filter path returns a bare array, the default path is paged.
+  if (isFiltering) {
+    res.json(roles);
+    return;
+  }
+
   const requestedLimit = Number(req.query.limit);
   const requestedOffset = Number(req.query.offset);
   const limit = Number.isInteger(requestedLimit) && requestedLimit > 0 ? requestedLimit : 10;
