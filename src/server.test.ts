@@ -230,7 +230,7 @@ describe("server endpoints", () => {
     expect(response.text).not.toContain("Sign Out");
   });
 
-  it("redirects to login when register succeeds", async () => {
+  it("signs the user in and redirects home when register succeeds", async () => {
     mockedAuthService.register.mockResolvedValue({
       token: "jwt-token",
       user: {
@@ -240,17 +240,21 @@ describe("server endpoints", () => {
       }
     });
 
-    const response = await request(app).post("/register").type("form").send({
+    const agent = request.agent(app);
+    const response = await agent.post("/register").type("form").send({
       email: "new.user@kainos.com",
       password: "Password123!"
     });
 
     expect(response.status).toBe(302);
-    expect(response.headers.location).toBe("/login");
+    expect(response.headers.location).toBe("/");
     expect(mockedAuthService.register).toHaveBeenCalledWith({
       email: "new.user@kainos.com",
       password: "Password123!"
     });
+
+    const home = await agent.get("/");
+    expect(home.text).not.toContain('href="/login" class="nav-link">Login</a>');
   });
 
   it("renders backend validation message when register fails", async () => {
