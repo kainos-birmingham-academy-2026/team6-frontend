@@ -269,13 +269,6 @@ export class ApplicationController {
     const id = Array.isArray(rawId) ? rawId[0] : rawId;
 
     if (!id) {
-  async hireApplication(req: Request, res: Response): Promise<void> {
-    const rawJobRoleId = req.params.jobRoleId || req.params.id;
-    const jobRoleId = Array.isArray(rawJobRoleId) ? rawJobRoleId[0] : rawJobRoleId;
-    const rawAppId = req.params.applicationId || req.params.id;
-    const applicationId = Array.isArray(rawAppId) ? rawAppId[0] : rawAppId;
-
-    if (!jobRoleId || !applicationId) {
       res.redirect("/job-roles");
       return;
     }
@@ -303,8 +296,6 @@ export class ApplicationController {
         applicants: applicantsViewModel,
         hasLoadError: false
       });
-      await applicationService.hireApplication(applicationId, req.session.token);
-      res.redirect(`/job-roles/${jobRoleId}`);
     } catch (error) {
       if (await redirectToLoginOnAuthFailure(error, req, res)) {
         return;
@@ -319,6 +310,48 @@ export class ApplicationController {
     }
   }
 
+  async hireApplication(req: Request, res: Response): Promise<void> {
+    const rawJobRoleId = req.params.jobRoleId;
+    const jobRoleId = Array.isArray(rawJobRoleId) ? rawJobRoleId[0] : rawJobRoleId;
+    const rawApplicationId = req.params.applicationId;
+    const applicationId = Array.isArray(rawApplicationId)
+      ? rawApplicationId[0]
+      : rawApplicationId;
+
+    try {
+      if (applicationId) {
+        await applicationService.hireApplication(applicationId, req.session.token);
+      }
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+    }
+
+    res.redirect(jobRoleId ? `/job-roles/${jobRoleId}` : "/applications");
+  }
+
+  async rejectApplication(req: Request, res: Response): Promise<void> {
+    const rawJobRoleId = req.params.jobRoleId;
+    const jobRoleId = Array.isArray(rawJobRoleId) ? rawJobRoleId[0] : rawJobRoleId;
+    const rawApplicationId = req.params.applicationId;
+    const applicationId = Array.isArray(rawApplicationId)
+      ? rawApplicationId[0]
+      : rawApplicationId;
+
+    try {
+      if (applicationId) {
+        await applicationService.rejectApplication(applicationId, req.session.token);
+      }
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+    }
+
+    res.redirect(jobRoleId ? `/job-roles/${jobRoleId}` : "/applications");
+  }
+
   async hireApplicant(req: Request, res: Response): Promise<void> {
     const rawApplicationId = req.params.applicationId;
     const applicationId = Array.isArray(rawApplicationId)
@@ -328,7 +361,7 @@ export class ApplicationController {
 
     try {
       if (applicationId) {
-        await applicationService.hireApplicant(applicationId, req.session.token);
+        await applicationService.hireApplication(applicationId, req.session.token);
       }
     } catch (error) {
       if (await redirectToLoginOnAuthFailure(error, req, res)) {
@@ -348,26 +381,8 @@ export class ApplicationController {
 
     try {
       if (applicationId) {
-        await applicationService.rejectApplicant(applicationId, req.session.token);
+        await applicationService.rejectApplication(applicationId, req.session.token);
       }
-      res.redirect(`/job-roles/${jobRoleId}`);
-    }
-  }
-
-  async rejectApplication(req: Request, res: Response): Promise<void> {
-    const rawJobRoleId = req.params.jobRoleId || req.params.id;
-    const jobRoleId = Array.isArray(rawJobRoleId) ? rawJobRoleId[0] : rawJobRoleId;
-    const rawAppId = req.params.applicationId || req.params.id;
-    const applicationId = Array.isArray(rawAppId) ? rawAppId[0] : rawAppId;
-
-    if (!jobRoleId || !applicationId) {
-      res.redirect("/job-roles");
-      return;
-    }
-
-    try {
-      await applicationService.rejectApplication(applicationId, req.session.token);
-      res.redirect(`/job-roles/${jobRoleId}`);
     } catch (error) {
       if (await redirectToLoginOnAuthFailure(error, req, res)) {
         return;
@@ -375,8 +390,6 @@ export class ApplicationController {
     }
 
     res.redirect(jobRoleId ? `/job-roles/${jobRoleId}/applicants` : "/applications");
-      res.redirect(`/job-roles/${jobRoleId}`);
-    }
   }
 }
 
