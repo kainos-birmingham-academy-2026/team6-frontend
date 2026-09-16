@@ -5,6 +5,7 @@ import multer from "multer";
 import { authController } from "./controllers/authController";
 import { chatController } from "./controllers/chatController";
 import { jobRoleController } from "./controllers/jobRoleController";
+import { jobRoleMatcherController } from "./controllers/jobRoleMatcherController";
 import { applicationController } from "./controllers/applicationController";
 import "dotenv/config";
 import session from "express-session";
@@ -67,6 +68,16 @@ app.post("/logout", authController.logout.bind(authController));
 app.get("/api/jobRoles", jobRoleController.apiList.bind(jobRoleController));
 app.post("/chat", chatController.ask.bind(chatController));
 app.get("/job-roles", jobRoleController.list.bind(jobRoleController));
+app.get(
+  "/job-role-matcher",
+  requireAuth,
+  jobRoleMatcherController.showQuestionnaire.bind(jobRoleMatcherController)
+);
+app.post(
+  "/job-role-matcher",
+  requireAuth,
+  jobRoleMatcherController.submitAnswers.bind(jobRoleMatcherController)
+);
 app.get("/job-roles/add", requireAdmin, jobRoleController.showAddForm.bind(jobRoleController));
 app.post("/job-roles/add", requireAdmin, jobRoleController.createRole.bind(jobRoleController));
 app.get(

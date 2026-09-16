@@ -55,6 +55,18 @@
         <p class="message message-error">Unable to load job roles right now. Please try again later.</p>
         {% endif %}
 
+        <section class="matcher-banner reveal">
+          <div class="matcher-banner-copy">
+            <p class="eyebrow">Not sure where to start?</p>
+            <h2>Not sure what role suits you?</h2>
+            <p class="section-lede">
+              Answer a few quick questions and we'll suggest the capabilities and open roles that
+              best match you.
+            </p>
+          </div>
+          <a href="/job-role-matcher" class="primary-link primary-link-solid">Take the quiz</a>
+        </section>
+
         {% if jobRoles and jobRoles.length > 0 %}
         <div class="role-toolbar reveal" data-role-filters>
           <div class="role-search">
