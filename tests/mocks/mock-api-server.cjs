@@ -234,6 +234,38 @@ app.get("/job-roles", requireAuth, (req, res) => {
   });
 });
 
+const matcherQuestions = [
+  { questionId: 1, text: "I enjoy building and maintaining technical systems.", capabilityName: "Engineering" },
+  { questionId: 2, text: "I enjoy understanding business problems and proposing solutions.", capabilityName: "Data & AI" }
+];
+
+app.get("/job-role-matcher/questions", requireAuth, (_req, res) => {
+  res.json(matcherQuestions);
+});
+
+app.post("/job-role-matcher/submit", requireAuth, (req, res) => {
+  const answers = Array.isArray(req.body.answers) ? req.body.answers : [];
+  const scores = { Engineering: 0, "Data & AI": 0 };
+
+  for (const answer of answers) {
+    const question = matcherQuestions.find((entry) => entry.questionId === answer.questionId);
+    if (question) {
+      scores[question.capabilityName] += answer.agreement;
+    }
+  }
+
+  const recommendations = Object.entries(scores)
+    .map(([capabilityName, score]) => ({ capabilityName, score }))
+    .sort((a, b) => b.score - a.score);
+
+  const topCapability = recommendations[0].capabilityName;
+  const matchingRoles = rolesForToken(getToken(req)).filter(
+    (role) => role.capabilityName === topCapability
+  );
+
+  res.json({ recommendations, matchingRoles });
+});
+
 app.get("/job-roles/:id", requireAuth, (req, res) => {
   const id = String(req.params.id);
   const roles = rolesForToken(getToken(req));
@@ -325,14 +357,54 @@ app.post("/job-roles/:id/apply", requireAuth, upload.single("cv"), (req, res) =>
     return;
   }
 
-  applications.push({
+  const newApp = {
+    applicationId: applications.length + 1,
+    userId: 100,
+    email: "candidate@kainos.com",
     jobRoleId: Number(id),
+    applicationStatusName: "in progress",
     fileName: req.file.originalname,
     mimeType: req.file.mimetype,
     size: req.file.size
-  });
+  };
+  applications.push(newApp);
 
   res.status(201).json({ message: "Application submitted" });
+});
+
+app.get("/job-roles/:id/applications", requireAdmin, (req, res) => {
+  const id = Number(req.params.id);
+  const roleApps = applications.filter((app) => app.jobRoleId === id);
+  res.json(roleApps);
+});
+
+app.post("/applications/:id/hire", requireAdmin, (req, res) => {
+  const appId = Number(req.params.id);
+  const app = applications.find((a) => a.applicationId === appId);
+  if (!app) {
+    res.status(404).json({ message: "Application not found" });
+    return;
+  }
+  app.applicationStatusName = "hired";
+
+  const role = sharedRoles.find((r) => r.jobRoleId === app.jobRoleId);
+  if (role && typeof role.numberOfOpenPositions === "number") {
+    role.numberOfOpenPositions = Math.max(0, role.numberOfOpenPositions - 1);
+  }
+
+  res.json({ applicationId: appId, status: "hired" });
+});
+
+app.post("/applications/:id/reject", requireAdmin, (req, res) => {
+  const appId = Number(req.params.id);
+  const app = applications.find((a) => a.applicationId === appId);
+  if (!app) {
+    res.status(404).json({ message: "Application not found" });
+    return;
+  }
+  app.applicationStatusName = "rejected";
+
+  res.json({ applicationId: appId, status: "rejected" });
 });
 
 const port = 4010;

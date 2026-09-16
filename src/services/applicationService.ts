@@ -1,6 +1,9 @@
 import axios, { AxiosError, type AxiosInstance } from "axios";
 import FormData from "form-data";
 import { BackendRequestError } from "./jobRoleService";
+import { ApplicationStatus, ApplicationStatusEnum } from "../models/applicationStatus";
+
+export { ApplicationStatus, ApplicationStatusEnum };
 
 export type ApplicationCvFile = {
   buffer: Buffer;
@@ -25,6 +28,7 @@ export type BackendMyApplication = {
 };
 
 export type BackendAdminApplication = {
+export type RoleApplicant = {
   applicationId: number;
   userId: number;
   email: string;
@@ -39,6 +43,7 @@ export type BackendJobRoleApplicant = {
   email: string;
   applicationStatusName: string;
   cv: string;
+  cv?: string;
 };
 
 type ErrorPayload = {
@@ -141,6 +146,10 @@ export class ApplicationService {
     jobRoleId: string | number,
     token?: string
   ): Promise<BackendJobRoleApplicant[]> {
+  async getApplicationsByJobRoleId(
+    jobRoleId: string | number,
+    token?: string
+  ): Promise<RoleApplicant[]> {
     const headers: Record<string, string> = {};
     if (token) {
       headers.Authorization = `Bearer ${token}`;
@@ -150,6 +159,11 @@ export class ApplicationService {
       const response = await this.client.get<BackendJobRoleApplicant[]>(
         `/applications/job-role/${jobRoleId}`,
         { headers }
+      const response = await this.client.get<RoleApplicant[]>(
+        `/job-roles/${jobRoleId}/applications`,
+        {
+          headers
+        }
       );
       return response.data;
     } catch (error) {
@@ -157,6 +171,7 @@ export class ApplicationService {
         throw new BackendRequestError(
           this.extractBackendMessage(error.response?.data) ||
             "Unable to load applicants for this role right now.",
+            "Unable to load applications for this job role right now.",
           error.response?.status
         );
       }
@@ -166,6 +181,7 @@ export class ApplicationService {
   }
 
   async hireApplicant(applicationId: string | number, token?: string): Promise<void> {
+  async hireApplication(applicationId: string | number, token?: string): Promise<void> {
     const headers: Record<string, string> = {};
     if (token) {
       headers.Authorization = `Bearer ${token}`;
@@ -177,6 +193,8 @@ export class ApplicationService {
       if (error instanceof AxiosError) {
         throw new BackendRequestError(
           this.extractBackendMessage(error.response?.data) || "Unable to hire this applicant.",
+          this.extractBackendMessage(error.response?.data) ||
+            "Unable to hire this applicant right now.",
           error.response?.status
         );
       }
@@ -186,6 +204,7 @@ export class ApplicationService {
   }
 
   async rejectApplicant(applicationId: string | number, token?: string): Promise<void> {
+  async rejectApplication(applicationId: string | number, token?: string): Promise<void> {
     const headers: Record<string, string> = {};
     if (token) {
       headers.Authorization = `Bearer ${token}`;
@@ -197,6 +216,8 @@ export class ApplicationService {
       if (error instanceof AxiosError) {
         throw new BackendRequestError(
           this.extractBackendMessage(error.response?.data) || "Unable to reject this applicant.",
+          this.extractBackendMessage(error.response?.data) ||
+            "Unable to reject this applicant right now.",
           error.response?.status
         );
       }

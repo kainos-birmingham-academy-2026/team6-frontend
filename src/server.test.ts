@@ -36,7 +36,10 @@ vi.mock("./services/authService", () => ({
 vi.mock("./services/applicationService", () => ({
   applicationService: {
     submitApplication: vi.fn(),
-    getMyApplications: vi.fn().mockResolvedValue([])
+    getMyApplications: vi.fn().mockResolvedValue([]),
+    getApplicationsByJobRoleId: vi.fn().mockResolvedValue([]),
+    hireApplication: vi.fn(),
+    rejectApplication: vi.fn()
   }
 }));
 
@@ -778,5 +781,93 @@ describe("server endpoints", () => {
     expect(response.status).toBe(302);
     expect(response.headers.location).toBe("/login");
     expect(mockedApplicationService.submitApplication).not.toHaveBeenCalled();
+  });
+
+  it("renders applicants list with hire and reject links for an admin when applications are in progress", async () => {
+    mockedJobRoleService.getJobRoleById.mockResolvedValue({
+      jobRoleId: 1,
+      roleName: "Backend Developer",
+      statusName: "open",
+      numberOfOpenPositions: 2
+    });
+    mockedApplicationService.getApplicationsByJobRoleId.mockResolvedValue([
+      {
+        applicationId: 10,
+        userId: 100,
+        email: "candidate1@example.com",
+        applicationStatusName: "in progress"
+      },
+      {
+        applicationId: 11,
+        userId: 101,
+        email: "candidate2@example.com",
+        applicationStatusName: "hired"
+      }
+    ]);
+
+    const agent = await loginAgent();
+    const response = await agent.get("/job-roles/1");
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Applicants");
+    expect(response.text).toContain("candidate1@example.com");
+    expect(response.text).toContain("In Progress");
+    expect(response.text).toContain('href="/job-roles/1/applications/10/hire"');
+    expect(response.text).toContain('href="/job-roles/1/applications/10/reject"');
+    expect(response.text).toContain("confirm('Are you sure you want to hire this applicant?')");
+    expect(response.text).toContain("confirm('Are you sure you want to reject this applicant?')");
+    expect(response.text).toContain("candidate2@example.com");
+    expect(response.text).toContain("Hired");
+    expect(response.text).not.toContain('href="/job-roles/1/applications/11/hire"');
+  });
+
+  it("does not display applicants list for non-admin users", async () => {
+    mockedJobRoleService.getJobRoleById.mockResolvedValue({
+      jobRoleId: 1,
+      roleName: "Backend Developer",
+      statusName: "open",
+      numberOfOpenPositions: 2
+    });
+
+    const agent = await loginAsCandidateAgent();
+    const response = await agent.get("/job-roles/1");
+
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain("Applicants");
+    expect(mockedApplicationService.getApplicationsByJobRoleId).not.toHaveBeenCalled();
+  });
+
+  it("allows admin to hire an applicant and redirects to job role details", async () => {
+    mockedApplicationService.hireApplication.mockResolvedValue(undefined);
+    const agent = await loginAgent();
+
+    const response = await agent.get("/job-roles/1/applications/10/hire");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles/1");
+    expect(mockedApplicationService.hireApplication).toHaveBeenCalledWith("10", "jwt-token");
+  });
+
+  it("allows admin to reject an applicant and redirects to job role details", async () => {
+    mockedApplicationService.rejectApplication.mockResolvedValue(undefined);
+    const agent = await loginAgent();
+
+    const response = await agent.get("/job-roles/1/applications/10/reject");
+
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe("/job-roles/1");
+    expect(mockedApplicationService.rejectApplication).toHaveBeenCalledWith("10", "jwt-token");
+  });
+
+  it("redirects non-admin away from hiring or rejecting applicants", async () => {
+    const candidateAgent = await loginAsCandidateAgent();
+
+    const hireResponse = await candidateAgent.get("/job-roles/1/applications/10/hire");
+    expect(hireResponse.status).toBe(302);
+    expect(hireResponse.headers.location).toBe("/login");
+
+    const rejectResponse = await candidateAgent.get("/job-roles/1/applications/10/reject");
+    expect(rejectResponse.status).toBe(302);
+    expect(rejectResponse.headers.location).toBe("/login");
   });
 });

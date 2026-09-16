@@ -269,6 +269,13 @@ export class ApplicationController {
     const id = Array.isArray(rawId) ? rawId[0] : rawId;
 
     if (!id) {
+  async hireApplication(req: Request, res: Response): Promise<void> {
+    const rawJobRoleId = req.params.jobRoleId || req.params.id;
+    const jobRoleId = Array.isArray(rawJobRoleId) ? rawJobRoleId[0] : rawJobRoleId;
+    const rawAppId = req.params.applicationId || req.params.id;
+    const applicationId = Array.isArray(rawAppId) ? rawAppId[0] : rawAppId;
+
+    if (!jobRoleId || !applicationId) {
       res.redirect("/job-roles");
       return;
     }
@@ -296,6 +303,8 @@ export class ApplicationController {
         applicants: applicantsViewModel,
         hasLoadError: false
       });
+      await applicationService.hireApplication(applicationId, req.session.token);
+      res.redirect(`/job-roles/${jobRoleId}`);
     } catch (error) {
       if (await redirectToLoginOnAuthFailure(error, req, res)) {
         return;
@@ -341,6 +350,24 @@ export class ApplicationController {
       if (applicationId) {
         await applicationService.rejectApplicant(applicationId, req.session.token);
       }
+      res.redirect(`/job-roles/${jobRoleId}`);
+    }
+  }
+
+  async rejectApplication(req: Request, res: Response): Promise<void> {
+    const rawJobRoleId = req.params.jobRoleId || req.params.id;
+    const jobRoleId = Array.isArray(rawJobRoleId) ? rawJobRoleId[0] : rawJobRoleId;
+    const rawAppId = req.params.applicationId || req.params.id;
+    const applicationId = Array.isArray(rawAppId) ? rawAppId[0] : rawAppId;
+
+    if (!jobRoleId || !applicationId) {
+      res.redirect("/job-roles");
+      return;
+    }
+
+    try {
+      await applicationService.rejectApplication(applicationId, req.session.token);
+      res.redirect(`/job-roles/${jobRoleId}`);
     } catch (error) {
       if (await redirectToLoginOnAuthFailure(error, req, res)) {
         return;
@@ -348,6 +375,8 @@ export class ApplicationController {
     }
 
     res.redirect(jobRoleId ? `/job-roles/${jobRoleId}/applicants` : "/applications");
+      res.redirect(`/job-roles/${jobRoleId}`);
+    }
   }
 }
 

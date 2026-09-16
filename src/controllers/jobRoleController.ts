@@ -130,6 +130,22 @@ const formatDateToDayMonthYear = (value?: string): string => {
   return `${day}/${month}/${year}`;
 };
 
+const APPLICATION_STATUS_STYLES: Record<string, { label: string; className: string }> = {
+  "in progress": { label: "In Progress", className: "status-pill-progress" },
+  hired: { label: "Hired", className: "status-pill-success" },
+  rejected: { label: "Rejected", className: "status-pill-danger" }
+};
+
+const applicationStatusDisplay = (statusName?: string): { label: string; className: string } => {
+  const normalized = (statusName || "").toLowerCase().trim();
+  return (
+    APPLICATION_STATUS_STYLES[normalized] || {
+      label: statusName || "N/A",
+      className: "status-pill-progress"
+    }
+  );
+};
+
 const CAPABILITY_ICONS: Record<string, string> = {
   engineering: "</>",
   "software engineering": "</>",
@@ -442,8 +458,42 @@ export class JobRoleController {
         canApply: roleStatus === "open" && (role.numberOfOpenPositions ?? 0) > 0 && !alreadyApplied
       };
 
+      let applications: Array<{
+        applicationId: number;
+        userId: number;
+        email: string;
+        applicationStatusName: string;
+        statusLabel: string;
+        statusClass: string;
+        isInProgress: boolean;
+      }> = [];
+
+      const isAdmin = req.session.user?.role === "admin";
+      if (isAdmin && req.session.token) {
+        try {
+          const rawApps = await applicationService.getApplicationsByJobRoleId(
+            id,
+            req.session.token
+          );
+          applications = rawApps.map((app) => {
+            const status = applicationStatusDisplay(app.applicationStatusName);
+            const isInProgress =
+              (app.applicationStatusName || "").trim().toLowerCase() === "in progress";
+            return {
+              ...app,
+              statusLabel: status.label,
+              statusClass: status.className,
+              isInProgress
+            };
+          });
+        } catch (_err) {
+          // Keep applications empty on fetch failure
+        }
+      }
+
       res.render("job-role-information.html", {
         jobRole: jobRoleViewModel,
+        applications,
         hasLoadError: false,
         hasNotFoundError: false
       });
