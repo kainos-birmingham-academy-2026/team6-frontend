@@ -73,6 +73,11 @@ const isRoleOpenForApplications = (role: {
 
 export class ApplicationController {
   async showApplyForm(req: Request, res: Response): Promise<void> {
+    if (req.session.user?.role === "admin") {
+      res.redirect("/job-roles");
+      return;
+    }
+
     const rawId = req.params.id;
     const id = Array.isArray(rawId) ? rawId[0] : rawId;
 
@@ -118,6 +123,11 @@ export class ApplicationController {
   }
 
   async submitApplication(req: Request, res: Response): Promise<void> {
+    if (req.session.user?.role === "admin") {
+      res.redirect("/job-roles");
+      return;
+    }
+
     const rawId = req.params.id;
     const id = Array.isArray(rawId) ? rawId[0] : rawId;
 
@@ -187,6 +197,11 @@ export class ApplicationController {
   }
 
   async listMyApplications(req: Request, res: Response): Promise<void> {
+    if (req.session.user?.role === "admin") {
+      await this.listAllApplications(req, res);
+      return;
+    }
+
     try {
       const applications = await applicationService.getMyApplications(req.session.token);
 
@@ -216,6 +231,123 @@ export class ApplicationController {
         hasLoadError: true
       });
     }
+  }
+
+  private async listAllApplications(req: Request, res: Response): Promise<void> {
+    try {
+      const applications = await applicationService.getAllApplications(req.session.token);
+
+      const applicationsViewModel = applications.map((application) => {
+        const status = applicationStatusDisplay(application.applicationStatusName);
+
+        return {
+          ...application,
+          statusLabel: status.label,
+          statusClass: status.className,
+          isInProgress: application.applicationStatusName.toLowerCase() === "in progress"
+        };
+      });
+
+      res.render("admin-applications.html", {
+        applications: applicationsViewModel,
+        hasLoadError: false
+      });
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+
+      res.status(502).render("admin-applications.html", {
+        applications: [],
+        hasLoadError: true
+      });
+    }
+  }
+
+  async listApplicantsForJobRole(req: Request, res: Response): Promise<void> {
+    const rawId = req.params.id;
+    const id = Array.isArray(rawId) ? rawId[0] : rawId;
+
+    if (!id) {
+      res.redirect("/job-roles");
+      return;
+    }
+
+    try {
+      const [role, applicants] = await Promise.all([
+        jobRoleService.getJobRoleById(id, req.session.token),
+        applicationService.getApplicationsByJobRoleId(id, req.session.token)
+      ]);
+
+      const applicantsViewModel = applicants.map((applicant) => {
+        const status = applicationStatusDisplay(applicant.applicationStatusName);
+
+        return {
+          ...applicant,
+          statusLabel: status.label,
+          statusClass: status.className,
+          isInProgress: applicant.applicationStatusName.toLowerCase() === "in progress"
+        };
+      });
+
+      res.render("job-role-applicants.html", {
+        jobRoleId: id,
+        roleName: role.roleName || "",
+        applicants: applicantsViewModel,
+        hasLoadError: false
+      });
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+
+      res.status(502).render("job-role-applicants.html", {
+        jobRoleId: id,
+        roleName: "",
+        applicants: [],
+        hasLoadError: true
+      });
+    }
+  }
+
+  async hireApplicant(req: Request, res: Response): Promise<void> {
+    const rawApplicationId = req.params.applicationId;
+    const applicationId = Array.isArray(rawApplicationId)
+      ? rawApplicationId[0]
+      : rawApplicationId;
+    const jobRoleId = req.body?.jobRoleId;
+
+    try {
+      if (applicationId) {
+        await applicationService.hireApplicant(applicationId, req.session.token);
+      }
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+    }
+
+    res.redirect(jobRoleId ? `/job-roles/${jobRoleId}/applicants` : "/applications");
+  }
+
+  async rejectApplicant(req: Request, res: Response): Promise<void> {
+    const rawApplicationId = req.params.applicationId;
+    const applicationId = Array.isArray(rawApplicationId)
+      ? rawApplicationId[0]
+      : rawApplicationId;
+    const jobRoleId = req.body?.jobRoleId;
+
+    try {
+      if (applicationId) {
+        await applicationService.rejectApplicant(applicationId, req.session.token);
+      }
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+    }
+
+    res.redirect(jobRoleId ? `/job-roles/${jobRoleId}/applicants` : "/applications");
   }
 }
 

@@ -18,7 +18,7 @@
           <a href="/" class="nav-link">Home</a>
           <a href="/job-roles" class="nav-link nav-link-active">Job Roles</a>
           {% if isAuthenticated %}
-          <a href="/applications" class="nav-link">My Applications</a>
+          <a href="/applications" class="nav-link">{% if isAdmin %}View Applications{% else %}My Applications{% endif %}</a>
           <form action="/logout" method="post" class="nav-inline-form">
             <button type="submit" class="nav-link nav-link-button">Sign Out</button>
           </form>

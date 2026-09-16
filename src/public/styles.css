@@ -498,6 +498,19 @@ th {
   color: var(--kainos-blue);
 }
 
+.applicants-table {
+  margin-top: 16px;
+  background: var(--kainos-white);
+  border: 1px solid var(--kainos-line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.applicants-table .nav-inline-form {
+  display: inline-block;
+  margin-right: 8px;
+}
+
 tbody tr:nth-child(even) {
   background: #fafcff;
 }

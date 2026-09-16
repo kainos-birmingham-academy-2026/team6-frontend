@@ -24,6 +24,23 @@ export type BackendMyApplication = {
   closingDate: string;
 };
 
+export type BackendAdminApplication = {
+  applicationId: number;
+  userId: number;
+  email: string;
+  applicationStatusName: string;
+  jobRoleId: number;
+  roleName: string;
+};
+
+export type BackendJobRoleApplicant = {
+  applicationId: number;
+  userId: number;
+  email: string;
+  applicationStatusName: string;
+  cv: string;
+};
+
 type ErrorPayload = {
   error?: string;
   message?: string;
@@ -87,6 +104,99 @@ export class ApplicationService {
         throw new BackendRequestError(
           this.extractBackendMessage(error.response?.data) ||
             "Unable to load your applications right now.",
+          error.response?.status
+        );
+      }
+
+      throw error;
+    }
+  }
+
+  // Same endpoint as getMyApplications, but returns every applicant when called as an admin.
+  async getAllApplications(token?: string): Promise<BackendAdminApplication[]> {
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    try {
+      const response = await this.client.get<BackendAdminApplication[]>("/applications", {
+        headers
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new BackendRequestError(
+          this.extractBackendMessage(error.response?.data) ||
+            "Unable to load applications right now.",
+          error.response?.status
+        );
+      }
+
+      throw error;
+    }
+  }
+
+  async getApplicationsByJobRoleId(
+    jobRoleId: string | number,
+    token?: string
+  ): Promise<BackendJobRoleApplicant[]> {
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    try {
+      const response = await this.client.get<BackendJobRoleApplicant[]>(
+        `/applications/job-role/${jobRoleId}`,
+        { headers }
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new BackendRequestError(
+          this.extractBackendMessage(error.response?.data) ||
+            "Unable to load applicants for this role right now.",
+          error.response?.status
+        );
+      }
+
+      throw error;
+    }
+  }
+
+  async hireApplicant(applicationId: string | number, token?: string): Promise<void> {
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    try {
+      await this.client.post(`/applications/${applicationId}/hire`, {}, { headers });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new BackendRequestError(
+          this.extractBackendMessage(error.response?.data) || "Unable to hire this applicant.",
+          error.response?.status
+        );
+      }
+
+      throw error;
+    }
+  }
+
+  async rejectApplicant(applicationId: string | number, token?: string): Promise<void> {
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    try {
+      await this.client.post(`/applications/${applicationId}/reject`, {}, { headers });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new BackendRequestError(
+          this.extractBackendMessage(error.response?.data) || "Unable to reject this applicant.",
           error.response?.status
         );
       }

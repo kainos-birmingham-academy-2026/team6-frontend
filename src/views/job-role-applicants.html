@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Application Submitted | Kainos Careers</title>
+    <title>Applicants | Kainos Careers</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
@@ -30,17 +30,46 @@
     </header>
 
     <main class="container page-content">
-      <h1>Application Submitted</h1>
+      <h1>Applicants{% if roleName %} for {{ roleName }}{% endif %}</h1>
+      <p><a href="/job-roles/{{ jobRoleId }}" class="primary-link">Back to Role</a></p>
 
-      <div class="card job-role-form-panel">
-        <p class="auth-message auth-message-success">
-          Your application has been received and is now in progress.
-        </p>
-        <div class="form-actions">
-          <a href="/job-roles" class="primary-link">Back to Job Roles</a>
-          <a href="/job-roles/{{ jobRoleId }}" class="btn-secondary-link">View Role</a>
-        </div>
-      </div>
+      {% if hasLoadError %}
+      <p class="message message-error">Unable to load applicants right now. Please try again later.</p>
+      {% elif applicants and applicants.length > 0 %}
+      <table class="applicants-table">
+        <thead>
+          <tr>
+            <th>Applicant Email</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for applicant in applicants %}
+          <tr>
+            <td>{{ applicant.email }}</td>
+            <td><span class="status-pill {{ applicant.statusClass }}">{{ applicant.statusLabel }}</span></td>
+            <td>
+              {% if applicant.isInProgress %}
+              <form action="/applications/{{ applicant.applicationId }}/hire" method="post" class="nav-inline-form">
+                <input type="hidden" name="jobRoleId" value="{{ jobRoleId }}" />
+                <button type="submit" class="admin-btn">Hire</button>
+              </form>
+              <form action="/applications/{{ applicant.applicationId }}/reject" method="post" class="nav-inline-form">
+                <input type="hidden" name="jobRoleId" value="{{ jobRoleId }}" />
+                <button type="submit" class="admin-btn admin-btn-danger">Reject</button>
+              </form>
+              {% else %}
+              <span>&mdash;</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="message">No one has applied for this role yet.</p>
+      {% endif %}
     </main>
 
     <footer class="site-footer">
@@ -57,5 +86,7 @@
         </div>
       </div>
     </footer>
+    {% include "_chat-widget.njk" %}
+
   </body>
 </html>
