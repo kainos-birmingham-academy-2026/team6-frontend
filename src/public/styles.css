@@ -2504,6 +2504,10 @@ tbody tr:hover {
   margin-top: 1.6rem;
 }
 
+.matcher-nav [hidden] {
+  display: none;
+}
+
 .matcher-nav button {
   font: inherit;
 }
@@ -2518,6 +2522,17 @@ tbody tr:hover {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid rgba(40, 53, 131, 0.18);
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    var(--kainos-dark-green),
+    var(--kainos-green),
+    var(--kainos-mid-blue),
+    var(--kainos-blue)
+  );
+  box-shadow: 0 18px 40px rgba(40, 53, 131, 0.18);
 }
 
 .matcher-result-card {
@@ -2525,6 +2540,7 @@ tbody tr:hover {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  min-height: 250px;
 }
 
 .matcher-result-card h2 {
@@ -2542,11 +2558,17 @@ tbody tr:hover {
 
 .matcher-result-primary {
   border-color: var(--kainos-blue);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(239, 248, 235, 0.96));
   box-shadow: 0 18px 34px rgba(40, 53, 131, 0.16);
 }
 
 .matcher-result-primary .featured-badge {
   align-self: flex-start;
+}
+
+.matcher-result-card .card-cta {
+  margin-top: auto;
 }
 
 .matcher-roles-heading {
@@ -2561,8 +2583,13 @@ tbody tr:hover {
 .matcher-results-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.8rem;
   margin-top: 1.6rem;
+}
+
+.matcher-results-actions .primary-link {
+  margin-top: 0;
 }
 
 /* Job roles chatbot widget */

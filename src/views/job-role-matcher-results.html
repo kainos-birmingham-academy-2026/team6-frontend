@@ -42,11 +42,6 @@
             Your answers suggest {{ recommendation.capabilityName }} could be a strong fit for the
             kind of work you enjoy.
           </p>
-          <a
-            href="/job-roles?capabilities={{ recommendation.capabilityName | urlencode }}"
-            class="card-cta"
-            >View {{ recommendation.capabilityName }} roles</a
-          >
         </article>
         {% endfor %}
       </div>
