@@ -325,14 +325,54 @@ app.post("/job-roles/:id/apply", requireAuth, upload.single("cv"), (req, res) =>
     return;
   }
 
-  applications.push({
+  const newApp = {
+    applicationId: applications.length + 1,
+    userId: 100,
+    email: "candidate@kainos.com",
     jobRoleId: Number(id),
+    applicationStatusName: "in progress",
     fileName: req.file.originalname,
     mimeType: req.file.mimetype,
     size: req.file.size
-  });
+  };
+  applications.push(newApp);
 
   res.status(201).json({ message: "Application submitted" });
+});
+
+app.get("/job-roles/:id/applications", requireAdmin, (req, res) => {
+  const id = Number(req.params.id);
+  const roleApps = applications.filter((app) => app.jobRoleId === id);
+  res.json(roleApps);
+});
+
+app.post("/applications/:id/hire", requireAdmin, (req, res) => {
+  const appId = Number(req.params.id);
+  const app = applications.find((a) => a.applicationId === appId);
+  if (!app) {
+    res.status(404).json({ message: "Application not found" });
+    return;
+  }
+  app.applicationStatusName = "hired";
+
+  const role = sharedRoles.find((r) => r.jobRoleId === app.jobRoleId);
+  if (role && typeof role.numberOfOpenPositions === "number") {
+    role.numberOfOpenPositions = Math.max(0, role.numberOfOpenPositions - 1);
+  }
+
+  res.json({ applicationId: appId, status: "hired" });
+});
+
+app.post("/applications/:id/reject", requireAdmin, (req, res) => {
+  const appId = Number(req.params.id);
+  const app = applications.find((a) => a.applicationId === appId);
+  if (!app) {
+    res.status(404).json({ message: "Application not found" });
+    return;
+  }
+  app.applicationStatusName = "rejected";
+
+  res.json({ applicationId: appId, status: "rejected" });
 });
 
 const port = 4010;

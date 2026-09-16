@@ -217,6 +217,50 @@ export class ApplicationController {
       });
     }
   }
+
+  async hireApplication(req: Request, res: Response): Promise<void> {
+    const rawJobRoleId = req.params.jobRoleId || req.params.id;
+    const jobRoleId = Array.isArray(rawJobRoleId) ? rawJobRoleId[0] : rawJobRoleId;
+    const rawAppId = req.params.applicationId || req.params.id;
+    const applicationId = Array.isArray(rawAppId) ? rawAppId[0] : rawAppId;
+
+    if (!jobRoleId || !applicationId) {
+      res.redirect("/job-roles");
+      return;
+    }
+
+    try {
+      await applicationService.hireApplication(applicationId, req.session.token);
+      res.redirect(`/job-roles/${jobRoleId}`);
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+      res.redirect(`/job-roles/${jobRoleId}`);
+    }
+  }
+
+  async rejectApplication(req: Request, res: Response): Promise<void> {
+    const rawJobRoleId = req.params.jobRoleId || req.params.id;
+    const jobRoleId = Array.isArray(rawJobRoleId) ? rawJobRoleId[0] : rawJobRoleId;
+    const rawAppId = req.params.applicationId || req.params.id;
+    const applicationId = Array.isArray(rawAppId) ? rawAppId[0] : rawAppId;
+
+    if (!jobRoleId || !applicationId) {
+      res.redirect("/job-roles");
+      return;
+    }
+
+    try {
+      await applicationService.rejectApplication(applicationId, req.session.token);
+      res.redirect(`/job-roles/${jobRoleId}`);
+    } catch (error) {
+      if (await redirectToLoginOnAuthFailure(error, req, res)) {
+        return;
+      }
+      res.redirect(`/job-roles/${jobRoleId}`);
+    }
+  }
 }
 
 export const applicationController = new ApplicationController();
