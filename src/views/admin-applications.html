@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>My Applications | Kainos Careers</title>
+    <title>View Applications | Kainos Careers</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
@@ -18,7 +18,7 @@
           <a href="/" class="nav-link">Home</a>
           <a href="/job-roles" class="nav-link">Job Roles</a>
           {% if isAuthenticated %}
-          <a href="/applications" class="nav-link nav-link-active">{% if isAdmin %}View Applications{% else %}My Applications{% endif %}</a>
+          <a href="/applications" class="nav-link nav-link-active">View Applications</a>
           <form action="/logout" method="post" class="nav-inline-form">
             <button type="submit" class="nav-link nav-link-button">Sign Out</button>
           </form>
@@ -37,10 +37,10 @@
         </div>
         <div class="container page-hero-inner">
           <div>
-            <p class="eyebrow eyebrow-dark">Your Applications</p>
-            <h1>My Applications</h1>
+            <p class="eyebrow eyebrow-dark">Applications</p>
+            <h1>All Applications</h1>
             <p class="section-lede">
-              Keep track of every role you've applied for and see where each application stands.
+              Review every candidate who has applied across all job roles.
             </p>
           </div>
         </div>
@@ -48,40 +48,45 @@
 
       <div class="container page-content">
         {% if hasLoadError %}
-        <p class="message message-error">Unable to load your applications right now. Please try again later.</p>
+        <p class="message message-error">Unable to load applications right now. Please try again later.</p>
         {% endif %}
 
         {% if applications and applications.length > 0 %}
-        <div class="role-grid">
-          {% for application in applications %}
-          <article class="role-card {{ application.accentClass }} reveal">
-            <div class="role-card-head">
-              <p class="role-card-cap">{{ application.capabilityName }}</p>
-            </div>
-            <div class="role-card-body">
-              <h2 class="role-card-title">
-                <a href="/job-roles/{{ application.jobRoleId }}" class="role-name-link">{{ application.roleName }}</a>
-              </h2>
-              <p class="role-card-meta">
-                <span class="status-pill {{ application.statusClass }}">{{ application.statusLabel }}</span>
-                <span class="pill pill-band">{{ application.bandName }}</span>
-              </p>
-              <p class="role-card-meta">
-                <span class="role-card-location">{{ application.location }}</span>
-              </p>
-            </div>
-            <div class="role-card-foot">
-              <p class="closing">Closes {{ application.closingDateDisplay }}</p>
-              <a href="/job-roles/{{ application.jobRoleId }}" class="card-cta">View Role</a>
-            </div>
-          </article>
-          {% endfor %}
-        </div>
+        <table class="applicants-table">
+          <thead>
+            <tr>
+              <th>Applicant Email</th>
+              <th>Job Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for application in applications %}
+            <tr>
+              <td>{{ application.email }}</td>
+              <td><a href="/job-roles/{{ application.jobRoleId }}">{{ application.roleName }}</a></td>
+              <td><span class="status-pill {{ application.statusClass }}">{{ application.statusLabel }}</span></td>
+              <td>
+                {% if application.isInProgress %}
+                <form action="/applications/{{ application.applicationId }}/hire" method="post" class="nav-inline-form">
+                  <input type="hidden" name="jobRoleId" value="{{ application.jobRoleId }}" />
+                  <button type="submit" class="admin-btn">Hire</button>
+                </form>
+                <form action="/applications/{{ application.applicationId }}/reject" method="post" class="nav-inline-form">
+                  <input type="hidden" name="jobRoleId" value="{{ application.jobRoleId }}" />
+                  <button type="submit" class="admin-btn admin-btn-danger">Reject</button>
+                </form>
+                {% else %}
+                <span>&mdash;</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
         {% else %}
-        <p class="message">
-          You haven't applied for any roles yet.
-          <a href="/job-roles" class="primary-link">Browse open job roles</a>
-        </p>
+        <p class="message">No applications have been submitted yet.</p>
         {% endif %}
       </div>
     </main>

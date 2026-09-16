@@ -132,6 +132,21 @@ app.get(
   requireAuth,
   applicationController.listMyApplications.bind(applicationController)
 );
+app.get(
+  "/job-roles/:id/applicants",
+  requireAdmin,
+  applicationController.listApplicantsForJobRole.bind(applicationController)
+);
+app.post(
+  "/applications/:applicationId/hire",
+  requireAdmin,
+  applicationController.hireApplicant.bind(applicationController)
+);
+app.post(
+  "/applications/:applicationId/reject",
+  requireAdmin,
+  applicationController.rejectApplicant.bind(applicationController)
+);
 app.get("/job-roles/:id", jobRoleController.getById);
 
 app.get("/health", (_req, res) => {

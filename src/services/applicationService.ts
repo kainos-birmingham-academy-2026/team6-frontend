@@ -27,6 +27,15 @@ export type BackendMyApplication = {
   closingDate: string;
 };
 
+export type BackendAdminApplication = {
+  applicationId: number;
+  userId: number;
+  email: string;
+  applicationStatusName: string;
+  jobRoleId: number;
+  roleName: string;
+};
+
 export type RoleApplicant = {
   applicationId: number;
   userId: number;
@@ -106,6 +115,31 @@ export class ApplicationService {
     }
   }
 
+  // Same endpoint as getMyApplications, but returns every applicant when called as an admin.
+  async getAllApplications(token?: string): Promise<BackendAdminApplication[]> {
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    try {
+      const response = await this.client.get<BackendAdminApplication[]>("/applications", {
+        headers
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new BackendRequestError(
+          this.extractBackendMessage(error.response?.data) ||
+            "Unable to load applications right now.",
+          error.response?.status
+        );
+      }
+
+      throw error;
+    }
+  }
+
   async getApplicationsByJobRoleId(
     jobRoleId: string | number,
     token?: string
@@ -118,9 +152,7 @@ export class ApplicationService {
     try {
       const response = await this.client.get<RoleApplicant[]>(
         `/job-roles/${jobRoleId}/applications`,
-        {
-          headers
-        }
+        { headers }
       );
       return response.data;
     } catch (error) {
