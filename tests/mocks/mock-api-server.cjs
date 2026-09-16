@@ -234,6 +234,38 @@ app.get("/job-roles", requireAuth, (req, res) => {
   });
 });
 
+const matcherQuestions = [
+  { questionId: 1, text: "I enjoy building and maintaining technical systems.", capabilityName: "Engineering" },
+  { questionId: 2, text: "I enjoy understanding business problems and proposing solutions.", capabilityName: "Data & AI" }
+];
+
+app.get("/job-role-matcher/questions", requireAuth, (_req, res) => {
+  res.json(matcherQuestions);
+});
+
+app.post("/job-role-matcher/submit", requireAuth, (req, res) => {
+  const answers = Array.isArray(req.body.answers) ? req.body.answers : [];
+  const scores = { Engineering: 0, "Data & AI": 0 };
+
+  for (const answer of answers) {
+    const question = matcherQuestions.find((entry) => entry.questionId === answer.questionId);
+    if (question) {
+      scores[question.capabilityName] += answer.agreement;
+    }
+  }
+
+  const recommendations = Object.entries(scores)
+    .map(([capabilityName, score]) => ({ capabilityName, score }))
+    .sort((a, b) => b.score - a.score);
+
+  const topCapability = recommendations[0].capabilityName;
+  const matchingRoles = rolesForToken(getToken(req)).filter(
+    (role) => role.capabilityName === topCapability
+  );
+
+  res.json({ recommendations, matchingRoles });
+});
+
 app.get("/job-roles/:id", requireAuth, (req, res) => {
   const id = String(req.params.id);
   const roles = rolesForToken(getToken(req));
