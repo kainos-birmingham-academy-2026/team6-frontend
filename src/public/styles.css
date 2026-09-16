@@ -1775,6 +1775,31 @@ tbody tr:nth-child(even) {
   color: #b3261e;
 }
 
+.hire-link {
+  color: var(--kainos-green, #61a83f);
+  font-weight: 700;
+  text-decoration: none;
+  margin-right: 0.8rem;
+}
+
+.hire-link:hover,
+.hire-link:focus-visible {
+  text-decoration: underline;
+  color: var(--kainos-dark-green, #004631);
+}
+
+.reject-link {
+  color: #b3261e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.reject-link:hover,
+.reject-link:focus-visible {
+  text-decoration: underline;
+  color: #8c1d18;
+}
+
 .role-card {
   position: relative;
   display: flex;

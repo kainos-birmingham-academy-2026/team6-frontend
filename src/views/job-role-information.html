@@ -105,6 +105,51 @@
           <p class="info-copy">No SharePoint resource is available for this role yet.</p>
           {% endif %}
         </article>
+
+        {% if isAdmin %}
+        <article class="card info-panel info-panel-wide applicants-panel">
+          <h3>Applicants</h3>
+          {% if applications and applications.length > 0 %}
+          <table class="data-table" style="width: 100%; margin-top: 0.85rem; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <th style="text-align: left; padding: 0.6rem; border-bottom: 2px solid var(--kainos-line);">Applicant</th>
+                <th style="text-align: left; padding: 0.6rem; border-bottom: 2px solid var(--kainos-line);">Status</th>
+                <th style="text-align: left; padding: 0.6rem; border-bottom: 2px solid var(--kainos-line);">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for applicant in applications %}
+              <tr style="border-bottom: 1px solid var(--kainos-line);">
+                <td style="padding: 0.6rem;">{{ applicant.email or ("Applicant #" + applicant.userId) }}</td>
+                <td style="padding: 0.6rem;">
+                  <span class="status-pill {{ applicant.statusClass }}">{{ applicant.statusLabel }}</span>
+                </td>
+                <td style="padding: 0.6rem;" class="action-cell">
+                  {% if applicant.isInProgress %}
+                  <a
+                    href="/job-roles/{{ jobRole.jobRoleId }}/applications/{{ applicant.applicationId }}/hire"
+                    class="action-link hire-link"
+                    onclick="return confirm('Are you sure you want to hire this applicant?');"
+                  >Hire</a>
+                  <a
+                    href="/job-roles/{{ jobRole.jobRoleId }}/applications/{{ applicant.applicationId }}/reject"
+                    class="action-link reject-link"
+                    onclick="return confirm('Are you sure you want to reject this applicant?');"
+                  >Reject</a>
+                  {% else %}
+                  <span class="no-actions">-</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <p class="info-copy">No applications have been submitted for this role yet.</p>
+          {% endif %}
+        </article>
+        {% endif %}
       </section>
 
       <section class="info-actions">

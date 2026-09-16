@@ -97,6 +97,26 @@ app.get(
   applicationController.showConfirmation.bind(applicationController)
 );
 app.get(
+  "/job-roles/:jobRoleId/applications/:applicationId/hire",
+  requireAdmin,
+  applicationController.hireApplication.bind(applicationController)
+);
+app.post(
+  "/job-roles/:jobRoleId/applications/:applicationId/hire",
+  requireAdmin,
+  applicationController.hireApplication.bind(applicationController)
+);
+app.get(
+  "/job-roles/:jobRoleId/applications/:applicationId/reject",
+  requireAdmin,
+  applicationController.rejectApplication.bind(applicationController)
+);
+app.post(
+  "/job-roles/:jobRoleId/applications/:applicationId/reject",
+  requireAdmin,
+  applicationController.rejectApplication.bind(applicationController)
+);
+app.get(
   "/applications",
   requireAuth,
   applicationController.listMyApplications.bind(applicationController)
