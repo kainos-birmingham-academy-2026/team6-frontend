@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";</script>
     <title>Application Submitted | Kainos Careers</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/styles.css" />
@@ -29,7 +30,7 @@
       </div>
     </header>
 
-    <main class="container page-content">
+    <main class="container page-content" data-confetti>
       <h1>Application Submitted</h1>
 
       <div class="card job-role-form-panel">
@@ -57,5 +58,7 @@
         </div>
       </div>
     </footer>
+
+    <script src="/site.js" defer></script>
   </body>
 </html>
